@@ -1,13 +1,22 @@
 import React, { useState, useEffect, useRef } from "react"
-import { faCheck, faTimes, faInfoCircle, faInfo } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
 
 const EMAIL_REGEX = /[a-z0-9]@wit.edu/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const NAME_REGEX = /[A-Za-z]/;
 // const REGISTER_URL = '/register';
 
-export const Register = (props) => {
+export const Register = () => {
+    const navigate = useNavigate();
+
+    const loginPage = () => {
+        navigate('/');
+    }
+
     const emailRef = useRef();
+    const nameRef = useRef();
     const errRef = useRef();
 
     const [email, setEmail] = useState('');
@@ -34,6 +43,13 @@ export const Register = (props) => {
     }, [])
 
     useEffect(() => {
+        const result = NAME_REGEX.test(name);
+        console.log(result);
+        console.log(name);
+        setValidName(result);
+    }, [name])
+
+    useEffect(() => {
         const result = EMAIL_REGEX.test(email);
         console.log(result);
         console.log(email);
@@ -58,11 +74,12 @@ export const Register = (props) => {
         // handling JS hack
         const v1 = EMAIL_REGEX.test(email);
         const v2 = PWD_REGEX.test(pwd);
-        if (!v1 || !v2) {
+        const v3 = NAME_REGEX.test(name);
+        if (!v1 || !v2 || !v3) {
             setErrMsg('Invalid Entry');
             return;
         }
-        console.log(email, pwd);
+        console.log(name, email, pwd);
         setSuccess(true);
     }
 
@@ -72,7 +89,7 @@ export const Register = (props) => {
                 <section>
                     <h1>Success!</h1>
                     <p>
-                    <button className="link-btn" onClick={() => props.onFormSwitch('login')}><a>Login</a></button>
+                    <button className="link-btn" onClick={loginPage}><a>Login</a></button>
                     </p>
                 </section>
             ) : (
@@ -82,6 +99,29 @@ export const Register = (props) => {
                     <form className="register-form" onSubmit={handleSubmit}>
                         {/* <label htmlFor="name">Full Name:</label>
                         <input value={name} type="text" name="name" id="name" placeholder="Full name" /> */}
+                        <label htmlFor="name">
+                            Full Name:
+                            <FontAwesomeIcon icon={faCheck} className={validName ? "valid" : "hide"}/>
+                            <FontAwesomeIcon icon={faTimes} className={validName || !name ? "hide" : "invalid"}/>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            placeholder="Full Name"
+                            ref={nameRef} 
+                            autoComplete="off" 
+                            onChange={(e) => setName(e.target.value)} 
+                            value={name}
+                            reguired 
+                            aria-invalid={validName ? "false" : "true"} 
+                            aria-describedby="name-id-note"
+                            onFocus={() => setNameFocus(true)}
+                            onBlur={() => setNameFocus(false)}
+                        />
+                        <p id="name-id-note" className={nameFocus && name && !validName ? "instructions" : "offscreen"}>
+                            <FontAwesomeIcon icon={faInfoCircle} /> Must be a real name.
+                        </p>
+
                         <label htmlFor="email">
                             Email:
                             <FontAwesomeIcon icon={faCheck} className={validEmail ? "valid" : "hide"}/>
@@ -151,11 +191,9 @@ export const Register = (props) => {
 
                         <button disabled={!validEmail || !validPwd || !validMacth ? true : false}>Register</button>
                     </form>
-                    <button className="link-btn" onClick={() => props.onFormSwitch('login')}>Already have an account? Login here.</button>
+                    <button className="link-btn" onClick={loginPage}>Already have an account? Login here.</button>
                 </section>
             )}
         </div> 
     )
 }
-
-export default Register;

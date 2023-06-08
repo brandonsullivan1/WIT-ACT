@@ -1,8 +1,9 @@
 import React, {useState } from 'react';
-// import logo from './logo.svg';
 import './App.css';
-import { Login } from './Login';
-import { Register } from './Register';
+import { Login } from './pages/Login';
+import { Register } from './pages/Register';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Verification } from './pages/Verification';
 
 function App() {
   const [currentForm, setCurrentForm] =  useState('login');
@@ -13,9 +14,13 @@ function App() {
 
   return (
     <main className="App">
-      {
-        currentForm === "login" ? <Login onFormSwitch={toggleForm} /> : <Register onFormSwitch={toggleForm}/>
-      }
+      <Router>
+        <Routes>
+          <Route exact path='/' Component={Login} />
+          <Route exact path='/verification' Component={Verification} />
+          <Route exact path='/register' Component={Register} />
+        </Routes>
+      </Router>
     </main>
   );
 }
