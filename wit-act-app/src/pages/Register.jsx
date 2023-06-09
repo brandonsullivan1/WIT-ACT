@@ -5,13 +5,12 @@ import { useNavigate } from "react-router-dom";
 
 const EMAIL_REGEX = /[a-z0-9]@wit.edu/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const NAME_REGEX = /[A-Za-z]/;
-// const REGISTER_URL = '/register';
+const NAME_REGEX = /^[A-Z][a-zA-Z- ]+$/;
 
 export const Register = () => {
     const navigate = useNavigate();
 
-    const loginPage = () => {
+    const loginLink = () => {
         navigate('/');
     }
 
@@ -40,6 +39,7 @@ export const Register = () => {
 
     useEffect(() => {
         emailRef.current.focus();
+        nameRef.current.focus();
     }, [])
 
     useEffect(() => {
@@ -89,7 +89,7 @@ export const Register = () => {
                 <section>
                     <h1>Success!</h1>
                     <p>
-                    <button className="link-btn" onClick={loginPage}><a>Login</a></button>
+                    <button className="link-btn" onClick={loginLink}><a>Login</a></button>
                     </p>
                 </section>
             ) : (
@@ -97,8 +97,6 @@ export const Register = () => {
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                     <h2>Register</h2>
                     <form className="register-form" onSubmit={handleSubmit}>
-                        {/* <label htmlFor="name">Full Name:</label>
-                        <input value={name} type="text" name="name" id="name" placeholder="Full name" /> */}
                         <label htmlFor="name">
                             Full Name:
                             <FontAwesomeIcon icon={faCheck} className={validName ? "valid" : "hide"}/>
@@ -191,7 +189,7 @@ export const Register = () => {
 
                         <button disabled={!validEmail || !validPwd || !validMacth ? true : false}>Register</button>
                     </form>
-                    <button className="link-btn" onClick={loginPage}>Already have an account? Login here.</button>
+                    <button className="link-btn" onClick={loginLink}>Already have an account? Login here.</button>
                 </section>
             )}
         </div> 

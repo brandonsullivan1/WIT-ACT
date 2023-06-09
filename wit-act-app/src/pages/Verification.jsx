@@ -8,8 +8,12 @@ const CODE_CHECK = "111111";
 export const Verification = () => {
     const navigate = useNavigate();
 
-    const loginPage = () => {
+    const loginLink = () => {
         navigate('/');
+    }
+
+    const homepageLink = () => {
+        navigate('/homepage');
     }
 
     const codeRef = useRef();
@@ -29,7 +33,7 @@ export const Verification = () => {
         setValidCode(result);
     }, [code])
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const v1 = (code === CODE_CHECK);
         if (!v1) {
@@ -46,7 +50,7 @@ export const Verification = () => {
                 <section>
                 <h1>Success!</h1>
                 <p>
-                <button className="link-btn" onClick={loginPage}><a>Login</a></button>
+                <button className="link-btn" onClick={loginLink}><a>Login</a></button>
                 </p>
             </section>
             ) : (
@@ -76,9 +80,9 @@ export const Verification = () => {
                         <p id="code-id-note" className={codeFocus && code && !validCode ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} /> Must be the same code recieved via email.
                         </p>
-                        <button type="submit">Verify</button>
+                        <button type="submit" disabled={!validCode ? true : false} onClick={homepageLink}>Verify</button>
                     </form>
-                    <button className="link-btn" onClick={loginPage}>Back to login.</button>
+                    <button className="link-btn" onClick={loginLink}>Back to login.</button>
                 </section>
             )}
         </div>

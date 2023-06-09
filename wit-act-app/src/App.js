@@ -4,6 +4,7 @@ import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Verification } from './pages/Verification';
+import { Homepage } from './pages/Homepage';
 
 function App() {
   const [currentForm, setCurrentForm] =  useState('login');
@@ -19,6 +20,7 @@ function App() {
           <Route exact path='/' Component={Login} />
           <Route exact path='/verification' Component={Verification} />
           <Route exact path='/register' Component={Register} />
+          <Route exact path='/homepage' Component={Homepage} />
         </Routes>
       </Router>
     </main>
