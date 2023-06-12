@@ -3,9 +3,60 @@ import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 
-const EMAIL_REGEX = /[a-z0-9]@wit.edu/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const NAME_REGEX = /^[A-Z][a-zA-Z- ]+$/;
+const EMAIL_REGEX = /[a-z0-9]@wit.edu/;
+const VALID_MAJORS = [
+    "Applied Mathematics",
+    "Applied Sciences",
+    "Architecture",
+    "Biological Engineering",
+    "Biomedical Engineering",
+    "Business Management",
+    "Civil Engineering",
+    "Computer Engineering",
+    "Computer Information Systems",
+    "Computer Networking",
+    "Computer Science",
+    "Computer Science + Society",
+    "Construction Management",
+    "Cybersecurity",
+    "Data Science",
+    "Eleectrical Engineering",
+    "Electromechanical Engineering",
+    "Engineering",
+    "Industrial Design",
+    "Information Technology",
+    "Interior Design",
+    "Mechanical Engineering"
+];
+const VALID_MINORS = [
+    "Aerospace Engineering",
+    "American Studies",
+    "Applied Math",
+    "Architectural Studies",
+    "Biology",
+    "Business Analytics",
+    "Chemistry",
+    "Civil Engineering",
+    "Computer Networking",
+    "Computer Science",
+    "Construction Management",
+    "Cybersecurity Management",
+    "Data Science",
+    "Electrical Engineering",
+    "Environmental Engineering",
+    "Financial Mathematics",
+    "Internet of Things",
+    "Manufacturing",
+    "Media, Culture, and Communication Studies",
+    "Performing Arts",
+    "Physics",
+    "Science, Technology, and Society",
+    "Sustainability"
+];
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+
+
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -14,9 +65,23 @@ export const Register = () => {
         navigate('/');
     }
 
-    const emailRef = useRef();
     const nameRef = useRef();
+    const majorRef = useRef();
+    const minorRef = useRef();
+    const emailRef = useRef();
     const errRef = useRef();
+
+    const [name, setName] = useState('');
+    const [validName, setValidName] = useState(false);
+    const [nameFocus, setNameFocus] = useState(false);
+
+    const [major, setMajor] = useState('');
+    const [validMajor, setValidMajor] = useState(false);
+    const [majorFocus, setMajorFocus] = useState(false);
+
+    const [minor, setMinor] = useState('');
+    const [validMinor, setValidMinor] = useState(false);
+    const [minorFocus, setMinorFocus] = useState(false);
 
     const [email, setEmail] = useState('');
     const [validEmail, setValidEmail] = useState(false);
@@ -30,36 +95,38 @@ export const Register = () => {
     const [validMacth, setValidMatch] = useState(false);
     const [matchFocus, setMatchFocus] = useState(false);
 
-    const [name, setName] = useState('');
-    const [validName, setValidName] = useState(false);
-    const [nameFocus, setNameFocus] = useState(false);
-
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState('');
 
     useEffect(() => {
-        emailRef.current.focus();
         nameRef.current.focus();
+        majorRef.current.focus();
+        minorRef.current.focus();
+        emailRef.current.focus();
     }, [])
 
     useEffect(() => {
         const result = NAME_REGEX.test(name);
-        console.log(result);
-        console.log(name);
         setValidName(result);
     }, [name])
 
     useEffect(() => {
+        const result = VALID_MAJORS.includes(major);
+        setValidMajor(result);
+    }, [major])
+
+    useEffect(() => {
+        const result = VALID_MINORS.includes(minor);
+        setValidMinor(result);
+    }, [minor])
+
+    useEffect(() => {
         const result = EMAIL_REGEX.test(email);
-        console.log(result);
-        console.log(email);
         setValidEmail(result);
     }, [email])
 
     useEffect(() => {
         const result = PWD_REGEX.test(pwd);
-        console.log(result);
-        console.log(pwd);
         setValidPwd(result);
         const match = pwd === matchPwd;
         setValidMatch(match);
@@ -79,7 +146,6 @@ export const Register = () => {
             setErrMsg('Invalid Entry');
             return;
         }
-        console.log(name, email, pwd);
         setSuccess(true);
     }
 
@@ -118,6 +184,52 @@ export const Register = () => {
                         />
                         <p id="name-id-note" className={nameFocus && name && !validName ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} /> Must be a real name.
+                        </p>
+
+                        <label htmlFor="major">
+                            Major:
+                            <FontAwesomeIcon icon={faCheck} className={validMajor ? "valid" : "hide"}/>
+                            <FontAwesomeIcon icon={faTimes} className={validMajor || !major ? "hide" : "invalid"}/>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="major" 
+                            placeholder="Major"
+                            ref={majorRef} 
+                            autoComplete="off" 
+                            onChange={(e) => setMajor(e.target.value)} 
+                            value={major}
+                            reguired 
+                            aria-invalid={validMajor ? "false" : "true"} 
+                            aria-describedby="name-id-note"
+                            onFocus={() => setMajorFocus(true)}
+                            onBlur={() => setMajorFocus(false)}
+                        />
+                        <p id="major-id-note" className={majorFocus && major && !validMajor ? "instructions" : "offscreen"}>
+                            <FontAwesomeIcon icon={faInfoCircle} /> Must be a valid Major at WIT.
+                        </p>
+
+                        <label htmlFor="minor">
+                            Minor:
+                            <FontAwesomeIcon icon={faCheck} className={validMinor ? "valid" : "hide"}/>
+                            <FontAwesomeIcon icon={faTimes} className={validMinor || !minor ? "hide" : "invalid"}/>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="minor" 
+                            placeholder="(optional)"
+                            ref={minorRef} 
+                            autoComplete="off" 
+                            onChange={(e) => setMinor(e.target.value)} 
+                            value={minor}
+                            reguired 
+                            aria-invalid={validMinor ? "false" : "true"} 
+                            aria-describedby="name-id-note"
+                            onFocus={() => setMinorFocus(true)}
+                            onBlur={() => setMinorFocus(false)}
+                        />
+                        <p id="minor-id-note" className={minorFocus && minor && !validMinor ? "instructions" : "offscreen"}>
+                            <FontAwesomeIcon icon={faInfoCircle} /> Must be a valid Minor at WIT.
                         </p>
 
                         <label htmlFor="email">
