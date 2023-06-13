@@ -68,6 +68,7 @@ export const Register = () => {
     const nameRef = useRef();
     const majorRef = useRef();
     const minorRef = useRef();
+    const skillsRef = useRef();
     const emailRef = useRef();
     const errRef = useRef();
 
@@ -82,6 +83,10 @@ export const Register = () => {
     const [minor, setMinor] = useState('');
     const [validMinor, setValidMinor] = useState(false);
     const [minorFocus, setMinorFocus] = useState(false);
+
+    const [skills, setSkills] = useState('');
+    const [validSkills, setValidSkills] = useState(false);
+    const [skillsFocus, setSkillsFocus] = useState(false);
 
     const [email, setEmail] = useState('');
     const [validEmail, setValidEmail] = useState(false);
@@ -119,6 +124,13 @@ export const Register = () => {
         const result = VALID_MINORS.includes(minor);
         setValidMinor(result);
     }, [minor])
+
+    useEffect(() => {
+        const result = skills.length !== 0;
+        setValidSkills(result);
+        const skillsList = skills.split(', ');
+        console.log(skillsList);
+    }, [skills])
 
     useEffect(() => {
         const result = EMAIL_REGEX.test(email);
@@ -231,6 +243,30 @@ export const Register = () => {
                         <p id="minor-id-note" className={minorFocus && minor && !validMinor ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} /> Must be a valid Minor at WIT.
                         </p>
+
+                        <label htmlFor="Skills">
+                            Skills:
+                            <FontAwesomeIcon icon={faCheck} className={validSkills ? "valid" : "hide"}/>
+                            <FontAwesomeIcon icon={faTimes} className={validSkills || !skills ? "hide" : "invalid"}/>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="skills" 
+                            placeholder="Skill 1, Skill 2, ..."
+                            ref={skillsRef} 
+                            autoComplete="off" 
+                            onChange={(e) => setSkills(e.target.value)} 
+                            value={skills}
+                            reguired 
+                            aria-invalid={validSkills ? "false" : "true"} 
+                            aria-describedby="skills-id-note"
+                            onFocus={() => setSkillsFocus(true)}
+                            onBlur={() => setSkillsFocus(false)}
+                        />
+                        <p id="skills-id-note" className={skillsFocus && skills && !validSkills ? "instructions" : "offscreen"}>
+                            <FontAwesomeIcon icon={faInfoCircle} /> Must enter at least one skill.
+                        </p>
+
 
                         <label htmlFor="email">
                             Email:
