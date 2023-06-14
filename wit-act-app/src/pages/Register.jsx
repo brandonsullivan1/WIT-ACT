@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from "react"
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
+import axios from '../api/axios';
 
 const EMAIL_REGEX = /[a-z0-9]@wit.edu/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const NAME_REGEX = /^[A-Z][a-zA-Z- ]+$/;
+const REGISTER_URL = '/register';
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -18,6 +20,10 @@ export const Register = () => {
     const nameRef = useRef();
     const errRef = useRef();
 
+    const [name, setName] = useState('');
+    const [validName, setValidName] = useState(false);
+    const [nameFocus, setNameFocus] = useState(false);
+
     const [email, setEmail] = useState('');
     const [validEmail, setValidEmail] = useState(false);
     const [emailFocus, setEmailFocus] = useState(false);
@@ -27,18 +33,14 @@ export const Register = () => {
     const [pwdFocus, setPwdFocus] = useState(false);
 
     const [matchPwd, setMatchPwd] = useState('');
-    const [validMacth, setValidMatch] = useState(false);
+    const [validMatch, setValidMatch] = useState(false);
     const [matchFocus, setMatchFocus] = useState(false);
-
-    const [name, setName] = useState('');
-    const [validName, setValidName] = useState(false);
-    const [nameFocus, setNameFocus] = useState(false);
 
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState('');
 
     useEffect(() => {
-        emailRef.current.focus();
+        // focus name on initial visit
         nameRef.current.focus();
     }, [])
 
@@ -72,15 +74,46 @@ export const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         // handling JS hack
-        const v1 = EMAIL_REGEX.test(email);
-        const v2 = PWD_REGEX.test(pwd);
-        const v3 = NAME_REGEX.test(name);
+        const v1 = NAME_REGEX.test(name);
+        const v2 = EMAIL_REGEX.test(email);
+        const v3 = PWD_REGEX.test(pwd);
         if (!v1 || !v2 || !v3) {
             setErrMsg('Invalid Entry');
             return;
         }
-        console.log(name, email, pwd);
-        setSuccess(true);
+        try {
+            // in case this fails: stringify({ backend_name: frontend_var, ... })
+            // name specification unnecessary if name is the same front/back
+            const response = await axios.post(REGISTER_URL,
+                JSON.stringify({ name, email, pwd }),
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true,
+                }
+            );
+            console.log(response.data);
+            // console.log(response.accessToken); //copied from tutorial, in case we use the same node backend setup
+            console.log(JSON.stringify(response)); //log entire response
+            setSuccess(true);
+            // reset everything
+            setName(''); setEmail(''); setPwd(''); setMatchPwd('');
+            setValidName(false); setValidEmail(false); setValidPwd(false); setValidMatch(false);
+            nameRef.current.focus();
+        }
+        catch (err) {
+            switch(err) {
+                case !err?.response:
+                    setErrMsg('No Server Response');
+                    break;
+                case err.response?.status === 409:
+                    // 409 - Conflict w/ requested resource
+                    setErrMsg('Username Taken');
+                    break;
+                default:
+                    setErrMsg('Registration Failed');
+            }
+            errRef.current.focus();
+        }
     }
 
     return (
@@ -168,8 +201,8 @@ export const Register = () => {
 
                         <label htmlFor="confirm-pwd">
                             Confirm Password:
-                            <FontAwesomeIcon icon={faCheck} className={validMacth && matchPwd ? "valid" : "hide"}/>
-                            <FontAwesomeIcon icon={faTimes} className={validMacth || !matchPwd ? "hide" : "invlaid"}/>
+                            <FontAwesomeIcon icon={faCheck} className={validMatch && matchPwd ? "valid" : "hide"}/>
+                            <FontAwesomeIcon icon={faTimes} className={validMatch || !matchPwd ? "hide" : "invlaid"}/>
                         </label>
                         <input
                             type="password"
@@ -178,16 +211,16 @@ export const Register = () => {
                             onChange={(e) => setMatchPwd(e.target.value)}
                             value={matchPwd}
                             required
-                            aria-invalid={validMacth ? "false" : "true"}
+                            aria-invalid={validMatch ? "false" : "true"}
                             aria-describedby="confrim-pwd-note"
                             onFocus={() => setMatchFocus(true)}
                             onBlur={() => setMatchFocus(false)}
                         />
-                        <p id="confrim-pwd-note" className={matchFocus && !validMacth ? "instructions" : "offscreen"}>
+                        <p id="confrim-pwd-note" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} /> Passwords must match.
                         </p>
 
-                        <button disabled={!validEmail || !validPwd || !validMacth ? true : false}>Register</button>
+                        <button disabled={!validEmail || !validPwd || !validMatch ? true : false}>Register</button>
                     </form>
                     <button className="link-btn" onClick={loginLink}>Already have an account? Login here.</button>
                 </section>
