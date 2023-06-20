@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react"
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
+import { Button, Form, Container } from "react-bootstrap";
 
 const NAME_REGEX = /^[A-Z][a-zA-Z- ]+$/;
 const EMAIL_REGEX = /[a-z0-9]@wit.edu/;
@@ -171,10 +172,10 @@ export const Register = () => {
                     </p>
                 </section>
             ) : (
-                <section>
+                <Container>
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                     <h2>Register</h2>
-                    <form className="register-form" onSubmit={handleSubmit}>
+                    <Form className="register-form" onSubmit={handleSubmit}>
                         <label htmlFor="name">
                             Full Name:
                             <FontAwesomeIcon icon={faCheck} className={validName ? "valid" : "hide"}/>
@@ -193,6 +194,7 @@ export const Register = () => {
                             aria-describedby="name-id-note"
                             onFocus={() => setNameFocus(true)}
                             onBlur={() => setNameFocus(false)}
+                            style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
                         />
                         <p id="name-id-note" className={nameFocus && name && !validName ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} /> Must be a real name.
@@ -216,6 +218,7 @@ export const Register = () => {
                             aria-describedby="name-id-note"
                             onFocus={() => setMajorFocus(true)}
                             onBlur={() => setMajorFocus(false)}
+                            style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
                         />
                         <p id="major-id-note" className={majorFocus && major && !validMajor ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} /> Must be a valid Major at WIT.
@@ -239,6 +242,7 @@ export const Register = () => {
                             aria-describedby="name-id-note"
                             onFocus={() => setMinorFocus(true)}
                             onBlur={() => setMinorFocus(false)}
+                            style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
                         />
                         <p id="minor-id-note" className={minorFocus && minor && !validMinor ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} /> Must be a valid Minor at WIT.
@@ -262,6 +266,7 @@ export const Register = () => {
                             aria-describedby="skills-id-note"
                             onFocus={() => setSkillsFocus(true)}
                             onBlur={() => setSkillsFocus(false)}
+                            style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
                         />
                         <p id="skills-id-note" className={skillsFocus && skills && !validSkills ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} /> Must enter at least one skill.
@@ -286,6 +291,7 @@ export const Register = () => {
                             aria-describedby="email-id-note"
                             onFocus={() => setEmailFocus(true)}
                             onBlur={() => setEmailFocus(false)}
+                            style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
                         />
                         <p id="email-id-note" className={emailFocus && email && !validEmail ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} /> Must be an active WIT email.
@@ -307,6 +313,7 @@ export const Register = () => {
                             aria-describedby="pwd-note"
                             onFocus={() => setPwdFocus(true)}
                             onBlur={() => setPwdFocus(false)}
+                            style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
                         />
                         <p id="pwd-note" className={pwdFocus && !validPwd ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} /> 8 to 24 Characters.<br />
@@ -330,16 +337,19 @@ export const Register = () => {
                             aria-describedby="confrim-pwd-note"
                             onFocus={() => setMatchFocus(true)}
                             onBlur={() => setMatchFocus(false)}
+                            style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
                         />
                         <p id="confrim-pwd-note" className={matchFocus && !validMacth ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} /> Passwords must match.
                         </p>
 
-                        <button disabled={!validEmail || !validPwd || !validMacth ? true : false}>Register</button>
-                    </form>
-                    <button className="link-btn" onClick={loginLink}>Already have an account? Login here.</button>
-                </section>
+                        <Button disabled={!validEmail || !validPwd || !validMacth ? true : false} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}}>Register</Button>
+                    </Form>
+                    <Button className="link-btn" onClick={loginLink} style={{ border: "none", background: "none", color: "white", textDecoration: "underline" }}>Already have an account? Login here.</Button>
+                </Container>
             )}
         </div> 
     )
 }
+
+export default Register;

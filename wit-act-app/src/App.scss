@@ -1,3 +1,9 @@
+$primary: #2920cf;
+$secondary: #262d3d;
+
+@import "~bootstrap/scss/bootstrap";
+
+
 * {
   margin: 0;
   padding: 0;
@@ -20,7 +26,7 @@ body {
   background-image: linear-gradient(79deg, #e5bc18, #fb4646 48%, #f38a3f);
 }
 
-.auth-form-container, .login-form, .register-form {
+.auth-form-container, .login-form, .register-form, .verification-form {
   display: flex;
   flex-direction: column;
 }
@@ -117,4 +123,8 @@ a, a:visited {
 
 .line {
   display: inline-block;
+}
+
+.navbar {
+  align-items: stretch;
 }

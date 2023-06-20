@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react"
+import { Button, Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const TEST_EMAIL = "sullivanb13@wit.edu";
@@ -63,12 +64,12 @@ export const Login = () => {
             {success ? (
                 <section></section>
             ) : (
-                <section>
+                <Container>
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                     <h2>Login</h2>
-                    <form className="login-form" onSubmit={handleSubmit}>
-                        <label htmlFor="email">Email:</label>
-                        <input 
+                    <Form className="login-form" onSubmit={handleSubmit}>
+                        <Form.Label htmlFor="email">Email:</Form.Label>
+                        <Form.Control
                             type="email" 
                             id="email" 
                             name="email"
@@ -80,9 +81,10 @@ export const Login = () => {
                             reguired
                             onFocus={() => setEmailFocus(true)}
                             onBlur={() => setEmailFocus(false)}
+                            style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
                         />
-                        <label htmlFor="password">Password:</label>
-                        <input 
+                        <Form.Label htmlFor="password">Password:</Form.Label>
+                        <Form.Control 
                             type="password"
                             id="password"
                             name="password"
@@ -92,14 +94,15 @@ export const Login = () => {
                             required
                             onFocus={() => setPasswordFocus(true)}
                             onBlur={() => setPasswordFocus(false)}
+                            style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
                         />
-                        <button type="submit" onClick={verificationLink} disabled={!validEmail || !validPassword ? true : false}>Login</button>
-                    </form>
-                    <button className="link-btn" onClick={registrationLink}>Don't have an account? Register here.</button>
-                </section>
+                        <Button type="submit" onClick={verificationLink} disabled={!validEmail || !validPassword ? true : false} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}}>Login</Button>
+                    </Form>
+                    <Button className="link-btn" onClick={registrationLink} style={{ border: "none", background: "none", color: "white", textDecoration: "underline" }}>Don't have an account? Register here.</Button>
+                </Container>
             )}
         </div>
     )
 }
 
-            
+export default Login;
