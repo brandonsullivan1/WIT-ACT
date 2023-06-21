@@ -15,6 +15,12 @@ export const LikeButton = () => {
     const toggleDisliike = () => {
         setDisliked(!disliked);
     }
+
+    const animateCard = () => {
+        // document.getElementById("card").style.transform = "skewY(20deg)";
+        // document.getElementById("card").style.transform = "scaleY(1.5)";
+    }
+
     return (
         <Navbar>
             <Container style={{ alignItems:"center", justifyContent:"left" }}>
@@ -25,7 +31,7 @@ export const LikeButton = () => {
             </Button>
             </Container>
             <Container style={{ alignItems:"center", justifyContent:"center"}}>
-                <Button style={{backgroundColor: "#000", border: "1px solid #000"}}>Expand</Button>
+                <Button style={{backgroundColor: "#000", border: "1px solid #000"}} onClick={animateCard}>Expand</Button>
             </Container>
             <Container style={{ alignItems:"center", justifyContent:"right"}}>
                 <Button onClick={toggleDisliike} style={{ fontSize: "1.5rem", color: "black", background: "none", border: "none"}}>

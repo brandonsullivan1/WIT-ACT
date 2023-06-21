@@ -17,7 +17,7 @@ export const Homepage = () => {
                     {projects.map((item) => {
                         return (
                             <Col>
-                                <Card style={{ backgroundColor: "white", minWidth: '18rem', margin: '20px'}}>
+                                <Card id="card" style={{ backgroundColor: "white", minWidth: '18rem', margin: '20px'}}>
                                     <Card.Body>
                                         <Navbar>
                                             <Container style={{ alignItems:"center", justifyContent:"left"}}></Container>
@@ -28,19 +28,8 @@ export const Homepage = () => {
                                                 <BookmarkButton />
                                             </Container>
                                         </Navbar>
-                                        <Card.Text>{item.text}</Card.Text>
+                                        <Card.Text>{item.description}</Card.Text>
                                         <LikeButton />
-                                        {/* <Navbar>
-                                            <Container style={{ alignItems:"center", justifyContent:"left"}}>
-                                                <LikeButton />
-                                            </Container>
-                                            <Container style={{ alignItems:"center", justifyContent:"center"}}>
-                                                <Button style={{backgroundColor: "#000", border: "1px solid #000"}}>Expand</Button>
-                                            </Container>
-                                            <Container style={{ alignItems:"center", justifyContent:"right"}}>
-                                                <DislikeButton />
-                                            </Container>
-                                        </Navbar> */}
                                     </Card.Body>
                                 </Card>
                             </Col>

@@ -8,6 +8,7 @@ import { Verification } from "./pages/Verification";
 import { Homepage } from "./pages/Homepage";
 import "./App.scss";
 import "bootstrap/dist/css/bootstrap.min.css"
+import Profile from './pages/Profile';
 
 const App = () => (
   <div className="App">
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       { 
         path: "/homepage",
         element: <Homepage />,
+      },
+      { 
+        path: "/profile",
+        element: <Profile />,
       },
     ],
   },
