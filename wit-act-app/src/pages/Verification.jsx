@@ -43,41 +43,42 @@ export const Verification = () => {
         }
         console.log(code);
         setSuccess(true);
+        homepageLink();
     }
 
     return (
         <div className="auth-form-container">
-                <Container>
-                    <p ref={errRef} className={errMsg ? "errMsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-                    <h2>Verify</h2>
-                    <Form className="verification-form" onSubmit={handleSubmit}>
-                        <Form.Label htmlFor="verify">
-                            Code:
-                            <FontAwesomeIcon icon={faCheck} className={validCode ? "valid" : "hide"}/>
-                            <FontAwesomeIcon icon={faTimes} className={validCode || !code ? "hide" : "invalid"}/>
-                        </Form.Label>
-                        <Form.Control 
-                            type="text"
-                            id="code"
-                            placeholder="000000"
-                            ref={codeRef}
-                            autoComplete="off"
-                            onChange={(e) => setCode(e.target.value)}
-                            value={code}
-                            required
-                            aria-invalid={validCode ? "false" : "true"}
-                            aria-describedby="code-id-note"
-                            onFocus={() => setCodeFocus(true)}
-                            onBlur={() => setCodeFocus(false)}
-                            style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
-                        />
-                        <p id="code-id-note" className={codeFocus && code && !validCode ? "instructions" : "offscreen"}>
-                            <FontAwesomeIcon icon={faInfoCircle} /> Must be the same code recieved via email.
-                        </p>
-                        <Button type="submit" disabled={!validCode ? true : false} onClick={homepageLink} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}}>Verify</Button>
-                    </Form>
-                    <Button className="link-btn" onClick={loginLink} style={{ border: "none", background: "none", color: "white", textDecoration: "underline" }}>Back to login.</Button>
-                </Container>
+            <Container>
+                <p ref={errRef} className={errMsg ? "errMsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+                <h2>Verify</h2>
+                <Form className="verification-form" onSubmit={handleSubmit}>
+                    <Form.Label htmlFor="verify">
+                        Code:
+                        <FontAwesomeIcon icon={faCheck} className={validCode ? "valid" : "hide"}/>
+                        <FontAwesomeIcon icon={faTimes} className={validCode || !code ? "hide" : "invalid"}/>
+                    </Form.Label>
+                    <Form.Control 
+                        type="text"
+                        id="code"
+                        placeholder="000000"
+                        ref={codeRef}
+                        autoComplete="off"
+                        onChange={(e) => setCode(e.target.value)}
+                        value={code}
+                        required
+                        aria-invalid={validCode ? "false" : "true"}
+                        aria-describedby="code-id-note"
+                        onFocus={() => setCodeFocus(true)}
+                        onBlur={() => setCodeFocus(false)}
+                        style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
+                    />
+                    <p id="code-id-note" className={codeFocus && code && !validCode ? "instructions" : "offscreen"}>
+                    <FontAwesomeIcon icon={faInfoCircle} /> Must be the same code <br/>recieved via email.
+                    </p>
+                    <Button type="submit" disabled={!validCode ? true : false} onClick={handleSubmit} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}}>Verify</Button>
+                </Form>
+                <Button className="link-btn" onClick={loginLink} style={{ border: "none", background: "none", color: "white", textDecoration: "underline" }}>Back to login.</Button>
+            </Container>
         </div>
     )
 }

@@ -98,7 +98,7 @@ export const Login = () => {
                         />
                         <Button type="submit" onClick={verificationLink} disabled={!validEmail || !validPassword ? true : false} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}}>Login</Button>
                     </Form>
-                    <Button className="link-btn" onClick={registrationLink} style={{ border: "none", background: "none", color: "white", textDecoration: "underline" }}>Don't have an account? Register here.</Button>
+                    <Button onClick={registrationLink} style={{ border: "none", background: "none", color: "white", textDecoration: "underline" }}>Don't have an account? Register here.</Button>
                 </Container>
             )}
         </div>

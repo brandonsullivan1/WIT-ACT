@@ -17,8 +17,8 @@ export const LikeButton = () => {
     }
     return (
         <Navbar>
-            <Container style={{ alignItems:"center", justifyContent:"left"}}>
-            <Button onClick={toggleLike}>
+            <Container style={{ alignItems:"center", justifyContent:"left" }}>
+            <Button onClick={toggleLike} style={{ fontSize: "1.5rem", color: "black", background: "none", border: "none"}}>
                     {
                         liked === true ?  <AiIcons.AiFillLike onFormSwitch={toggleLike} /> : <AiIcons.AiOutlineLike onFormSwitch={toggleLike} />
                     }
@@ -28,7 +28,7 @@ export const LikeButton = () => {
                 <Button style={{backgroundColor: "#000", border: "1px solid #000"}}>Expand</Button>
             </Container>
             <Container style={{ alignItems:"center", justifyContent:"right"}}>
-                <Button onClick={toggleDisliike}>
+                <Button onClick={toggleDisliike} style={{ fontSize: "1.5rem", color: "black", background: "none", border: "none"}}>
                     {
                         disliked === true ? <AiIcons.AiFillDislike onFormSwitch={toggleDisliike} /> : <AiIcons.AiOutlineDislike onFormSwitch={toggleDisliike} />
                     }

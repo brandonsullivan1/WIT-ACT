@@ -17,7 +17,7 @@ export const Homepage = () => {
                     {projects.map((item) => {
                         return (
                             <Col>
-                                <Card style={{ minWidth: '18rem', margin: '20px'}}>
+                                <Card style={{ backgroundColor: "white", minWidth: '18rem', margin: '20px'}}>
                                     <Card.Body>
                                         <Navbar>
                                             <Container style={{ alignItems:"center", justifyContent:"left"}}></Container>

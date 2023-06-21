@@ -11,7 +11,7 @@ export const BookmarkButton = () => {
     }
 
     return (
-        <Button onClick={toggleBookmark}>
+        <Button onClick={toggleBookmark} style={{ fontSize: "1.25rem", color: "black", background: "none", border: "none"}}>
             {
                 bookmark === true ? <BsIcons.BsBookmarkFill onFormSwitch={toggleBookmark} /> : <BsIcons.BsBookmark onFormSwitch={toggleBookmark} />
             }

@@ -168,7 +168,7 @@ export const Register = () => {
                 <section>
                     <h1>Success!</h1>
                     <p>
-                    <button className="link-btn" onClick={loginLink}><a>Login</a></button>
+                    <Button onClick={loginLink} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}}>Login</Button>
                     </p>
                 </section>
             ) : (
@@ -317,7 +317,8 @@ export const Register = () => {
                         />
                         <p id="pwd-note" className={pwdFocus && !validPwd ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} /> 8 to 24 Characters.<br />
-                            Must include uppercase and lowercase letters, a number, and a special character.<br />
+                            Must include uppercase and lowercase letters,<br />
+                            a number, and a special character.<br />
                             Allowed special characters: <span aria-label="exclamation mark">!</span>  <span aria-label="at symbol">@</span>  <span aria-label="hashtag">#</span>  <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
                         </p>
 
@@ -343,9 +344,9 @@ export const Register = () => {
                             <FontAwesomeIcon icon={faInfoCircle} /> Passwords must match.
                         </p>
 
-                        <Button disabled={!validEmail || !validPwd || !validMacth ? true : false} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}}>Register</Button>
+                        <Button disabled={!validEmail || !validPwd || !validMacth ? true : false} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}} type="submit">Register</Button>
                     </Form>
-                    <Button className="link-btn" onClick={loginLink} style={{ border: "none", background: "none", color: "white", textDecoration: "underline" }}>Already have an account? Login here.</Button>
+                    <Button onClick={loginLink} style={{ border: "none", background: "none", color: "white", textDecoration: "underline" }}>Already have an account? Login here.</Button>
                 </Container>
             )}
         </div> 
