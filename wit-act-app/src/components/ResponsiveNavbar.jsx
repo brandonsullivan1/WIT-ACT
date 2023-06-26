@@ -53,7 +53,7 @@ export const ResponsiveNavbar = () => {
             leadMaker: projectLeadMaker,
             leadMakerEmail: projectLeadMakerEmail,
         });
-        setProjectList(projects);
+        setProjectList(projectList);
     }
 
     return (
@@ -69,9 +69,6 @@ export const ResponsiveNavbar = () => {
                     <Button style={{ marginRight: "5px", backgroundColor: "slategray", border: "none"}} onClick={createProject}>+ Create Project</Button>
                     <Button style={{ marginLeft: "5px", fontSize: "1.25rem", background: "none", border: "none"}} onClick={profilePage}><CgIcons.CgProfile /></Button>
                 </Container>
-                {/* <Container style={{ alignItems:"center", justifyContent:"right"}}>
-                    <Button>Profile</Button>
-                </Container> */}
             </Navbar> 
 
             <Form className="auth-form-container" id="project-form" hidden={projectHidden ? true : false} style={{ transform: ""}}>

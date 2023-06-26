@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Card, Row, Col, Navbar } from "react-bootstrap";
 import { ResponsiveNavbar } from "../components/ResponsiveNavbar";
 import { Footer } from "../components/Footer";
 import { projects } from "./Projects";
 import { LikeButton } from "../components/LikeButton";
 import BookmarkButton from "../components/BookmarkButton";
-// import DislikeButton from "../components/DislikeButton";
 
 export const Homepage = () => {
+
     return (
         <div className="d-flex flex-column min-vh-100" style={{width: "100%"}}>
             <ResponsiveNavbar />
