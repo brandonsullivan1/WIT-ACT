@@ -15,8 +15,6 @@ export const ResponsiveNavbar = () => {
 
     const [projectHidden, setProjectHidden] = useState(true);
 
-    const [projectList, setProjectList] = useState(projects);
-
     const projectTitleRef = useRef();
     const projectDescRef = useRef();
     const projectLeadMakerRef = useRef();
@@ -34,6 +32,9 @@ export const ResponsiveNavbar = () => {
     const [projectLeadMakerEmail, setProjectLeadMakerEmail] = useState('');
     const [projectLeadMakerEmailFocus, setProjectLeadMakerEmailFocus] = useState(false);
 
+    const [status, setStatus] = useState('');
+    const [msg, setMsg] = useState('');
+
     const createProject = () => {
         setProjectHidden(!projectHidden);
     }
@@ -47,13 +48,7 @@ export const ResponsiveNavbar = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        projectList = projects.push({
-            title: projectTitle,
-            description: projectDescription,
-            leadMaker: projectLeadMaker,
-            leadMakerEmail: projectLeadMakerEmail,
-        });
-        setProjectList(projectList);
+        
     }
 
     return (
@@ -71,7 +66,7 @@ export const ResponsiveNavbar = () => {
                 </Container>
             </Navbar> 
 
-            <Form className="auth-form-container" id="project-form" hidden={projectHidden ? true : false} style={{ transform: ""}}>
+            <Form className="auth-form-container" id="project-form" hidden={projectHidden ? true : false} style={{ transform: ""}} method="POST">
                 <Container>
                     <Form.Label htmlFor="project-title">Project Title:</Form.Label>
                     <Form.Control 

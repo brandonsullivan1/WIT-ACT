@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Navbar, Container } from "react-bootstrap";
 import * as AiIcons from "react-icons/ai";
 
-export const LikeButton = () => {
+export const CardButtons = () => {
 
     const [liked, setLiked] = useState(false);
 
@@ -44,4 +44,4 @@ export const LikeButton = () => {
     )   
 }
 
-export default LikeButton;
+export default CardButtons;
