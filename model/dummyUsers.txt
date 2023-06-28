@@ -1,0 +1,21 @@
+TEST REQUEST BODIES
+
+To clear mock DB: Replace the contents of users.json with '[]' (no quotes)
+
+/api POST Bodies (createNewUser)
+{ "name": "Joshua Polischuk", "major": "Computer Science", "minor": "", "skills": ["Node", "Express"], "email": "polischukj@wit.edu", "pwd": "Aa12345!" }
+{ "name": "Brandon Sullivan", "major": "Computer Science", "minor": "", "skills": ["React", "Bootstrap"], "email": "sullivanb13@wit.edu", "pwd": "Bb12345!" }
+{ "name": "Not Enough Data" }
+{ "bad": "Bad Name" }
+{ "extra": "extra data", "name": "Random Guy", "major": "Computer Science", "minor": "", "skills": ["Stuff", "Things"], "email": "randomGuy@wit.edu", "pwd": "Cc12345!" }
+
+
+/api PUT Bodies (updateUser)
+{ "id": 1, "minor": [ "Applied Math", "Computer Networking"] }
+{ "id": 2, "name": "B_Sully" }
+{ "id": 99, "name": "Bad Request" }
+
+/api DELETE Bodies (deleteUser)
+{ "id": 1 }
+{ "id": 2 }
+{ "id": 99 }
