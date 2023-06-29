@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { Container, Navbar, Button, Form } from "react-bootstrap";
 import * as FaIcons from "react-icons/fa";
 import * as CgIcons from "react-icons/cg"
-import { projects } from "../pages/Projects";
 import { useNavigate } from "react-router-dom";
 
 export const ResponsiveNavbar = () => {
@@ -32,11 +31,14 @@ export const ResponsiveNavbar = () => {
     const [projectLeadMakerEmail, setProjectLeadMakerEmail] = useState('');
     const [projectLeadMakerEmailFocus, setProjectLeadMakerEmailFocus] = useState(false);
 
-    const [status, setStatus] = useState('');
-    const [msg, setMsg] = useState('');
+    const [sidemenu, setSidemenu] = useState(true);
 
     const createProject = () => {
         setProjectHidden(!projectHidden);
+    }
+
+    const toggleMenu = () => {
+        setSidemenu(!sidemenu);
     }
 
     useEffect(() => {
@@ -55,7 +57,8 @@ export const ResponsiveNavbar = () => {
         <>
             <Navbar bg="dark" collapseOnSelect expand="sm" style={{width: "100%"}}>
                 <Container style={{ alignItems:"center", justifyContent:"left"}}>
-                    <Button style={{ backgroundColor: "slategray", border: "none"}}><FaIcons.FaBars /></Button>
+                    <Button style={{ backgroundColor: "slategray", border: "none"}} onClick={toggleMenu}><FaIcons.FaBars /></Button>
+                    
                 </Container>
                 <Container style={{ alignItems:"center", justifyContent:"center"}}>
                     <Navbar.Brand href="/homepage">WIT ACT</Navbar.Brand>
@@ -66,7 +69,7 @@ export const ResponsiveNavbar = () => {
                 </Container>
             </Navbar> 
 
-            <Form className="auth-form-container" id="project-form" hidden={projectHidden ? true : false} style={{ transform: ""}} method="POST">
+            <Form className="auth-form-container" id="project-form" hidden={projectHidden ? true : false}>
                 <Container>
                     <Form.Label htmlFor="project-title">Project Title:</Form.Label>
                     <Form.Control 
@@ -125,7 +128,7 @@ export const ResponsiveNavbar = () => {
                         onBlur={() => setProjectLeadMakerEmailFocus(false)}
                         style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
                     />
-                     <Button type="submit" onSubmit={handleSubmit} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}}>Submit</Button>
+                    <Button type="submit" onSubmit={handleSubmit} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}}>Submit</Button>
                 </Container>
             </Form>
         </>

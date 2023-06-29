@@ -47,4 +47,10 @@ export const projects = [
         leadMaker: "Project 8",
         leadMakerEmail: "project8@wit.edu",
     },
+    {
+        title: `Project 9`,
+        description: 'This is Project 9\'s description',
+        leadMaker: "Project 9",
+        leadMakerEmail: "project9@wit.edu",
+    },
 ];
