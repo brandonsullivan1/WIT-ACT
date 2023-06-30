@@ -12,12 +12,13 @@ const PORT = process.env.PORT || 3500;
 //request and error logging
 app.use(logger);
 app.use(errorHandler);
+
 /* built-in middleware */
 app.use(express.json());
 //urlencoded (form) data
 app.use(express.urlencoded({extended: false})); 
 //Cross-Origin Resource Sharing
-app.use(cors(corsOptions));
+app.use(cors(corsOptions)); // REMOVE !origin FROM CORSOPTIONS AFTER DEVELOPMENT!!!!!
 
 /** ROUTERS **/
 app.use('/api', require('./routes/api/users'));
