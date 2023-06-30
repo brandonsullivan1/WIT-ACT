@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from "react"
 import { Button, Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const TEST_EMAIL = "sullivanb13@wit.edu";
-const TEST_PASSWORD = "TestPassword1!";
+const TEST_EMAIL = 'sullivanb13@wit.edu';
+const TEST_PASSWORD = 'TestPassword1!';
 
 export const Login = () => {
     const navigate = useNavigate();
@@ -15,6 +15,18 @@ export const Login = () => {
     const verificationLink = () => {
         navigate('/verification');
     }
+
+    const [data, setData] = useState([{}]);
+
+    useEffect(() => {
+        fetch("/users").then(
+            res => res.json()
+        ).then(
+            resData => {
+                setData(resData)
+            }
+        )
+    }, [])
 
     const emailRef = useRef();
     const errRef = useRef();
@@ -31,11 +43,7 @@ export const Login = () => {
     const [success, setSuccess] = useState('');
 
     useEffect(() => {
-        emailRef.current.focus();
-    }, [])
-
-    useEffect(() => {
-        const result = email === TEST_EMAIL;
+        const result = email === data["Email"];
         setValidEmail(result);
     }, [email])
 
@@ -70,21 +78,21 @@ export const Login = () => {
                     <Form className="login-form" onSubmit={handleSubmit}>
                         <Form.Label htmlFor="email">Email:</Form.Label>
                         <Form.Control
-                            type="email" 
-                            id="email" 
+                            type="email"
+                            id="email"
                             name="email"
                             placeholder="student@wit.edu"
                             ref={emailRef}
                             autoComplete="off"
-                            onChange={(e) => setEmail(e.target.value)}  
-                            value={email} 
+                            onChange={(e) => setEmail(e.target.value)}
+                            value={email}
                             reguired
                             onFocus={() => setEmailFocus(true)}
                             onBlur={() => setEmailFocus(false)}
                             style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
                         />
                         <Form.Label htmlFor="password">Password:</Form.Label>
-                        <Form.Control 
+                        <Form.Control
                             type="password"
                             id="password"
                             name="password"
@@ -96,7 +104,7 @@ export const Login = () => {
                             onBlur={() => setPasswordFocus(false)}
                             style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
                         />
-                        <Button type="submit" onClick={verificationLink} disabled={!validEmail || !validPassword ? true : false} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}}>Login</Button>
+                        <Button type="submit" onClick={verificationLink} disabled={!validEmail || !validPassword} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}}>Login</Button>
                     </Form>
                     <Button onClick={registrationLink} style={{ border: "none", background: "none", color: "white", textDecoration: "underline" }}>Don't have an account? Register here.</Button>
                 </Container>
