@@ -68,46 +68,50 @@ export const Login = () => {
     }
 
     return (
-        <div className="auth-form-container">           
+        <div>
             {success ? (
                 <section></section>
             ) : (
-                <Container>
-                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-                    <h2>Login</h2>
-                    <Form className="login-form" onSubmit={handleSubmit}>
-                        <Form.Label htmlFor="email">Email:</Form.Label>
-                        <Form.Control
-                            type="email"
-                            id="email"
-                            name="email"
-                            placeholder="student@wit.edu"
-                            ref={emailRef}
-                            autoComplete="off"
-                            onChange={(e) => setEmail(e.target.value)}
-                            value={email}
-                            reguired
-                            onFocus={() => setEmailFocus(true)}
-                            onBlur={() => setEmailFocus(false)}
-                            style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
-                        />
-                        <Form.Label htmlFor="password">Password:</Form.Label>
-                        <Form.Control
-                            type="password"
-                            id="password"
-                            name="password"
-                            placeholder="********"
-                            onChange={(e) => setPassword(e.target.value)}
-                            value={password}
-                            required
-                            onFocus={() => setPasswordFocus(true)}
-                            onBlur={() => setPasswordFocus(false)}
-                            style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
-                        />
-                        <Button type="submit" onClick={verificationLink} disabled={!validEmail || !validPassword} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}}>Login</Button>
-                    </Form>
-                    <Button onClick={registrationLink} style={{ border: "none", background: "none", color: "white", textDecoration: "underline" }}>Don't have an account? Register here.</Button>
-                </Container>
+                <div>
+                    <div className="auth-form-container">
+                        <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+                        <h2>Login</h2>
+                        <Form className="login-form" onSubmit={handleSubmit}>
+                            <Form.Label htmlFor="email">Email:</Form.Label>
+                            <Form.Control
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="student@wit.edu"
+                                ref={emailRef}
+                                autoComplete="off"
+                                onChange={(e) => setEmail(e.target.value)}
+                                value={email}
+                                reguired
+                                onFocus={() => setEmailFocus(true)}
+                                onBlur={() => setEmailFocus(false)}
+                                style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
+                            />
+                            <Form.Label htmlFor="password">Password:</Form.Label>
+                            <Form.Control
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="********"
+                                onChange={(e) => setPassword(e.target.value)}
+                                value={password}
+                                required
+                                onFocus={() => setPasswordFocus(true)}
+                                onBlur={() => setPasswordFocus(false)}
+                                style={{ margin: "0.5rem 0", padding: "1rem", border: "none", borderRadius: "10px" }}
+                            />
+                            <Button type="submit" onClick={verificationLink} disabled={!validEmail || !validPassword} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}}>Login</Button>
+                        </Form>
+                    </div>
+                    <div className="auth-form-container" style={{paddingTop: "10px", paddingBottom: "5px"}}>
+                        <p>Don't have an account? <a onClick={registrationLink} style={{ border: "none", background: "none", color: "white", textDecoration: "underline" }}>Register here.</a></p>
+                    </div>
+                </div>
             )}
         </div>
     )

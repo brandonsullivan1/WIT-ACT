@@ -133,8 +133,8 @@ export const Register = () => {
                     </p>
                 </section>
             ) : (
-                <Container>
-                    <Container className="auth-form-container">
+                <div>
+                    <div className="auth-form-container">
                         <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                         <h2>Register</h2>
                         <Form className="register-form" onSubmit={handleSubmit}>
@@ -346,11 +346,11 @@ export const Register = () => {
 
                             <Button disabled={!validEmail || !validPwd || !validMatch} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}} type="submit">Register</Button>
                         </Form>
-                    </Container>
-                    <Container className="auth-form-container" style={{paddingTop: "10px", paddingBottom: "5px"}}>
-                        <p style={{justifyContent: "center"}}>Already have an account? <Button onClick={loginLink} style={{ border: "none", background: "none", color: "white", textDecoration: "underline" }}>Log in</Button></p>
-                    </Container>
-                </Container>
+                    </div>
+                    <div className="auth-form-container" style={{paddingTop: "10px", paddingBottom: "5px"}}>
+                        <p>Already have an account? <a onClick={loginLink} style={{ border: "none", background: "none", color: "white", textDecoration: "underline" }}>Log in</a></p>
+                    </div>
+                </div>
             )}
         </Container>
     )
