@@ -120,7 +120,40 @@ export const Register = () => {
             setErrMsg('Invalid Entry');
             return;
         }
-        setSuccess(true);
+        const skillsList = skills.split(', ');
+        console.log(`skillsList: ${skillsList}`);
+        const request = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                name: name,
+                major: major,
+                minor: minor,
+                skill1: skillsList.shift(),
+                skill2: skillsList.shift(),
+                skill3: skillsList.shift(),
+                skill4: skillsList.shift(),
+                skill5: skillsList.shift(),
+                email: email,
+                phone: phoneNumber,
+                discord: discord,
+                password: pwd
+            })
+        }
+        await fetch('http://localhost:3100/adduser', request)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+
+                if(!response.ok){
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                }
+                setSuccess(true);
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
     }
 
     return (
@@ -344,7 +377,7 @@ export const Register = () => {
                                 <FontAwesomeIcon icon={faInfoCircle} /> Passwords must match.
                             </p>
 
-                            <Button disabled={!validEmail || !validPwd || !validMatch} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}} type="submit">Register</Button>
+                            <Button disabled={!validEmail || !validPwd || !validMatch} onClick={handleSubmit} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}} type="submit">Register</Button>
                         </Form>
                     </div>
                     <div className="auth-form-container" style={{paddingTop: "10px", paddingBottom: "5px"}}>
