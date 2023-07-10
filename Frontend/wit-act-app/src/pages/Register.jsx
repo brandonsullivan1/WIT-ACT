@@ -120,6 +120,7 @@ export const Register = () => {
             setErrMsg('Invalid Entry');
             return;
         }
+        const bcrypt = require('bcryptjs');
         const skillsList = skills.split(', ');
         console.log(`skillsList: ${skillsList}`);
         const request = {
@@ -137,7 +138,7 @@ export const Register = () => {
                 email: email,
                 phone: phoneNumber,
                 discord: discord,
-                password: pwd
+                password: await bcrypt.hash(pwd, 10)
             })
         }
         await fetch('http://localhost:3100/adduser', request)
