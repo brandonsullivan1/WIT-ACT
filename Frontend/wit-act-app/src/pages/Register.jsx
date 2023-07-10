@@ -11,7 +11,10 @@ const EMAIL_REGEX = /[a-z0-9]@wit.edu/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const PHONE_NUMBER_REGEX = /[0-9].{9}/;
 
-
+/*
+TODO: Change Major/Minor to dropdowns
+TODO:
+ */
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -65,7 +68,7 @@ export const Register = () => {
     const [matchFocus, setMatchFocus] = useState(false);
 
     const [errMsg, setErrMsg] = useState('');
-    const [success, setSuccess] = useState('');
+    const [success, setSuccess] = useState(false);
 
     useEffect(() => {
         const result = NAME_REGEX.test(name);
@@ -83,9 +86,10 @@ export const Register = () => {
     }, [minor])
 
     useEffect(() => {
+        console.log(`skills len: ${skills.length}`);
         const result = skills.length !== 0;
         setValidSkills(result);
-        const skillsList = skills.split(', ');
+        const skillsList = skills.split(/,\s?/g);
         console.log(skillsList);
     }, [skills])
 
@@ -121,7 +125,7 @@ export const Register = () => {
             return;
         }
         const bcrypt = require('bcryptjs');
-        const skillsList = skills.split(', ');
+        const skillsList = skills.split(/', ?'/g);
         console.log(`skillsList: ${skillsList}`);
         const request = {
             method: 'POST',
