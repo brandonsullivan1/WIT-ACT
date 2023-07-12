@@ -11,6 +11,7 @@ const connector = mysql.createConnection({
     user: "root",
     password: "SeniorProject2023",
     database: "WIT_ACT",
+    multipleStatements: true
 });
 
 app.get('/', (req, res) => {
@@ -29,8 +30,7 @@ app.get('/users', (req, res) => {
 
 app.post('/adduser', (req, res) => {
     console.log(req.body);
-    const sql = "INSERT INTO Users (FullName, Email, Password, Major, Minor, Skill_1, Skill_2, Skill_3, Skill_4, Skill_5, Phone_Number, Discord) " +
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    const sql = "INSERT INTO Users VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     connector.query(sql, [
         req.body.name,
         req.body.email,
@@ -51,20 +51,9 @@ app.post('/adduser', (req, res) => {
     });
 });
 
-app.delete('/deleteOne/:id', (req, res) => {
+app.get('/clearDB', (req, res) => {
     //cleanup
-    const sql = `DELETE FROM Users WHERE UserID=${req.params.id}`; //LIMIT needed because safe mode
-
-    connector.query(sql, (err, data) => {
-        if(err) throw err;
-        console.log(data);
-        res.json(data); //200 OK (consider 204 no content)
-    });
-});
-
-app.delete('/clearDB', (req, res) => {
-    //cleanup
-    const sql = "DELETE FROM Users WHERE UserID <= 1000000"; //if we hit this during testing we have failed
+    const sql = "SET SQL_SAFE_UPDATES = 0; DELETE FROM wit_act.Users; SET SQL_SAFE_UPDATES = 1";
 
     connector.query(sql, (err, data) => {
         if(err) throw err;
