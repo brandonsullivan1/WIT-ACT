@@ -11,7 +11,10 @@ const EMAIL_REGEX = /[a-z0-9]@wit.edu/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const PHONE_NUMBER_REGEX = /[0-9].{9}/;
 
-
+/*
+TODO: Change Major/Minor to dropdowns
+TODO:
+ */
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -65,7 +68,7 @@ export const Register = () => {
     const [matchFocus, setMatchFocus] = useState(false);
 
     const [errMsg, setErrMsg] = useState('');
-    const [success, setSuccess] = useState('');
+    const [success, setSuccess] = useState(false);
 
     useEffect(() => {
         const result = NAME_REGEX.test(name);
@@ -83,9 +86,10 @@ export const Register = () => {
     }, [minor])
 
     useEffect(() => {
+        console.log(`skills len: ${skills.length}`);
         const result = skills.length !== 0;
         setValidSkills(result);
-        const skillsList = skills.split(', ');
+        const skillsList = skills.split(/,\s?/g);
         console.log(skillsList);
     }, [skills])
 
@@ -120,7 +124,41 @@ export const Register = () => {
             setErrMsg('Invalid Entry');
             return;
         }
-        setSuccess(true);
+        const bcrypt = require('bcryptjs');
+        const skillsList = skills.split(/', ?'/g);
+        console.log(`skillsList: ${skillsList}`);
+        const request = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                name: name,
+                major: major,
+                minor: minor,
+                skill1: skillsList.shift(),
+                skill2: skillsList.shift(),
+                skill3: skillsList.shift(),
+                skill4: skillsList.shift(),
+                skill5: skillsList.shift(),
+                email: email,
+                phone: phoneNumber,
+                discord: discord,
+                password: await bcrypt.hash(pwd, 10)
+            })
+        }
+        await fetch('http://localhost:3100/adduser', request)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+
+                if(!response.ok){
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                }
+                setSuccess(true);
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
     }
 
     return (
@@ -344,7 +382,7 @@ export const Register = () => {
                                 <FontAwesomeIcon icon={faInfoCircle} /> Passwords must match.
                             </p>
 
-                            <Button disabled={!validEmail || !validPwd || !validMatch} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}} type="submit">Register</Button>
+                            <Button disabled={!validEmail || !validPwd || !validMatch} onClick={handleSubmit} style={{border: "none", backgroundColor: "white", padding: "20px", borderRadius: "10px", cursor: "pointer", color: "black"}} type="submit">Register</Button>
                         </Form>
                     </div>
                     <div className="auth-form-container" style={{paddingTop: "10px", paddingBottom: "5px"}}>

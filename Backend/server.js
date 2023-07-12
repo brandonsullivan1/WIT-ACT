@@ -1,5 +1,5 @@
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const cors = require('cors');
 
 const app = express();
@@ -11,52 +11,54 @@ const connector = mysql.createConnection({
     user: "root",
     password: "SeniorProject2023",
     database: "WIT_ACT",
+    multipleStatements: true
 });
 
 app.get('/', (req, res) => {
-    return res.json("From backend");
+    res.json("From backend"); // 200 OK
 });
 
 app.get('/users', (req, res) => {
     const sql = "SELECT * FROM Users";
 
     connector.query(sql, (err, data) => {
-        if (err) return res.json(err);
+        if (err) throw err;
         console.log(data);
-        return res.json(data);
+        res.json(data); // 200 OK
     });
-})
+});
 
-app.get('/adduser', (req, res) => {
-    //WHATEVER TEST DATA IS USED, ALL PHONE NUMBERS SHOULD BE ALL 5s FOR CLEANUP
-    const sql = "INSERT INTO Users (FullName, Email, Password, Major, Minor, Skill_1, Skill_2, Skill_3, Skill" +
-        "_4, Skill_5, Phone_Number, Discord) VALUES ('Joshua Polischuk', 'polischukj@wit.edu', 'fakepassword', " +
-        "'Computer Science', null, 'Node','Express', null, null, null,'555-555-555', 'discordname')";
-
-    connector.query(sql, (err, data) => {
-        if(err) return res.json(err);
+app.post('/adduser', (req, res) => {
+    console.log(req.body);
+    const sql = "INSERT INTO Users VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    connector.query(sql, [
+        req.body.name,
+        req.body.email,
+        req.body.password,
+        req.body.major,
+        req.body.minor,
+        req.body.skill1,
+        req.body.skill2,
+        req.body.skill3,
+        req.body.skill4,
+        req.body.skill5,
+        req.body.phone,
+        req.body.discord
+    ].map(x => (x===null||x===undefined||x==='')? null : x), (err, data) => {
+        if(err) throw err;
         console.log(data);
-        return res.json(data);
-    })
-})
-app.get('/deleteOne/:id', (req, res) => {
-    //cleanup
-    const sql = `DELETE FROM Users WHERE UserID=${req.params.id} LIMIT 1`; //LIMIT needed because safe mode
-
-    connector.query(sql, (err, data) => {
-        if(err) return res.json(err);
-        console.log(data);
-        return res.json(data);
+        res.json(data); //200 OK
     });
-})
+});
+
 app.get('/clearDB', (req, res) => {
     //cleanup
-    const sql = "DELETE FROM Users WHERE Phone_Number='555-555-555' LIMIT 100"; //LIMIT needed because safe mode
+    const sql = "SET SQL_SAFE_UPDATES = 0; DELETE FROM wit_act.Users; SET SQL_SAFE_UPDATES = 1";
 
     connector.query(sql, (err, data) => {
-        if(err) return res.json(err);
+        if(err) throw err;
         console.log(data);
-        return res.json(data);
+        res.json(data); //200 OK (consider 204 no content)
     });
 })
 
