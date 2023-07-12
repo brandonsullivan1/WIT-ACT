@@ -109,7 +109,7 @@ export const Login = () => {
                         </Form>
                     </div>
                     <div className="auth-form-container" style={{paddingTop: "10px", paddingBottom: "5px"}}>
-                        <p>Don't have an account? <a onClick={registrationLink} style={{ border: "none", background: "none", color: "white", textDecoration: "underline" }}>Register here.</a></p>
+                        <p>Don't have an account? <a onClick={registrationLink} style={{ border: "none", background: "none", color: "white", textDecoration: "underline", cursor: "pointer" }}>Register here.</a></p>
                     </div>
                 </div>
             )}

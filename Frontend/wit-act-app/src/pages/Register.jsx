@@ -3,8 +3,8 @@ import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Container } from "react-bootstrap";
-import { VALID_MAJORS } from "../validMajors";
-import { VALID_MINORS } from "../validMinors";
+import { VALID_MAJORS } from "../Validation/FormValidation";
+import { VALID_MINORS } from "../Validation/FormValidation";
 
 const NAME_REGEX = /^[A-Z][a-zA-Z- ]+$/;
 const EMAIL_REGEX = /[a-z0-9]@wit.edu/;
@@ -17,7 +17,7 @@ export const Register = () => {
     const navigate = useNavigate();
 
     const loginLink = () => {
-        navigate('/');
+        navigate('/login');
     }
 
     const nameRef = useRef();
@@ -348,7 +348,7 @@ export const Register = () => {
                         </Form>
                     </div>
                     <div className="auth-form-container" style={{paddingTop: "10px", paddingBottom: "5px"}}>
-                        <p>Already have an account? <a onClick={loginLink} style={{ border: "none", background: "none", color: "white", textDecoration: "underline" }}>Log in</a></p>
+                        <p>Already have an account? <a onClick={loginLink} style={{ border: "none", background: "none", color: "white", textDecoration: "underline", cursor: "pointer" }}>Log in</a></p>
                     </div>
                 </div>
             )}

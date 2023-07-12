@@ -48,10 +48,22 @@ export const ResponsiveNavbar = () => {
     const openSidebar = () => setShowSidebar(true);
     const closeSidebar = () => setShowSidebar(false);
 
+    const [projectFilterActive, setProjectFilterActive] = useState(false);
+    const [makerFilterActive, setMakerFilterActive] = useState(false);
+
+    const toggleProjectFilterActive = () => {
+        setProjectFilterActive(true);
+        setMakerFilterActive(false);
+    }
+
+    const toggleMakerFilterActive = () => {
+        setProjectFilterActive(false);
+        setMakerFilterActive(true);
+    }
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
     }
 
     return (
@@ -65,10 +77,10 @@ export const ResponsiveNavbar = () => {
                         </Offcanvas.Header>
                         <Offcanvas.Body>
                             <ListGroup as="ul">
-                                <ListGroup.Item as="li" active>
+                                <ListGroup.Item as="li" onClick={toggleProjectFilterActive} active={projectFilterActive}>
                                     Projects
                                 </ListGroup.Item>
-                                <ListGroup.Item as="li">
+                                <ListGroup.Item as="li" onClick={toggleMakerFilterActive} active={makerFilterActive}>
                                     Makers
                                 </ListGroup.Item>
                             </ListGroup>

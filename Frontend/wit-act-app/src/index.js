@@ -1,14 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, Route, Link, Outlet, createRoutesFromElement, RouterProvider } from "react-router-dom";
-import { Login } from "./pages/Login";
-import { Register } from "./pages/Register";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import { Verification } from "./pages/Verification";
 import { Homepage } from "./pages/Homepage";
 import "./App.scss";
 import "bootstrap/dist/css/bootstrap.min.css"
 import Profile from './pages/Profile';
+import LandingPage from "./pages/LandingPage";
 
 const App = () => (
   <div className="App">
@@ -20,23 +18,27 @@ const router = createBrowserRouter([
   {
     element: <App />,
     children: [
-      { 
+      {
         path: "/",
-        element: <Login />,
+        element: <LandingPage />,
       },
-      { 
-        path: "/register",
-        element: <Register />,
-      },
-      { 
+      // {
+      //   path: "/login",
+      //   element: <Login />,
+      // },
+      // {
+      //   path: "/register",
+      //   element: <Register />,
+      // },
+      {
         path: "/verification",
         element: <Verification />,
       },
-      { 
+      {
         path: "/homepage",
         element: <Homepage />,
       },
-      { 
+      {
         path: "/profile",
         element: <Profile />,
       },
@@ -46,7 +48,7 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <RouterProvider router={router} />
-);  
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
