@@ -7,6 +7,8 @@ import "./App.scss";
 import "bootstrap/dist/css/bootstrap.min.css"
 import Profile from './pages/Profile';
 import LandingPage from "./pages/LandingPage";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
 
 const App = () => (
   <div className="App">
@@ -22,14 +24,14 @@ const router = createBrowserRouter([
         path: "/",
         element: <LandingPage />,
       },
-      // {
-      //   path: "/login",
-      //   element: <Login />,
-      // },
-      // {
-      //   path: "/register",
-      //   element: <Register />,
-      // },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
       {
         path: "/verification",
         element: <Verification />,
