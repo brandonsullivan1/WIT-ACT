@@ -1,78 +1,41 @@
 import React, {useEffect, useRef, useState} from "react";
 import { useNavigate } from "react-router-dom";
-import {Button, Col, Container, Form, Row, Tab, Tabs, ProgressBar, InputGroup} from 'react-bootstrap';
+import {Button, Col, Container, Form, Row, Tab, Tabs, ProgressBar, InputGroup, Dropdown} from 'react-bootstrap';
 import {EMAIL_REGEX, PHONE_NUMBER_REGEX, PWD_REGEX, VALID_MAJORS, VALID_MINORS, NAME_REGEX} from "../Validation/FormValidation";
 import { Footer } from "../components/Footer";
-import * as Gr from "react-icons/gr";
+import * as Tfi from "react-icons/tfi";
+import Profile from "./Profile";
 
 const TEST_EMAIL = "sullivanb13@wit.edu";
 const TEST_PWD = "TestPassword1!";
 export const LandingPage = () => {
-    const [loginValidated, setLoginValidated] = useState(false);
-    const [registrationValidated, setRegistrationValidated] = useState(false);
-
-    const [progressBarState, setProgressBarState] = useState(0);
-
-    const navigate = useNavigate();
-
     // Login Section
+
+    const [loginValidated, setLoginValidated] = useState(false);
 
     const [userEmail, setUserEmail] = useState('');
     const [validUserEmail, setValidUserEmail] = useState(false);
-    const [userEmailFocus, setUserEmailFocus] = useState(false);
 
-    const [userPwd, setUserPwd] = useState('');
-    const [validUserPwd, setValidUserPwd] = useState(false);
-    const [userPwdFocus, setUserPwdFocus] = useState(false);
-
-    // test user email validity
     useEffect(() => {
-        // check if email is in database
-        const result = userEmail === TEST_EMAIL;
+        const result = userEmail === "sullivanb13@wit.edu";
         setValidUserEmail(result);
     }, [userEmail])
 
-    // test user password validity
-    useEffect(() => {
-        // check if password matches password in database stored by user's email
-        const result = userPwd === TEST_PWD;
-        setValidUserPwd(result);
-    }, [userPwd])
-
-    const handleLoginSubmit = (e) => {
-        const form = e.currentTarget;
+    const handleLoginSubmit = (event) => {
+        const form = event.currentTarget;
         if (form.checkValidity() === false) {
-            e.preventDefault();
-            e.stopPropagation();
+            event.preventDefault();
+            event.stopPropagation();
         }
 
         setLoginValidated(true);
     }
 
     // Register Section
-
-    const [name, setName] = useState('');
-    const [validName, setValidName] = useState(false);
-
-    const [major, setMajor] = useState('');
-    const [validMajor, setValidMajor] = useState(false);
-
-    const [minor, setMinor] = useState('');
-    const [validMinor, setValidMinor] = useState(false);
-
-    const [skills, setSkills] = useState('');
-    const [skillsList, setSkillsList] = useState([]);
-
-    const[skill1, setSkill1] = useState('');
-    const[skill2, setSkill2] = useState('');
-    const[skill3, setSkill3] = useState('');
-    const[skill4, setSkill4] = useState('');
-    const[skill5, setSkill5] = useState('');
+    const [registerValidated, setRegisterValidated] = useState(false);
 
     const [email, setEmail] = useState('');
     const [validEmail, setValidEmail] = useState(false);
-    const [emailFocus, setEmailFocus] = useState(false);
-    const emailRef = useRef();
 
     const [pwd, setPwd] = useState('');
     const [validPwd, setValidPwd] = useState(false);
@@ -80,182 +43,186 @@ export const LandingPage = () => {
     const [pwdMatch, setPwdMatch] = useState('');
     const [validPwdMatch, setValidPwdMatch] = useState(false);
 
+    const [major, setMajor] = useState('');
+    const [validMajor, setValidMajor] = useState(false);
+
+    const [minor, setMinor] = useState('');
+    const [validMinor, setValidMinor] = useState(false);
+
+    const [skillsList, setSkillsList] = useState([]);
+
+    const [skill1, setSkill1] = useState('');
+    const [validSkill1, setValidSkill1] = useState(false);
+
+    const [skill2, setSkill2] = useState('');
+    const [validSkill2, setValidSkill2] = useState(false);
+
+    const [skill3, setSkill3] = useState('');
+    const [validSkill3, setValidSkill3] = useState(false);
+
+    const [skill4, setSkill4] = useState('');
+    const [validSkill4, setValidSkill4] = useState(false);
+
+    const [skill5, setSkill5] = useState('');
+    const [validSkill5, setValidSkill5] = useState(false);
+
     const [phoneNumber, setPhoneNumber] = useState('');
     const [validPhoneNumber, setValidPhoneNumber] = useState(false);
 
     const [discord, setDiscord] = useState('');
+    const [validDiscord, setValidDiscord] = useState(false);
 
-    const [page1, setPage1] = useState(false);
-    const [page2, setPage2] = useState(true);
-    const [page3, setPage3] = useState(true);
-    const [page4, setPage4] = useState(true);
+    const [registerPage1Hidden, setRegisterPage1Hidden] = useState(false);
+    const [registerPage2Hidden, setRegisterPage2Hidden] = useState(true);
+    const [registerPage3Hidden, setRegisterPage3Hidden] = useState(true);
+    const [registerPage4Hidden, setRegisterPage4Hidden] = useState(true);
 
-    const [registerEmailPwdValidated, setRegisterEmailPwdValidated] = useState(false);
+    const [progressBarState, setProgressBarState] = useState(0);
 
-    const showPage1 = () => {
-        setPage1(false);
-        setPage2(true);
+    const [activeKey, setActiveKey] = useState("login");
+    const [loginDisabled, setLoginDisabled] = useState(false);
+    const [registerDisabled, setRegisterDisabled] = useState(true);
+
+    const changeTab = (e) => {
+        e.preventDefault();
+        if (activeKey === "login") {
+            setActiveKey("register");
+            setRegisterDisabled(false);
+            setLoginDisabled(true);
+        }
+
+        if (activeKey === "register") {
+            setActiveKey("login");
+            setRegisterDisabled(true);
+            setLoginDisabled(false);
+        }
+    }
+
+    const page1 = () => {
+        setRegisterPage1Hidden(false);
+        setRegisterPage2Hidden(true);
+        setRegisterPage3Hidden(true);
+        setRegisterPage4Hidden(true);
         setProgressBarState(0);
     }
 
-    const showPage2 = () => {
-        setPage1(true);
-        setPage2(false);
+    const page2 = () => {
+        setRegisterPage1Hidden(true);
+        setRegisterPage2Hidden(false);
+        setRegisterPage3Hidden(true);
+        setRegisterPage4Hidden(true);
         setProgressBarState(25);
     }
 
-    const showPage3 = () => {
-        setPage2(true);
-        setPage3(false);
+    const page3 = () => {
+        setRegisterPage1Hidden(true);
+        setRegisterPage2Hidden(true);
+        setRegisterPage3Hidden(false);
+        setRegisterPage4Hidden(true);
         setProgressBarState(50);
     }
 
-    const showPage4 = () => {
-        setPage3(true);
-        setPage4(false);
+    const page4 = () => {
+        setRegisterPage1Hidden(true);
+        setRegisterPage2Hidden(true);
+        setRegisterPage3Hidden(true);
+        setRegisterPage4Hidden(false);
         setProgressBarState(75);
     }
 
-    // test name validity
-    useEffect(() => {
-        const result = NAME_REGEX.test(name);
-        setValidName(result);
-    }, [name])
-
-    // test major validity
-    useEffect(() => {
-        const result = VALID_MAJORS.includes(major);
-        setValidMajor(result);
-    }, [major])
-
-    // test minor validity
-    useEffect(() => {
-        const result = VALID_MINORS.includes(minor);
-        setValidMinor(result);
-    }, [minor])
-
-    // set users skills list
-    useEffect(() => {
-        const result = skills.length !== 0;
-        setSkillsList(skills.split(", "));
-    }, [skills])
-
-    // test email validity
-    useEffect(() => {
-        const result = EMAIL_REGEX.test(email);
-        setValidEmail(result);
-    }, [email])
-
-    // test password validity
-    useEffect(() => {
-        const result = PWD_REGEX.test(pwd);
-        setValidPwd(result);
-    }, [pwd])
-
-    // test password match validity
-    useEffect(() => {
-        const result = pwd === pwdMatch;
-        setValidPwdMatch(result);
-    }, [pwd, pwdMatch])
-
-    // test phone number validity
-    useEffect(() => {
-        const result = PHONE_NUMBER_REGEX.test(phoneNumber);
-        setValidPhoneNumber(result);
-    }, [phoneNumber])
-
-    const handleRegisterSubmit = (e) => {
-        const form = e.currentTarget;
+    const handleRegisterSubmit = (event) => {
+        const form = event.currentTarget;
         if (form.checkValidity() === false) {
-            e.preventDefault();
-            e.stopPropagation();
+            event.preventDefault();
+            event.stopPropagation();
         }
 
-        // const testEmail = EMAIL_REGEX.test(email);
-        // const testPwd = PWD_REGEX.test(pwd);
-        // const testPwdMatch = pwd === pwdMatch;
-        //
-        // if (testEmail && testPwd && testPwdMatch) setRegisterEmailPwdValidated(true);
-        setRegistrationValidated(true);
+        setRegisterValidated(true);
     }
 
     return (
         <Container>
-            <Container style={{border: "1px solid white", padding: "0", borderTopLeftRadius: "7px", borderTopRightRadius: "7px", justifyContent: "center", alignItems: "center"}}>
-                    <Tabs defaultActiveKey="login" fill justify style={{width: "100%"}}>
-                        <Tab eventKey="login" title="Login">
-                            <Container style={{backgroundColor: "white"}}>
-                                <Form noValidate validated={loginValidated} id="loginForm" onSubmit={handleLoginSubmit}>
-                                        <Container>
-                                            <Row>
-                                                <Col md="3"></Col>
-                                                <Col md="6">
-                                                    <Form.Group controlId="formUserEmail">
-                                                        <Form.Label style={{color: "black"}}>Email</Form.Label>
-                                                        <InputGroup>
-                                                            <Form.Control
-                                                                required
-                                                                value={userEmail}
-                                                                isInvalid={!validUserEmail && loginValidated}
-                                                                id="validationUserEmail"
-                                                                type="text"
-                                                                placeholder="email@wit.edu"
-                                                                autoComplete="off"
-                                                                onChange={(e) => setUserEmail(e.target.value)}
-                                                            />
-                                                            <Form.Control.Feedback>Looks Good!</Form.Control.Feedback>
-                                                        </InputGroup>
-                                                    </Form.Group>
+            <Container style={{
+                border: "1px solid white",
+                padding: "0",
+                borderTopLeftRadius: "7px",
+                borderTopRightRadius: "7px",
+                justifyContent: "center",
+                alignItems: "center"
+            }}>
+                <Tabs activeKey={activeKey} fill justify style={{width: "100%", backgroundColor: "lightgray", color: "white"}}>
+                    <Tab eventKey="login" title="Login" disabled={loginDisabled}>
+                        <Container style={{backgroundColor: "white"}}>
+                            <Form noValidate validated={loginValidated}>
+                                <Row className="mt-3">
+                                    <Col md="3"></Col>
+                                    <Col md="6">
+                                        <Form.Group controlId="validationCustom01">
+                                            <Form.Label style={{color: "black"}}>Email</Form.Label>
+                                            <Form.Control
+                                                required
+                                                type="text"
+                                                placeholder="email@wit.edu"
+                                                onChange={(e) => setUserEmail(e.target.value)}
+                                                value={userEmail}
+                                                isInvalid={!validUserEmail && userEmail.length !== 0}
+                                            />
+                                            <Form.Control.Feedback
+                                                type={validUserEmail ? "valid" : "invalid"}></Form.Control.Feedback>
+                                        </Form.Group>
 
-                                                    <Form.Group controlId="validationUserPwd">
-                                                        <Form.Label style={{color: "black"}}>Password</Form.Label>
-                                                        <Form.Control
-                                                            required
-                                                            id="validationUserPwd"
-                                                            type="password"
-                                                            placeholder="Password"
-                                                            // autoComplete="off"
-                                                            // onChange={(e) => setUserPwd(e.target.value)}
-                                                            // value={userPwd}
-                                                        />
-                                                    </Form.Group>
-                                                    <Form.Control.Feedback type="invalid">Wrong</Form.Control.Feedback>
-                                                </Col>
-                                            </Row>
+                                        <Form.Group controlId="validationUserPwd">
+                                            <Form.Label style={{color: "black"}}>Password</Form.Label>
+                                            <Form.Control
+                                                type="password"
+                                                placeholder="password"
+                                                required
+                                            />
+                                            <Form.Control.Feedback type="invald">Invalid
+                                                password.</Form.Control.Feedback>
+                                        </Form.Group>
+
+                                        <Container className="mt-3">
+                                            <Button type="submit" style={{
+                                                border: "2px solid black",
+                                                backgroundColor: "white",
+                                                padding: "1rem 7rem",
+                                                borderRadius: "10px",
+                                                cursor: "pointer",
+                                                color: "black"
+                                            }}>Login</Button>
+                                            <p className="mt-3" style={{color: "black"}}>Don't have an account? <a href='' onClick={changeTab} style={{color: "black"}}>Register here.</a></p>
                                         </Container>
-                                    <Container className="mt-3">
-                                        <Button type="submit" style={{border: "none", backgroundColor: "black", padding: "1rem 9rem", borderRadius: "10px", cursor: "pointer", color: "white"}}>Login</Button>
-                                        <p className="mt-3">Don't have an account? <a href='#'>Register here.</a></p>
-                                    </Container>
-                                </Form>
-                            </Container>
-                        </Tab>
-                        <Tab eventKey="register" title="Register">
-                            <Container style={{backgroundColor: "white"}}>
-                                <Form noValidate validated={registerEmailPwdValidated} onSubmit={handleRegisterSubmit}>
-                                    <Container>
-                                        {/*<ProgressBar className="mt-1" now={progressBarState} />*/}
-                                        <Row>
-                                            <Col md="3"></Col>
-                                            <Col md="6">
-                                                <Form.Group controlId="emailValidation" hidden={page1}>
+                                    </Col>
+                                </Row>
+                            </Form>
+                        </Container>
+                    </Tab>
+
+                    <Tab eventKey="register" title="Register" disabled={registerDisabled}>
+                        <Container style={{backgroundColor: "white"}}>
+                            <Form noValidate validated={registerValidated} onSubmit={handleRegisterSubmit}>
+                                <Container>
+                                    <Row>
+                                        <Col md="3"></Col>
+                                        <Col md="6">
+
+                                            <ProgressBar className="mt-1" now={progressBarState}/>
+
+                                            <Container className="mt-3" hidden={registerPage1Hidden}>
+                                                <Form.Group controlId="emailValidation">
                                                     <Form.Label style={{color: "black"}}>Email</Form.Label>
                                                     <Form.Control
                                                         required
                                                         type="text"
                                                         placeholder="email@wit.edu"
-                                                        // ref={emailRef}
                                                         onChange={(e) => setEmail(e.target.value)}
                                                         value={email}
-                                                        isInvalid={validEmail && registrationValidated}
-                                                        onFocus={() => setEmailFocus(true)}
                                                     />
-                                                    <Form.Control.Feedback id="emailValidation" type={validEmail ? "valid" : "invalid"}>
-                                                        Invalid email.
-                                                    </Form.Control.Feedback>
+
                                                 </Form.Group>
 
-                                                <Form.Group>
+                                                <Form.Group controlId="pwdValidation">
                                                     <Form.Label style={{color: "black"}}>Password</Form.Label>
                                                     <Form.Control
                                                         required
@@ -263,11 +230,10 @@ export const LandingPage = () => {
                                                         placeholder="Password"
                                                         onChange={(e) => setPwd(e.target.value)}
                                                         value={pwd}
-                                                        aria-invalid={validPwd ? "false" : "true"}
                                                     />
                                                 </Form.Group>
 
-                                                <Form.Group>
+                                                <Form.Group controlId="matchPwdValidation">
                                                     <Form.Label style={{color: "black"}}>Confirm Password</Form.Label>
                                                     <Form.Control
                                                         required
@@ -275,167 +241,214 @@ export const LandingPage = () => {
                                                         placeholder="Confirm Password"
                                                         onChange={(e) => setPwdMatch(e.target.value)}
                                                         value={pwdMatch}
-                                                        aria-invalid={validPwdMatch ? "false" : "true"}
                                                     />
                                                 </Form.Group>
+
                                                 <Container className="mt-3">
-                                                    <Button
-                                                        type="submit"
-                                                        style={{border: "2px solid black", backgroundColor: "white", padding: "1rem 7rem", borderRadius: "10px", cursor: "pointer", color: "black"}}
-                                                        // disabled={!validEmail || !validPwdMatch || !validPwdMatch}
-                                                        // onClick={showPage2}
-                                                    >
-                                                        Submit
-                                                    </Button>
+                                                    <Button onClick={page2} style={{
+                                                        border: "2px solid black",
+                                                        backgroundColor: "white",
+                                                        padding: "1rem 7rem",
+                                                        borderRadius: "10px",
+                                                        cursor: "pointer",
+                                                        color: "black"
+                                                    }}>Next</Button>
+                                                    <p className="mt-3" style={{color: "black"}}>Already have an account? <a href='' onClick={changeTab} style={{color: "black"}}>Login here.</a></p>
                                                 </Container>
-                                            </Col>
-                                        </Row>
-                                    </Container>
-                                </Form>
+                                            </Container>
 
-                                {/*<Form>*/}
-                                {/*    <Container>*/}
-                                {/*        <Row>*/}
-                                {/*            <Form.Group as={Col} md={"3"}></Form.Group>*/}
-                                {/*            <Form.Group as={Col} md="6" controlId="registerValidation" hidden={page2}>*/}
-                                {/*                <Form.Label style={{color: "black"}}>Full name</Form.Label>*/}
-                                {/*                <Form.Control*/}
-                                {/*                    required*/}
-                                {/*                    type="text"*/}
-                                {/*                    placeholder="Full name"*/}
-                                {/*                    onChange={(e) => setName(e.target.value)}*/}
-                                {/*                    value={name}*/}
-                                {/*                    aria-invalid={validName ? "false" : "true"}*/}
-                                {/*                />*/}
-                                {/*                <Form.Label style={{color: "black"}}>Major</Form.Label>*/}
-                                {/*                <Form.Control*/}
-                                {/*                    required*/}
-                                {/*                    type="text"*/}
-                                {/*                    placeholder="Major"*/}
-                                {/*                    onChange={(e) => setMajor(e.target.value)}*/}
-                                {/*                    value={major}*/}
-                                {/*                    aria-invalid={validMajor ? "false" : "true"}*/}
-                                {/*                />*/}
+                                            <Container className="mt-3" hidden={registerPage2Hidden}>
+                                                <Form.Group controlId="majorValidation">
+                                                    <Form.Label style={{color: "black"}}>Major</Form.Label>
+                                                    <Form.Control
+                                                        required
+                                                        type="text"
+                                                        placeholder="Major"
+                                                        onChange={(e) => setMajor(e.target.value)}
+                                                        value={major}
+                                                    />
+                                                </Form.Group>
 
-                                {/*                <Form.Label style={{color: "black"}}>Minor</Form.Label>*/}
-                                {/*                <Form.Control*/}
-                                {/*                    type="text"*/}
-                                {/*                    placeholder="Minor"*/}
-                                {/*                    onChange={(e) => setMinor(e.target.value)}*/}
-                                {/*                    value={minor}*/}
-                                {/*                    aria-invalid={validMinor ? "false" : "true"}*/}
-                                {/*                />*/}
-                                {/*                <Container className="mt-3">*/}
-                                {/*                    <Row>*/}
-                                {/*                        <Button*/}
-                                {/*                            style={{width:"25%", border: "2px solid black", backgroundColor: "white", borderRadius: "10px", cursor: "pointer", color: "black"}}*/}
-                                {/*                            onClick={showPage1}*/}
-                                {/*                        >*/}
-                                {/*                            Back*/}
-                                {/*                        </Button>*/}
-                                {/*                        <Button*/}
-                                {/*                            className="mt-1"*/}
-                                {/*                            style={{width:"25%", border: "2px solid black", backgroundColor: "white", borderRadius: "10px", cursor: "pointer", color: "black"}}*/}
-                                {/*                            // disabled={!validEmail || !validPwdMatch || !validPwdMatch}*/}
-                                {/*                            onClick={showPage3}*/}
-                                {/*                        >*/}
-                                {/*                            Next*/}
-                                {/*                        </Button>*/}
-                                {/*                    </Row>*/}
-                                {/*                </Container>*/}
-                                {/*            </Form.Group>*/}
-                                {/*        </Row>*/}
-                                {/*    </Container>*/}
-                                {/*</Form>*/}
+                                                <Form.Group controlId="minorValidation">
+                                                    <Form.Label style={{color: "black"}}>Minor</Form.Label>
+                                                    <Form.Control
+                                                        required
+                                                        type="text"
+                                                        placeholder="(Optional)"
+                                                        onChange={(e) => setMinor(e.target.value)}
+                                                        value={minor}
+                                                    />
+                                                </Form.Group>
 
-                                {/*<Form>*/}
-                                {/*    <Container>*/}
-                                {/*        <Row>*/}
-                                {/*            <Form.Group as={Col} md={"3"}></Form.Group>*/}
-                                {/*            <Form.Group as={Col} md="6" hidden={page3}>*/}
-                                {/*                <Form.Label style={{color: "black"}}>Skill 1</Form.Label>*/}
-                                {/*                <Form.Control*/}
-                                {/*                    required*/}
-                                {/*                    type="text"*/}
-                                {/*                    placeholder="Skill 1"*/}
-                                {/*                    onChange={(e) => setSkills(e.target.value)}*/}
-                                {/*                    value={skills}*/}
-                                {/*                />*/}
+                                                <Container className="mt-3">
+                                                    <Row style={{display: "inline-flex"}}>
+                                                        <Col md="6"
+                                                             style={{alignItems: "center", justifyContent: "center"}}>
+                                                            <Button onClick={page1} style={{
+                                                                border: "2px solid black",
+                                                                backgroundColor: "white",
+                                                                padding: "1rem 1rem",
+                                                                borderRadius: "10px",
+                                                                cursor: "pointer",
+                                                                color: "black"
+                                                            }}>Back</Button>
+                                                        </Col>
+                                                        <Col md="6">
+                                                            <Button onClick={page3} style={{
+                                                                border: "2px solid black",
+                                                                backgroundColor: "white",
+                                                                padding: "1rem 1rem",
+                                                                borderRadius: "10px",
+                                                                cursor: "pointer",
+                                                                color: "black"
+                                                            }}>Next</Button>
+                                                        </Col>
 
-                                {/*                <Form.Label style={{color: "black"}}>Skill 2</Form.Label>*/}
-                                {/*                <Form.Control*/}
-                                {/*                    required*/}
-                                {/*                    type="text"*/}
-                                {/*                    placeholder="Skill 2"*/}
-                                {/*                />*/}
+                                                    </Row>
+                                                </Container>
+                                            </Container>
 
-                                {/*                <Form.Label style={{color: "black"}}>Skill 3</Form.Label>*/}
-                                {/*                <Form.Control*/}
-                                {/*                    type="text"*/}
-                                {/*                    placeholder="(Optional)"*/}
-                                {/*                />*/}
+                                            <Container className="mt-3" hidden={registerPage3Hidden}>
+                                                <Form.Group controlId="skill1Validation">
+                                                    <Form.Label style={{color: "black"}}>Skill 1</Form.Label>
+                                                    <Form.Control
+                                                        required
+                                                        type="text"
+                                                        placeholder="Skill 1"
+                                                        onChange={(e) => setSkill1(e.target.value)}
+                                                        value={skill1}
+                                                    />
+                                                </Form.Group>
 
-                                {/*                <Form.Label style={{color: "black"}}>Skill 4</Form.Label>*/}
-                                {/*                <Form.Control*/}
-                                {/*                    type="text"*/}
-                                {/*                    placeholder="(Optional)"*/}
-                                {/*                />*/}
+                                                <Form.Group controlId="skill2Validation">
+                                                    <Form.Label style={{color: "black"}}>Skill 2</Form.Label>
+                                                    <Form.Control
+                                                        required
+                                                        type="text"
+                                                        placeholder="Skill 2"
+                                                        onChange={(e) => setSkill2(e.target.value)}
+                                                        value={skill2}
+                                                    />
+                                                </Form.Group>
 
-                                {/*                <Form.Label style={{color: "black"}}>Skill 5</Form.Label>*/}
-                                {/*                <Form.Control*/}
-                                {/*                    type="text"*/}
-                                {/*                    placeholder="(Optional)"*/}
-                                {/*                />*/}
-                                {/*                <Container className="mt-3">*/}
-                                {/*                    <Button*/}
-                                {/*                        style={{border: "2px solid black", backgroundColor: "white", padding: "1rem 7rem", borderRadius: "10px", cursor: "pointer", color: "black"}}*/}
-                                {/*                        disabled={!validEmail || !validPwdMatch || !validPwdMatch}*/}
-                                {/*                        onClick={showPage4}*/}
-                                {/*                    >*/}
-                                {/*                        Next*/}
-                                {/*                        <Gr.GrLinkNext />*/}
-                                {/*                    </Button>*/}
-                                {/*                </Container>*/}
-                                {/*            </Form.Group>*/}
-                                {/*        </Row>*/}
-                                {/*    </Container>*/}
-                                {/*</Form>*/}
+                                                <Form.Group controlId="skill3Validation">
+                                                    <Form.Label style={{color: "black"}}>Skill 3</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        placeholder="Skill 3"
+                                                        onChange={(e) => setSkill3(e.target.value)}
+                                                        value={skill3}
+                                                    />
+                                                </Form.Group>
 
-                                {/*<Form>*/}
-                                {/*    <Container>*/}
-                                {/*        <Row>*/}
-                                {/*            <Form.Group as={Col} md={"3"}></Form.Group>*/}
-                                {/*            <Form.Group as={Col} md="6" hidden={page4}>*/}
-                                {/*                <Form.Label style={{color: "black"}}>Phone number</Form.Label>*/}
-                                {/*                <Form.Control*/}
-                                {/*                    type="text"*/}
-                                {/*                    placeholder="(Optional)"*/}
-                                {/*                />*/}
+                                                <Form.Group controlId="skill4Validation">
+                                                    <Form.Label style={{color: "black"}}>Skill 4</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        placeholder="Skill 4"
+                                                        onChange={(e) => setSkill4(e.target.value)}
+                                                        value={skill4}
+                                                    />
+                                                </Form.Group>
 
-                                {/*                <Form.Label style={{color: "black"}}>Discord</Form.Label>*/}
-                                {/*                <Form.Control*/}
-                                {/*                    type="text"*/}
-                                {/*                    placeholder="(Optional)"*/}
-                                {/*                    onChange={(e) => setDiscord(e.target.value)}*/}
-                                {/*                    value={discord}*/}
-                                {/*                />*/}
-                                {/*            </Form.Group>*/}
+                                                <Form.Group controlId="skill5Validation">
+                                                    <Form.Label style={{color: "black"}}>Skill 5</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        placeholder="Skill 5"
+                                                        onChange={(e) => setSkill5(e.target.value)}
+                                                        value={skill5}
+                                                    />
+                                                </Form.Group>
 
-                                {/*            <Container className="mt-3">*/}
-                                {/*                <Button style={{border: "none", backgroundColor: "black", padding: "1rem 7rem", borderRadius: "10px", cursor: "pointer", color: "white"}} hidden>Register</Button>*/}
-                                {/*                <p className="mt-3">Already have an account? <a href="#">Log in.</a></p>*/}
-                                {/*            </Container>*/}
-                                {/*        </Row>*/}
-                                {/*    </Container>*/}
-                                {/*</Form>*/}
-                            </Container>
-                        </Tab>
-                    </Tabs>
+                                                <Container className="mt-3">
+                                                    <Row style={{display: "inline-flex"}}>
+                                                        <Col md="6"
+                                                             style={{alignItems: "center", justifyContent: "center"}}>
+                                                            <Button onClick={page2} style={{
+                                                                border: "2px solid black",
+                                                                backgroundColor: "white",
+                                                                padding: "1rem 1rem",
+                                                                borderRadius: "10px",
+                                                                cursor: "pointer",
+                                                                color: "black"
+                                                            }}>Back</Button>
+                                                        </Col>
+                                                        <Col md="6">
+                                                            <Button onClick={page4} style={{
+                                                                border: "2px solid black",
+                                                                backgroundColor: "white",
+                                                                padding: "1rem 1rem",
+                                                                borderRadius: "10px",
+                                                                cursor: "pointer",
+                                                                color: "black"
+                                                            }}>Next</Button>
+                                                        </Col>
+
+                                                    </Row>
+                                                </Container>
+                                            </Container>
+
+                                            <Container className="mt-3" hidden={registerPage4Hidden}>
+                                                <Form.Group controlId="phoneNumberValidation">
+                                                    <Form.Label style={{color: "black"}}>Phone Number</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        placeholder="(Optional)"
+                                                        onChange={(e) => setPhoneNumber(e.target.value)}
+                                                        value={phoneNumber}
+                                                    />
+                                                </Form.Group>
+
+                                                <Form.Group controlId="discordValidation">
+                                                    <Form.Label style={{color: "black"}}>Discord</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        placeholder="(Optional)"
+                                                        onChange={(e) => setDiscord(e.target.value)}
+                                                        value={discord}
+                                                    />
+                                                </Form.Group>
+
+                                                <Container className="mt-3">
+                                                    <Row style={{display: "inline-flex"}}>
+                                                        <Col md="6"
+                                                             style={{alignItems: "center", justifyContent: "center"}}>
+                                                            <Button onClick={page3} style={{
+                                                                border: "2px solid black",
+                                                                backgroundColor: "white",
+                                                                padding: "1rem 1rem",
+                                                                borderRadius: "10px",
+                                                                cursor: "pointer",
+                                                                color: "black"
+                                                            }}>Back</Button>
+                                                        </Col>
+                                                        <Col md="6">
+                                                            <Button type="submit" style={{
+                                                                border: "2px solid black",
+                                                                backgroundColor: "white",
+                                                                padding: "1rem 1rem",
+                                                                borderRadius: "10px",
+                                                                cursor: "pointer",
+                                                                color: "black"
+                                                            }}>Register</Button>
+                                                        </Col>
+
+                                                    </Row>
+                                                </Container>
+                                            </Container>
+                                        </Col>
+                                    </Row>
+                                </Container>
+                            </Form>
+                        </Container>
+                    </Tab>
+                </Tabs>
             </Container>
 
-            <Footer />
+            <Footer/>
         </Container>
-    )
+    );
 }
 
 export default LandingPage;
