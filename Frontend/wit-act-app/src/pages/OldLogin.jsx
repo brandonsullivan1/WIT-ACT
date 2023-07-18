@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const TEST_EMAIL = 'sullivanb13@wit.edu';
 const TEST_PASSWORD = 'TestPassword1!';
 
-export const Login = () => {
+export const OldLogin = () => {
     const navigate = useNavigate();
 
     const registrationLink = () => {
@@ -61,7 +61,7 @@ export const Login = () => {
         const v1 = email === TEST_EMAIL;
         const v2 = password === TEST_PASSWORD;
         if (!v1 || !v2) {
-            setErrMsg('Invalid Login');
+            setErrMsg('Invalid OldLogin');
             return;
         }
         setSuccess(true);
@@ -117,4 +117,4 @@ export const Login = () => {
     )
 }
 
-export default Login;
+export default OldLogin;

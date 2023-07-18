@@ -1,8 +1,9 @@
-$primary: #fff;
-$secondary: #262d3d;
-
 @import "~bootstrap/scss/bootstrap";
 
+$theme-colors: (
+  'primary': white,
+  'secondary': lightgray
+);
 
 * {
   margin: 0;

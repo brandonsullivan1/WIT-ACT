@@ -16,7 +16,7 @@ TODO: Change Major/Minor to dropdowns
 TODO:
  */
 
-export const Register = () => {
+export const OldRegister = () => {
     const navigate = useNavigate();
 
     const loginLink = () => {
@@ -394,4 +394,4 @@ export const Register = () => {
     )
 }
 
-export default Register;
+export default OldRegister;
