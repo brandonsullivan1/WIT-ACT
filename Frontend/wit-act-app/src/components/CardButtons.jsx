@@ -37,71 +37,43 @@ export const CardButtons = () => {
                 <Button onClick={openExpandedCard} style={{backgroundColor: "#000", border: "1px solid #000"}}>Expand</Button>
                 <Modal show={showExpandedCard} onHide={closeExpandedCard} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
                     <Modal.Header closeButton>
-                        <Modal.Title>Project Title</Modal.Title>
+                        <Modal.Title>Stock Price Predictor</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Card>
                             <Card.Body>
                                 <Card.Title>Description:</Card.Title>
-                                <Card.Text>This is an example of a project description.</Card.Text>
-                                <Card.Title>Desired Skills:</Card.Title>
-                                <Card.Text>
-                                    <ListGroup as="ol" numbered>
-                                        <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
-                                            <Container className="ms-2 me-auto">
-                                                <div className="fw-bold">Skill 2</div>
-                                                Description of Skill 2.
-                                            </Container>
-                                        </ListGroup.Item>
-                                        <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
-                                            <Container className="ms-2 me-auto">
-                                                <div className="fw-bold">Skill 3</div>
-                                                Description of Skill 3.
-                                            </Container>
-                                        </ListGroup.Item>
-                                        <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
-                                            <Container className="ms-2 me-auto">
-                                                <div className="fw-bold">Skill 4</div>
-                                                Description of Skill 4.
-                                            </Container>
-                                        </ListGroup.Item>
-                                        <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
-                                            <Container className="ms-2 me-auto">
-                                                <div className="fw-bold">Skill 4</div>
-                                                Description of Skill 4.
-                                            </Container>
-                                        </ListGroup.Item>
-                                        <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
-                                            <Container className="ms-2 me-auto">
-                                                <div className="fw-bold">Skill 5</div>
-                                                Description of Skill 5.
-                                            </Container>
-                                        </ListGroup.Item>
-                                    </ListGroup>
+                                <Card.Text>The goal of this project is to build a database of historical stock prices and
+                                    predict the future prices. Each stock should have a sufficient amount of historical
+                                    data for accurate predictions. The prediction model needs tobe researched.
                                 </Card.Text>
+                                <Card.Title>Desired General Skill:</Card.Title>
+                                <Card.Text>Computing and Data Science</Card.Text>
+                                <Card.Title>Desired Skill Focus:</Card.Title>
+                                <Card.Text>Software Engineering</Card.Text>
                                 <Card.Title>Lead Maker:</Card.Title>
-                                <Card.Text>Lead Maker</Card.Text>
+                                <Card.Text>Brandon Sullivan</Card.Text>
                                 <Card.Title>Lead Maker Email:</Card.Title>
-                                <Card.Text>leadmaker@wit.edu</Card.Text>
+                                <Card.Text>sullivanb13@wit.edu</Card.Text>
                                 <Card.Title>Other Team Members:</Card.Title>
                                 <Card.Text>
                                     <ListGroup as="ol" numbered>
                                         <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
                                             <Container className="ms-2 me-auto">
-                                                <div className="fw-bold">Team Member 1</div>
-                                                    team member1@wit.edu
+                                                <div className="fw-bold">Josh Polischuk</div>
+                                                    polischukj@wit.edu
                                             </Container>
                                         </ListGroup.Item>
                                         <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
                                             <Container className="ms-2 me-auto">
                                                 <div className="fw-bold">Team Member 2</div>
-                                                teammember2@wit.edu
+                                                (open spot)
                                             </Container>
                                         </ListGroup.Item>
                                         <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
                                             <Container className="ms-2 me-auto">
                                                 <div className="fw-bold">Team Member 3</div>
-                                                teammember3@wit.edu
+                                                (open spot)
                                             </Container>
                                         </ListGroup.Item>
                                     </ListGroup>

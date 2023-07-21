@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Button, Col, Container, Form, ListGroup, ListGroupItem, ProgressBar, Row} from "react-bootstrap";
+import {Button, Col, Container, Dropdown, Form, ListGroup, ListGroupItem, ProgressBar, Row} from "react-bootstrap";
 import {VALID_MAJORS, VALID_MINORS} from "../Validation/FormValidation";
 
 export const Register = () => {
@@ -47,6 +47,7 @@ export const Register = () => {
     const [registerPage2Hidden, setRegisterPage2Hidden] = useState(true);
     const [registerPage3Hidden, setRegisterPage3Hidden] = useState(true);
     const [registerPage4Hidden, setRegisterPage4Hidden] = useState(true);
+    const [verifyPageHidden, setVerifyPageHidden] = useState(true);
 
     const [progressBarState, setProgressBarState] = useState(0);
 
@@ -67,13 +68,14 @@ export const Register = () => {
             setRegisterDisabled(true);
             setLoginDisabled(false);
         }
-    }
+    };
 
     const page1 = () => {
         setRegisterPage1Hidden(false);
         setRegisterPage2Hidden(true);
         setRegisterPage3Hidden(true);
         setRegisterPage4Hidden(true);
+        setVerifyPageHidden(true);
         setProgressBarState(0);
     }
 
@@ -82,6 +84,7 @@ export const Register = () => {
         setRegisterPage2Hidden(false);
         setRegisterPage3Hidden(true);
         setRegisterPage4Hidden(true);
+        setVerifyPageHidden(true);
         setProgressBarState(25);
     }
 
@@ -90,6 +93,7 @@ export const Register = () => {
         setRegisterPage2Hidden(true);
         setRegisterPage3Hidden(false);
         setRegisterPage4Hidden(true);
+        setVerifyPageHidden(true);
         setProgressBarState(50);
     }
 
@@ -98,10 +102,20 @@ export const Register = () => {
         setRegisterPage2Hidden(true);
         setRegisterPage3Hidden(true);
         setRegisterPage4Hidden(false);
+        setVerifyPageHidden(true);
         setProgressBarState(75);
     }
 
-    const handleRegisterSubmit = (event) => {
+    const verifyPage = () => {
+        setRegisterPage1Hidden(true);
+        setRegisterPage2Hidden(true);
+        setRegisterPage3Hidden(true);
+        setRegisterPage4Hidden(true);
+        setVerifyPageHidden(false);
+        setProgressBarState(100);
+    }
+
+    const handleSubmit = (event) => {
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
             event.preventDefault();
@@ -111,7 +125,7 @@ export const Register = () => {
         setRegisterValidated(true);
     }
     return (
-        <Form noValidate validated={registerValidated} onSubmit={handleRegisterSubmit}>
+        <Form noValidate validated={registerValidated} onSubmit={handleSubmit}>
             <Container>
                 <Row>
                     <Col md="3"></Col>
@@ -128,7 +142,6 @@ export const Register = () => {
                                     placeholder="email@wit.edu"
                                     onChange={(e) => setEmail(e.target.value)}
                                     value={email}
-                                    // isInvalid={email.length === 1 || !validEmail}
                                 />
 
                             </Form.Group>
@@ -152,7 +165,6 @@ export const Register = () => {
                                     placeholder="Confirm Password"
                                     onChange={(e) => setPwdMatch(e.target.value)}
                                     value={pwdMatch}
-                                    // isInvalid={!validPwd}
                                 />
                             </Form.Group>
 
@@ -172,7 +184,12 @@ export const Register = () => {
                             <Container>
                                 <Form.Group controlId="majorValidation">
                                     <Form.Label style={{color: "black"}}>Major</Form.Label>
-                                    <Form.Select required style={{color: "black"}} onChange={((e) => setMajor(e.target.value))}>
+                                    <Form.Select
+                                        required s
+                                        tyle={{color: "black"}}
+                                        onChange={((e) => setMajor(e.target.value))}
+                                        value={major}
+                                    >
                                         <option>Select your major...</option>
                                         {VALID_MAJORS.map((availableMajor, idx) => {
                                                 return (
@@ -185,7 +202,11 @@ export const Register = () => {
 
                                 <Form.Group controlId="minorValidation">
                                     <Form.Label style={{color: "black"}}>Minor</Form.Label>
-                                    <Form.Select style={{color: "black"}} onChange={((e) => setMinor(e.target.value))}>
+                                    <Form.Select
+                                        style={{color: "black"}}
+                                        onChange={((e) => setMinor(e.target.value))}
+                                        value={minor}
+                                    >
                                         <option>(Optional) Select your minor...</option>
                                         {VALID_MINORS.map((availableMinor, idx) => {
                                                 return (
@@ -228,7 +249,12 @@ export const Register = () => {
                         <Container className="mt-3" hidden={registerPage3Hidden}>
                             <Form.Group controlId="generalSkillValidation">
                                 <Form.Label style={{color: "black"}}>General Skill</Form.Label>
-                                <Form.Select required style={{color: "black"}} onChange={(e) => setSkill1(e.target.value)}>
+                                <Form.Select
+                                    required
+                                    style={{color: "black"}}
+                                    onChange={(e) => setSkill1(e.target.value)}
+                                    value={skill1}
+                                >
                                     <option>Select topic...</option>
                                     <option>Computing and Data Science</option>
                                     <option>Sciences & Humanities</option>
@@ -240,7 +266,9 @@ export const Register = () => {
 
                             <Form.Group controlId="focusValidation">
                                 <Form.Label style={{color: "black"}}>Skill Focus</Form.Label>
-                                <Form.Select required>
+                                <Form.Select
+                                    required
+                                >
                                     <option>Select focus...</option>
                                 </Form.Select>
                             </Form.Group>
@@ -299,6 +327,44 @@ export const Register = () => {
                                     <Col md="6"
                                          style={{alignItems: "center", justifyContent: "center"}}>
                                         <Button onClick={page3} style={{
+                                            border: "2px solid black",
+                                            backgroundColor: "white",
+                                            padding: "1rem 1rem",
+                                            borderRadius: "10px",
+                                            cursor: "pointer",
+                                            color: "black"
+                                        }}>Back</Button>
+                                    </Col>
+                                    <Col md="6">
+                                        <Button onClick={verifyPage} type="submit" style={{
+                                            border: "2px solid black",
+                                            backgroundColor: "white",
+                                            padding: "1rem 1rem",
+                                            borderRadius: "10px",
+                                            cursor: "pointer",
+                                            color: "black"
+                                        }}>Next</Button>
+                                    </Col>
+
+                                </Row>
+                            </Container>
+                        </Container>
+
+                        <Container className="mt-3" hidden={verifyPageHidden}>
+                            <Form.Group controlId='verifyValidation'>
+                                <Form.Label style={{color: "black"}}>Verify</Form.Label>
+                                <Form.Control
+                                    required
+                                    inputMode="text"
+                                    placeholder="000000"
+                                />
+                            </Form.Group>
+
+                            <Container className="mt-3">
+                                <Row style={{display: "inline-flex"}}>
+                                    <Col md="6"
+                                         style={{alignItems: "center", justifyContent: "center"}}>
+                                        <Button onClick={page4} style={{
                                             border: "2px solid black",
                                             backgroundColor: "white",
                                             padding: "1rem 1rem",
