@@ -40,7 +40,7 @@ export const LandingPage = () => {
                 justifyContent: "center",
                 alignItems: "center"
             }}>
-                <Tabs activeKey={activeKey} fill justify style={{width: "100%", backgroundColor: "lightgray", color: "white"}}>
+                <Tabs activeKey={activeKey} fill justify style={{width: "100%", backgroundColor: "lightgray", color: "white", borderTopLeftRadius: "7px", borderTopRightRadius: "7px"}}>
                     <Tab eventKey="login" title="Login" disabled={loginDisabled}>
                         <Container style={{backgroundColor: "white"}}>
                             <Login />

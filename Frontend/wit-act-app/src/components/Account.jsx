@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import {Container, Form, Button, Card} from "react-bootstrap";
+import {VALID_MAJORS, VALID_MINORS, TAGS} from "../Validation/FormValidation";
 
 export const Account = () => {
 
     const [success, setSuccess] = useState('');
 
-    const [formHidden, setFormHidden] = useState(true);
+    const [pwdFormHidden, setPwdFormHidden] = useState(true);
+    const [minorFormHidden, setMinorFormHidden] = useState(true);
+    const [tageFormHidden, setTagFormHidden] = useState(true);
 
-    const [majorSelectHidden, setMajorSelectHidden] = useState(true);
     const [minorSelectHidden, setMinorSelectHidden] = useState(true);
     const [tagSelectHidden, setTagSelectHidden] = useState(true);
 
@@ -26,12 +28,55 @@ export const Account = () => {
     const pwdForm = () => {
         const btn = document.getElementById('pwdBtn');
 
-        if (formHidden) {
-            setFormHidden(false);
+        if (pwdFormHidden) {
+            setPwdFormHidden(false);
             btn.style.color = "black";
             btn.style.backgroundColor = "white"
         } else {
-            setFormHidden(true);
+            setPwdFormHidden(true);
+            btn.style.color = "white";
+            btn.style.backgroundColor = "black"
+        }
+    }
+
+    const updatePassword = () => {
+        // add update password in DB
+        // need to pull current password
+    }
+
+    const updateMinor = () => {
+        // add update password in DB
+        // change or add minor
+    }
+
+    const updateTag = () => {
+        // add update password in DB
+        // change or add tag
+    }
+
+    const minorForm = () => {
+        const btn = document.getElementById('minorBtn');
+
+        if (minorFormHidden) {
+            setMinorFormHidden(false);
+            btn.style.color = "black";
+            btn.style.backgroundColor = "white"
+        } else {
+            setMinorFormHidden(true);
+            btn.style.color = "white";
+            btn.style.backgroundColor = "black"
+        }
+    }
+
+    const tagForm = () => {
+        const btn = document.getElementById('tagBtn');
+
+        if (tageFormHidden) {
+            setTagFormHidden(false);
+            btn.style.color = "black";
+            btn.style.backgroundColor = "white"
+        } else {
+            setTagFormHidden(true);
             btn.style.color = "white";
             btn.style.backgroundColor = "black"
         }
@@ -48,18 +93,19 @@ export const Account = () => {
                     borderTopRightRadius: "0",
                     borderTopLeftRadius: "0"
                 }}>
+                    <Card.Title className="mt-3">Password</Card.Title>
                     <Card.Body>
                         <Button style={{
                             border: "2px solid black",
                             backgroundColor: "black",
-                            padding: "1rem 7rem",
+                            padding: "1rem 1rem",
                             borderRadius: "10px",
                             cursor: "pointer",
                             color: "white",
-                            width: "60%"
+                            width: "60%",
                         }} onClick={pwdForm} id="pwdBtn">Update Password</Button>
 
-                        <Form hidden={formHidden} className="mt-3">
+                        <Form hidden={pwdFormHidden} className="mt-3">
                             <Form.Group>
                                 <Form.Label>Current Password:</Form.Label>
                                 <Form.Control
@@ -106,10 +152,11 @@ export const Account = () => {
                                 <Button style={{
                                     border: "2px solid black",
                                     backgroundColor: "black",
-                                    padding: "1rem 7rem",
+                                    padding: "1rem 1rem",
                                     borderRadius: "10px",
                                     cursor: "pointer",
                                     color: "white",
+                                    width: "60%",
                                 }}
                                 >Update</Button>
                             </Container>
@@ -123,56 +170,44 @@ export const Account = () => {
                         borderTopRightRadius: "0",
                         borderTopLeftRadius: "0"
                     }}>
-                        <Card.Title className="mt-3">Major</Card.Title>
-                        <Card.Body>
-                            <Form>
-                                <Form.Group style={{alignItems: "left"}}>
-                                    <Form.Label><strong>Major: </strong>Computer Science <Button style={{
-                                        border: "2px solid black",
-                                        backgroundColor: "black",
-                                        padding: "0",
-                                        borderRadius: "5px",
-                                        cursor: "pointer",
-                                        color: "white",
-                                        fontSize: "14px",
-                                        marginLeft: "5rem"
-                                    }}
-                                        onClick={() => setMajorSelectHidden(!majorSelectHidden)}
-                                    >Change Major</Button></Form.Label>
-                                    <Form.Select hidden={majorSelectHidden}>
-
-                                    </Form.Select>
-                                </Form.Group>
-                            </Form>
-                        </Card.Body>
-                    </Card>
-
-                    <Card style={{
-                        borderBottom: "none",
-                        borderRight: "none",
-                        borderLeft: "none",
-                        borderTopRightRadius: "0",
-                        borderTopLeftRadius: "0"
-                    }}>
                         <Card.Title className="mt-3">Minor</Card.Title>
                         <Card.Body>
-                            <Form>
+                            <Button style={{
+                                border: "2px solid black",
+                                backgroundColor: "black",
+                                padding: "1rem 1rem",
+                                borderRadius: "10px",
+                                cursor: "pointer",
+                                color: "white",
+                                width: "60%",
+                            }}
+                                onClick={minorForm}
+                                id="minorBtn"
+                            >Change Minor</Button>
+                            <Form hidden={minorFormHidden} className="mt-3">
                                 <Form.Group style={{alignItems: "left"}}>
-                                    <Form.Label><strong>Minor:</strong> Applied Mathematics <Button style={{
-                                        border: "2px solid black",
-                                        backgroundColor: "black",
-                                        padding: "0",
-                                        borderRadius: "5px",
-                                        cursor: "pointer",
-                                        color: "white",
-                                        fontSize: "14px",
-                                        marginLeft: "4rem"
-                                    }}
-                                        onClick={() => setMinorSelectHidden(!minorSelectHidden)}
-                                    >Change Minor</Button></Form.Label>
-                                    <Form.Select hidden={minorSelectHidden}>
-
+                                    <Form.Label><strong>Minor:</strong> Applied Mathematics</Form.Label>
+                                    <Form.Select>
+                                        {VALID_MINORS.map((availableMinor, idx) => {
+                                                return (
+                                                    <option key={idx}>{availableMinor}</option>
+                                                );
+                                            })
+                                        }
                                     </Form.Select>
+
+                                    <Container className="mt-3">
+                                        <Button style={{
+                                            border: "2px solid black",
+                                            backgroundColor: "black",
+                                            padding: "1rem 1rem",
+                                            borderRadius: "10px",
+                                            cursor: "pointer",
+                                            color: "white",
+                                            width: "60%",
+                                        }}
+                                        >Update</Button>
+                                    </Container>
                                 </Form.Group>
                             </Form>
                         </Card.Body>
@@ -187,23 +222,42 @@ export const Account = () => {
                     }}>
                         <Card.Title className="mt-3">Tag</Card.Title>
                         <Card.Body>
-                            <Form>
+                            <Button style={{
+                                border: "2px solid black",
+                                backgroundColor: "black",
+                                padding: "1rem 1rem",
+                                borderRadius: "10px",
+                                cursor: "pointer",
+                                color: "white",
+                                width: "60%",
+                            }}
+                                onClick={tagForm}
+                                id="tagBtn"
+                            >Change Tag</Button>
+                            <Form hidden={tageFormHidden} className="mt-3">
                                 <Form.Group style={{alignItems: "left"}}>
-                                    <Form.Label><strong>Tag: </strong>Technology <Button style={{
-                                        border: "2px solid black",
-                                        backgroundColor: "black",
-                                        padding: "0",
-                                        borderRadius: "5px",
-                                        cursor: "pointer",
-                                        color: "white",
-                                        fontSize: "14px",
-                                        marginLeft: "10rem"
-                                    }}
-                                         onClick={() => setTagSelectHidden(!tagSelectHidden)}
-                                    >Change Tag</Button></Form.Label>
-                                    <Form.Select hidden={tagSelectHidden}>
-
+                                    <Form.Label><strong>Tag: </strong>Technology</Form.Label>
+                                    <Form.Select>
+                                        {TAGS.map((availableTag, idx) => {
+                                                return (
+                                                    <option key={idx}>{availableTag}</option>
+                                                );
+                                            })
+                                        }
                                     </Form.Select>
+
+                                    <Container className="mt-3">
+                                        <Button style={{
+                                            border: "2px solid black",
+                                            backgroundColor: "black",
+                                            padding: "1rem 1rem",
+                                            borderRadius: "10px",
+                                            cursor: "pointer",
+                                            color: "white",
+                                            width: "60%",
+                                        }}
+                                        >Update</Button>
+                                    </Container>
                                 </Form.Group>
                             </Form>
                         </Card.Body>

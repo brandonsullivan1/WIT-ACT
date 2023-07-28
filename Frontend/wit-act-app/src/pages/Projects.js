@@ -10,7 +10,7 @@ export const projects = [
     },
     {
         title: `Project Posting Platform`,
-        shortDesc: 'Central platform to view/post projects',
+        shortDesc: 'Central platform to post projects',
         description: 'This is Project 2\'s description',
         leadMaker: "Project 2",
         leadMakerEmail: "project@wit.edu",

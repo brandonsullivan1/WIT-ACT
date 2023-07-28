@@ -23,10 +23,6 @@ const router = createBrowserRouter([
         element: <LandingPage />,
       },
       {
-        path: "/verification",
-        element: <LoginVerification />,
-      },
-      {
         path: "/homepage",
         element: <Homepage />,
       },

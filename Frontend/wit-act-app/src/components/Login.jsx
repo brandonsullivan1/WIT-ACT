@@ -10,6 +10,9 @@ export const Login = () => {
     const [email, setEmail] = useState('');
     const [validEmail, setValidEmail] = useState(false);
 
+    const [pwd, setPwd] = useState('');
+    const [validPwd, setValidPwd] = useState(false);
+
     useEffect(() => {
         const result = email === "sullivanb13@wit.edu";
         setValidEmail(result);
@@ -22,9 +25,10 @@ export const Login = () => {
             event.stopPropagation();
         }
 
-        setValidated(true);
-
-        navigate('/verification');
+        if (form.checkValidity() === true) {
+            setValidated(true);
+            navigate('homepage');
+        }
     }
 
     return (
@@ -40,7 +44,7 @@ export const Login = () => {
                             placeholder="email@wit.edu"
                             onChange={(e) => setEmail(e.target.value)}
                             value={email}
-                            isInvalid={!validEmail && email.length !== 0}
+                            isValid={!validEmail && email.length !== 0}
                         />
                         <Form.Control.Feedback
                             type={validEmail ? "valid" : "invalid"}></Form.Control.Feedback>
@@ -52,6 +56,8 @@ export const Login = () => {
                             type="password"
                             placeholder="Password"
                             required
+                            onChange={(e) => setPwd(e.target.value)}
+                            value={pwd}
                         />
                         <Form.Control.Feedback type="invald">Invalid
                             password.</Form.Control.Feedback>
@@ -66,7 +72,7 @@ export const Login = () => {
                             borderRadius: "10px",
                             cursor: "pointer",
                             color: "black"
-                        }}>Login</Button>
+                        }} onSubmit={handleSubmit}>Login</Button>
 
                     </Container>
                 </Col>

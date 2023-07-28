@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import {Container, Navbar, Button, Form, Modal, Offcanvas, ListGroup} from "react-bootstrap";
 import * as FaIcons from "react-icons/fa";
-import * as CgIcons from "react-icons/cg"
+import * as CgIcons from "react-icons/cg";
+import * as IoIcons from "react-icons/io";
+import * as AiIcons from "react-icons/ai";
+import * as RiIcons from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import CreateProjectForm from "./CreateProjectForm";
 
@@ -23,15 +26,25 @@ export const ResponsiveNavbar = () => {
     const openSidebar = () => setShowSidebar(true);
     const closeSidebar = () => setShowSidebar(false);
 
+    const [homepageFilterActive, setHomepageFilterActive] = useState(false);
     const [projectFilterActive, setProjectFilterActive] = useState(false);
     const [makerFilterActive, setMakerFilterActive] = useState(false);
 
+    const toggleHomepageFilterActive = () => {
+        setHomepageFilterActive(true);
+        setProjectFilterActive(false);
+        setMakerFilterActive(false);
+
+        navigate('/homepage');
+    }
     const toggleProjectFilterActive = () => {
+        setHomepageFilterActive(false);
         setProjectFilterActive(true);
         setMakerFilterActive(false);
     }
 
     const toggleMakerFilterActive = () => {
+        setHomepageFilterActive(false);
         setProjectFilterActive(false);
         setMakerFilterActive(true);
     }
@@ -42,18 +55,23 @@ export const ResponsiveNavbar = () => {
                 <Container style={{alignItems: "center", justifyContent: "left"}}>
                     <Button onClick={openSidebar}
                             style={{backgroundColor: "slategray", border: "none"}}><FaIcons.FaBars/></Button>
-                    <Offcanvas show={showSidebar} onHide={closeSidebar}>
+                    <Offcanvas show={showSidebar} onHide={closeSidebar} style={{maxWidth: "300px"}}>
                         <Offcanvas.Header closeButton>
-                            <Offcanvas.Title>Menu</Offcanvas.Title>
+                            <Offcanvas.Title style={{fontSize: "30px", justifyContent: "center"}}>Menu</Offcanvas.Title>
                         </Offcanvas.Header>
                         <Offcanvas.Body>
-                            <ListGroup as="ul">
-                                <ListGroup.Item as="li" onClick={toggleProjectFilterActive}
-                                                active={projectFilterActive}>
-                                    Projects
+                            <ListGroup as="ul" variant="flush">
+                                <ListGroup.Item as="li" onClick={toggleHomepageFilterActive}
+                                                active={homepageFilterActive} style={{cursor: "pointer"}}>
+                                    <IoIcons.IoIosHome style={{fontSize: "25px"}}/> Homepage
                                 </ListGroup.Item>
-                                <ListGroup.Item as="li" onClick={toggleMakerFilterActive} active={makerFilterActive}>
-                                    Makers
+                                <ListGroup.Item as="li" onClick={toggleProjectFilterActive} active={projectFilterActive}
+                                                style={{cursor: "pointer"}}>
+                                    <AiIcons.AiFillProject style={{fontSize: "25px"}}/> Projects
+                                </ListGroup.Item>
+                                <ListGroup.Item as="li" onClick={toggleMakerFilterActive} active={makerFilterActive}
+                                                style={{cursor: "pointer"}}>
+                                    <RiIcons.RiTeamFill style={{fontSize: "25px"}}/> Makers
                                 </ListGroup.Item>
                             </ListGroup>
                         </Offcanvas.Body>
