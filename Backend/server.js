@@ -4,7 +4,10 @@ const users = require("./routes/users");
 const projects = require("./routes/projects");
 
 const app = express();
-app.use(cors());
+const corsOptions = {
+    origin: RegExp(/http:\/\/localhost:3[01]00.*/)
+}
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/users", users);
