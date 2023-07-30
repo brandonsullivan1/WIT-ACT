@@ -7,7 +7,50 @@ import {Typeahead} from "react-bootstrap-typeahead";
 export const Register = () => {
     const navigate = useNavigate();
 
-    const [form, setForm] = useState({});
+    const [registerValidated, setRegisterValidated] = useState(false);
+
+    const [email, setEmail] = useState('');
+    const [validEmail, setValidEmail] = useState(false);
+
+    const [password, setPassword] = useState('');
+    const [validPwd, setValidPwd] = useState(false);
+
+    const [pwdMatch, setPwdMatch] = useState('');
+    const [validPwdMatch, setValidPwdMatch] = useState(false);
+
+    const [name, setName] = useState('');
+    const [validName, setValidName] = useState(false);
+
+    const [generalSkill, setGeneralSkill] = useState('Select general skill...');
+    const [skillsFocus, setSkillsFocus] = useState('Select skills focus...');
+    const [specificSkill1, setSpecificSkill1] = useState('Select specific skill...');
+    const [specificSkill2, setSpecificSkill2] = useState('Select specific skill...');
+    const [specificSkill3, setSpecificSkill3] = useState('Select specific skill...');
+
+    const [specSkill2Hidden, setSpecSkill2Hidden] = useState(true);
+    const [specSkill3Hidden, setSpecSkill3Hidden] = useState(true);
+
+    const [tag, setTag] = useState('');
+
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [validPhoneNumber, setValidPhoneNumber] = useState(true);
+
+    const [discord, setDiscord] = useState('');
+
+    const [form, setForm] = useState({
+        email: '',
+        password: '',
+        confirmPassword: '',
+        name: '',
+        generalSkill: '',
+        skillsFocus: '',
+        specificSkill1: '',
+        specificSkill2: '',
+        specificSkill3: '',
+        phoneNumber: '',
+        discord: '',
+        tag: '',
+    });
     const [errors, setErrors] = useState({});
 
     const setField = (field, value) => {
@@ -22,44 +65,6 @@ export const Register = () => {
         })
     }
 
-    const [registerValidated, setRegisterValidated] = useState(false);
-
-    const emailRef = useRef();
-
-    const [email, setEmail] = useState('');
-    const [validEmail, setValidEmail] = useState(false);
-    const [emailFocus, setEmailFocus] = useState(false);
-
-    const [pwd, setPwd] = useState('');
-    const [validPwd, setValidPwd] = useState(false);
-
-    const [pwdMatch, setPwdMatch] = useState('');
-    const [validPwdMatch, setValidPwdMatch] = useState(false);
-
-    const [name, setName] = useState('');
-    const [validName, setValidName] = useState(false);
-
-    const [major, setMajor] = useState('');
-    const [validMajor, setValidMajor] = useState(false);
-
-    const [minor, setMinor] = useState('');
-    const [validMinor, setValidMinor] = useState(false);
-
-    const [generalSkill, setGeneralSkill] = useState('');
-    const [skillsFocus, setSkillsFocus] = useState('');
-    const [specificSkill1, setSpecificSkill1] = useState('');
-    const [specificSkill2, setSpecificSkill2] = useState('');
-    const [specificSkill3, setSpecificSkill3] = useState('');
-
-    const [specSkill2Hidden, setSpecSkill2Hidden] = useState(true);
-    const [specSkill3Hidden, setSpecSkill3Hidden] = useState(true);
-
-    const [tag, setTag] = useState('');
-
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [validPhoneNumber, setValidPhoneNumber] = useState(false);
-
-    const [discord, setDiscord] = useState('');
 
     const [registerPage1Hidden, setRegisterPage1Hidden] = useState(false);
     const [registerPage2Hidden, setRegisterPage2Hidden] = useState(true);
@@ -100,55 +105,32 @@ export const Register = () => {
         setProgressBarState(75);
     }
 
-    const changeGenSkill = (selected) => {
-        setField('generalSkill', selected && selected[0]);
-
-         if (form.generalSkill) setGeneralSkill(form.generalSkill);
-    }
-
-    const changeSkillFocus = (selected) => {
-        setField('skillsFocus', selected && selected[0]);
-        if (form.skillsFocus) setSkillsFocus(form.skillsFocus);
-    }
-
-    const changeSpecSkill1 = (selected) => {
-        setField('specificSkill1', selected && selected[0]);
-        if (form.specificSkill1) setSpecificSkill1(form.specificSkill1);
-        setSpecSkill2Hidden(false);
-    }
-
-    const changeSpecSkill2 = (selected) => {
-        setField('specificSkill2', selected && selected[0]);
-        setSpecSkill3Hidden(false);
-    }
-
-    const changeSpecSkill3 = (selected) => {
-        setField('specificSkill3', selected && selected[0]);
-    }
-
-    const changeTag = (selected) => {
-        setField('tag', selected && selected[0]);
-    }
+    useEffect(() => {
+        if (specificSkill1 === 'Select specific skill...') {
+            setSpecSkill2Hidden(true);
+            setSpecSkill3Hidden(true);
+        }
+    }, [specificSkill1])
 
     useEffect(() => {
-        const result = EMAIL_REGEX.test(form.email);
+        const result = EMAIL_REGEX.test(email);
         setValidEmail(result);
-    }, [form.email])
+    }, [email])
 
     useEffect(() => {
-        const result = PWD_REGEX.test(form.password);
+        const result = PWD_REGEX.test(password);
         setValidPwd(result);
-    }, [form.password])
+    }, [password])
 
     useEffect(() => {
-        const result = form.password === form.confirmPassword;
+        const result = password === pwdMatch;
         setValidPwdMatch(result);
-    }, [form.password, form.confirmPassword])
+    }, [password, pwdMatch])
 
     useEffect(() => {
-        const result = NAME_REGEX.test(form.name);
+        const result = NAME_REGEX.test(name);
         setValidName(result);
-    }, [form.name])
+    }, [name])
 
     useEffect(() => {
         if (phoneNumber !== '') {
@@ -166,7 +148,6 @@ export const Register = () => {
             generalSkill,
             skillsFocus,
             specificSkill1,
-            phoneNumber,
         } = form;
 
         const newErrors = {};
@@ -175,8 +156,9 @@ export const Register = () => {
         if (!password || !validPwd) newErrors.password = 'Please enter a valid password. 8-24 characters, at least 1 uppercase, at least 1 lowercase, at least 1 number, and at least 1 special character (!, @, #, $, %)';
         if (!confirmPassword || !validPwdMatch) newErrors.confirmPassword = 'Passwords must be the same.';
         if (!name || !validName || name === '') newErrors.name = 'Please enter a valid name';
-        if (!generalSkill || generalSkill === '') newErrors.generalSkill = 'Please select a general skill';
+        if (!generalSkill || generalSkill === 'Select a general skill...') newErrors.generalSkill = 'Please select a general skill';
         if (!skillsFocus || skillsFocus === '') newErrors.skillsFocus = 'Please select a skills focus';
+        if (!validPhoneNumber) newErrors.phoneNumber = 'Please select a skills focus';
         if (!specificSkill1 || specificSkill1 === '') newErrors.specificSkill1 = 'Please select a specific skill';
 
         return newErrors;
@@ -194,7 +176,7 @@ export const Register = () => {
             navigate('/');
         }
     }
-    return <Form noValidate validated={registerValidated} onSubmit={handleSubmit}>
+    return <Form noValidate validated={registerValidated} onSubmit={handleSubmit} id="registerForm">
         <Container>
             <Row>
                 <Col md="3"></Col>
@@ -209,8 +191,11 @@ export const Register = () => {
                                 required={true}
                                 type="text"
                                 placeholder="email@wit.edu"
-                                onChange={(e) => setField('email', e.target.value)}
-                                value={form.email}
+                                onChange={(e) => {
+                                    setEmail(e.target.value);
+                                    setField('email', email);
+                                }}
+                                value={email}
                                 isInvalid={!!errors.email}
                             />
                             <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
@@ -222,8 +207,11 @@ export const Register = () => {
                                 required={true}
                                 type="password"
                                 placeholder="Password"
-                                onChange={(e) => setField('password', e.target.value)}
-                                value={form.password}
+                                onChange={(e) => {
+                                    setPassword(e.target.value);
+                                    setField('password', password);
+                                }}
+                                value={password}
                                 isInvalid={!!errors.password}
                             />
                             <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
@@ -235,8 +223,11 @@ export const Register = () => {
                                 required={true}
                                 type="password"
                                 placeholder="Confirm Password"
-                                onChange={(e) => setField('confirmPassword', e.target.value)}
-                                value={form.confirmPassword}
+                                onChange={(e) => {
+                                    setPwdMatch(e.target.value);
+                                    setField('confirmPassword', pwdMatch);
+                                }}
+                                value={pwdMatch}
                                 isInvalid={!!errors.confirmPassword}
                             />
                             <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
@@ -250,7 +241,9 @@ export const Register = () => {
                                 borderRadius: "10px",
                                 cursor: "pointer",
                                 color: "black"
-                            }}>Next</Button>
+                            }}
+                                disabled={!validEmail || !validPwd || !validPwdMatch}
+                            >Next</Button>
                         </Container>
                     </Container>
 
@@ -261,8 +254,11 @@ export const Register = () => {
                                 <Form.Control
                                     required={true}
                                     style={{color: "black"}}
-                                    onChange={(e) => setField('name', e.target.value)}
-                                    value={form.name}
+                                    onChange={(e) => {
+                                        setName(e.target.value);
+                                        setField('name', name);
+                                    }}
+                                    value={name}
                                     placeholder="Full name"
                                     isInvalid={!!errors.name}
                                />
@@ -271,31 +267,47 @@ export const Register = () => {
 
                             <Form.Group controlId="generalSkill">
                                 <Form.Label style={{color: "black"}}>General Skill</Form.Label>
-                                <Typeahead
+                                <Form.Select
                                     id="generalSkill"
                                     name="generalSkill"
                                     className={!!errors.generalSkill && 'red-border'}
-                                    placeholder="Select general skill..."
-                                    inputProps={{required: true}}
-                                    onChange={changeGenSkill}
-                                    value={form.generalSkill}
-                                    options={Object.keys(SKILLS)}
-                                />
+                                    required={true}
+                                    onChange={(e) => {
+                                        setGeneralSkill(e.target.value);
+                                        setField('generalSkill', e.target.value);
+                                    }}
+                                    value={generalSkill}
+                                >
+                                {Object.keys(SKILLS).map((availableGeneralSkill, idx) => {
+                                    return (
+                                      <option key={idx} value={availableGeneralSkill}>{availableGeneralSkill}</option>
+                                    );
+                                })}
+                                </Form.Select>
                                 <Container className="red">{errors.generalSkill}</Container>
                             </Form.Group>
 
                             <Form.Group controlId="skillFocus">
                                 <Form.Label style={{color: "black"}}>Skill Focus</Form.Label>
-                                <Typeahead
+                                <Form.Select
                                     id="skillFocus"
                                     name="skillFocus"
                                     className={!!errors.skillsFocus && 'red-border'}
-                                    placeholder="Select skill focus..."
-                                    inputProps={{required: true}}
-                                    options={Object.keys(SKILLS[generalSkill])}
-                                    value={form.skillsFocus}
-                                    onChange={changeSkillFocus}
-                                />
+                                    required={true}
+                                    value={skillsFocus}
+                                    onChange={(e) => {
+                                        setSkillsFocus(e.target.value);
+                                        setField('skillsFocus', e.target.value);
+                                        // setSpecificSkill1('Select specific skill...');
+                                        // setField('specificSkill1', specificSkill1);
+                                    }}
+                                >
+                                    {Object.keys(SKILLS[generalSkill]).map((availableSkillsFocus, idx) => {
+                                        return (
+                                            <option key={idx} value={availableSkillsFocus}>{availableSkillsFocus}</option>
+                                        );
+                                    })}
+                                </Form.Select>
                                 <Container className="red">{errors.skillsFocus}</Container>
                             </Form.Group>
 
@@ -320,7 +332,9 @@ export const Register = () => {
                                             borderRadius: "10px",
                                             cursor: "pointer",
                                             color: "black"
-                                        }}>Next</Button>
+                                        }}
+                                            disabled={!validName || !generalSkill || !skillsFocus}
+                                        >Next</Button>
                                     </Col>
                                 </Row>
                             </Container>
@@ -330,43 +344,66 @@ export const Register = () => {
                     <Container className="mt-3" hidden={registerPage3Hidden}>
                         <Form.Group controlId="specificSkill1">
                             <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
-                            <Typeahead
+                            <Form.Select
                                 id="specificSkill1"
                                 name="specificSkill1"
                                 className={!!errors.specificSkill1 && 'red-border'}
-                                placeholder="Select general skill..."
-                                inputProps={{required: true}}
-                                onChange={changeSpecSkill1}
-                                value={form.specificSkill1}
-                                options={SKILLS[generalSkill][skillsFocus]}
-                            />
+                                required={true}
+                                onChange={(e) => {
+                                    setSpecificSkill1(e.target.value);
+                                    setField('specificSkill1', e.target.value);
+                                    if (specificSkill1 !== 'Select specific skill...') setSpecSkill2Hidden(false);
+                                }}
+                                value={specificSkill1}
+                            >
+                                {SKILLS[generalSkill][skillsFocus].map((availableSpecificSkill, idx) => {
+                                    return (
+                                      <option key={idx} value={availableSpecificSkill}>{availableSpecificSkill}</option>
+                                    );
+                                })}
+                            </Form.Select>
                             <Container className="red">{errors.specificSkill1}</Container>
                         </Form.Group>
 
                         <Form.Group controlId="specificSkill2" hidden={specSkill2Hidden}>
                             <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
-                            <Typeahead
+                            <Form.Select
                                 id="specificSkill2"
                                 name="specificSkill2"
                                 className={!!errors.specificSkill2 && 'red-border'}
-                                placeholder="Select general skill..."
-                                onChange={changeSpecSkill2}
-                                value={form.specificSkill2}
-                                options={SKILLS[generalSkill][skillsFocus]}
-                            />
+                                onChange={(e) => {
+                                    setSpecificSkill1(e.target.value);
+                                    setField('specificSkill2', e.target.value);
+                                    if (specificSkill2 !== 'Select specific skill...') setSpecSkill3Hidden(false);
+                                }}
+                                value={specificSkill1}
+                            >
+                                {SKILLS[generalSkill][skillsFocus].map((availableSpecificSkill, idx) => {
+                                    return (
+                                        <option key={idx} value={availableSpecificSkill}>{availableSpecificSkill}</option>
+                                    );
+                                })}
+                            </Form.Select>
                         </Form.Group>
 
                         <Form.Group controlId="specificSkill3" hidden={specSkill3Hidden}>
                             <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
-                            <Typeahead
+                            <Form.Select
                                 id="specificSkill3"
                                 name="specificSkill3"
                                 className={!!errors.specificSkill3 && 'red-border'}
-                                placeholder="Select general skill..."
-                                onChange={changeSpecSkill3}
-                                value={form.specificSkill3}
-                                options={SKILLS[generalSkill][skillsFocus]}
-                            />
+                                onChange={(e) => {
+                                    setSpecificSkill3(e.target.value);
+                                    setField('specificSkill3', e.target.value);
+                                }}
+                                value={specificSkill1}
+                            >
+                                {SKILLS[generalSkill][skillsFocus].map((availableSpecificSkill, idx) => {
+                                    return (
+                                        <option key={idx} value={availableSpecificSkill}>{availableSpecificSkill}</option>
+                                    );
+                                })}
+                            </Form.Select>
                         </Form.Group>
 
                         <Container className="mt-3">
@@ -390,7 +427,9 @@ export const Register = () => {
                                         borderRadius: "10px",
                                         cursor: "pointer",
                                         color: "black"
-                                    }}>Next</Button>
+                                    }}
+                                        disabled={!specificSkill1}
+                                    >Next</Button>
                                 </Col>
                             </Row>
                         </Container>
@@ -402,8 +441,11 @@ export const Register = () => {
                             <Form.Control
                                 type="text"
                                 placeholder="(Optional)"
-                                onChange={(e) => setField('phoneNumber', e.target.value)}
-                                value={form.phoneNumber}
+                                onChange={(e) => {
+                                    setPhoneNumber(e.target.value)
+                                    setField('phoneNumber', e.target.value);
+                                }}
+                                value={phoneNumber}
                                 isInvalid={!!errors.phoneNumber}
                             />
                         </Form.Group>
@@ -413,23 +455,34 @@ export const Register = () => {
                             <Form.Control
                                 type="text"
                                 placeholder="(Optional)"
-                                onChange={(e) => setField('discord', e.target.value)}
-                                value={form.discord}
+                                onChange={(e) => {
+                                    setDiscord(e.target.value)
+                                    setField('discord', e.target.value);
+                                }}
+                                value={discord}
                                 isInvalid={!!errors.discord}
                             />
                         </Form.Group>
 
                         <Form.Group controlId="tagValidation">
-                            <Form.Label style={{color: "black"}}>Skill Tag</Form.Label>
-                            <Typeahead
+                            <Form.Label style={{color: "black"}}>Tag</Form.Label>
+                            <Form.Select
                                 id="tag"
                                 name="tag"
-                                onChange={changeTag}
+                                onChange={(e) => {
+                                    setTag(e.target.value);
+                                    setField('tag', e.target.value);
+                                }}
                                 className={!!errors.tag && 'red-border'}
-                                placeholder="Select tag..."
-                                options={TAGS}
+                                value={tag}
                                 isInvalid={!!errors.tag}
-                            />
+                            >
+                                {TAGS.map((availableTag, idx) => {
+                                    return (
+                                        <option key={idx} value={availableTag}>{availableTag}</option>
+                                    );
+                                })}
+                            </Form.Select>
                         </Form.Group>
 
                         <Container className="mt-3">
@@ -453,7 +506,7 @@ export const Register = () => {
                                         borderRadius: "10px",
                                         cursor: "pointer",
                                         color: "black"
-                                    }}>Register</Button>
+                                    }} onClick={handleSubmit}>Register</Button>
                                 </Col>
                             </Row>
                         </Container>

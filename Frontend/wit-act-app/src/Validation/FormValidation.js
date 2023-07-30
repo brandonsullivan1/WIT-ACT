@@ -29,6 +29,7 @@ export const VALID_MINORS = [
 ];
 
 export const TAGS = [
+    "(Optional) Select tag...",
     "Technology",
     "Health",
     "Environment",
@@ -39,11 +40,13 @@ export const TAGS = [
 ];
 
 export const SKILLS = {
-    "": {
-        "": [""],
+    "Select general skill...": {
+        "Select skills focus...": ["Select specific skill..."],
     },
     "Computing and Data Science": {
+        "Select skills focus...": ["Select specific skill..."],
         "Applied Mathematics": [
+            "Select specific skill...",
             "Calculus",
             "Numerical Analysis",
             "Advanced Statistics",
@@ -51,6 +54,7 @@ export const SKILLS = {
             "Differential Equations",
         ],
         "Computer Networking": [
+            "Select specific skill...",
             "Routing and Switching",
             "Network Administration",
             "System Administration",
@@ -60,6 +64,7 @@ export const SKILLS = {
             "Wireless Networks"
         ],
         "Computer Science": [
+            "Select specific skill...",
             "Software Engineering",
             "Mobile Development",
             "Web Development",
@@ -70,33 +75,37 @@ export const SKILLS = {
             "Data Structures",
         ],
         "Cybersecurity": [
-
+            "Select specific skill...",
         ],
-        "Data Science": [],
-        "Information Technology": [],
+        "Data Science": ["Select specific skill..."],
+        "Information Technology": ["Select specific skill..."],
     },
     "Science & Humanities": {
-        "Applied Sciences": [],
-        "Computer Science & Society": [],
+        "Select skills focus...": ["Select specific skill..."],
+        "Applied Sciences": ["Select specific skill..."],
+        "Computer Science & Society": ["Select specific skill..."],
     },
     "Architecture & Design": {
-        "Architecture": [],
-        "Industrial Design": [],
-        "Interior Design": [],
+        "Select skills focus...": ["Select specific skill..."],
+        "Architecture": ["Select specific skill..."],
+        "Industrial Design": ["Select specific skill..."],
+        "Interior Design": ["Select specific skill..."],
     },
     "Engineering": {
-        "Biological Engineering": [],
-        "Biomedical Engineering": [],
-        "Civil Engineering": [],
-        "Computer Engineering": [],
-        "Electrical Engineering": [],
-        "Electromechanical Engineering": [],
-        "Engineering": [],
-        "Mechanical Engineering": [],
+        "Select skills focus...": ["Select specific skill..."],
+        "Biological Engineering": ["Select specific skill..."],
+        "Biomedical Engineering": ["Select specific skill..."],
+        "Civil Engineering": ["Select specific skill..."],
+        "Computer Engineering": ["Select specific skill..."],
+        "Electrical Engineering": ["Select specific skill..."],
+        "Electromechanical Engineering": ["Select specific skill..."],
+        "Engineering": ["Select specific skill..."],
+        "Mechanical Engineering": ["Select specific skill..."],
     },
     "Management": {
-        "Business Management": [],
-        "Computer Information Systems": [],
-        "Construction Management": [],
+        "Select skills focus...": ["Select specific skill..."],
+        "Business Management": ["Select specific skill..."],
+        "Computer Information Systems": ["Select specific skill..."],
+        "Construction Management": ["Select specific skill..."],
     },
 };

@@ -36,7 +36,7 @@ export const Login = () => {
     }
 
     return (
-        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+        <Form noValidate validated={validated} onSubmit={handleSubmit} id="loginForm">
             <Row className="mt-3">
                 <Col md="3"></Col>
                 <Col md="6">
