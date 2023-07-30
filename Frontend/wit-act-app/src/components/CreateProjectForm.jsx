@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Button, Form} from "react-bootstrap";
 import {SKILLS, TAGS} from "../Validation/FormValidation";
+import axios from "axios";
 
 export const CreateProjectForm = () => {
 
@@ -85,9 +86,38 @@ export const CreateProjectForm = () => {
         }
     }, [tag1])
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
+        await axios.post("http://localhost:3100/users/fetchuser", {
+            title: projectTitle,
+            shortdesc: projectShortDesc,
+            fulldesc: projectDescription,
+            genskill: generalSkill,
+            skillfocus: skillsFocus,
+            specskill1: specSkill1,
+            specskill2: specSkill2,
+            speckskill3: specSkill3,
+            tag1: tag1,
+            tag2: tag2,
+            leadmaker: projectLeadMaker,
+            lmemail: projectLeadMakerEmail
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Mode': 'cors'
+            }
+        })
+            .then((response) => {
+                console.log(response);
+                if(!(200 <= response.status && response.status <= 299)){
+                    console.log(`Error: Response code ${response.status} from server!`);
+                } else {
+                    console.log("Project added!");
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
         // add POST method to send project to database
     }
 

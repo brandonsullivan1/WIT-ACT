@@ -1,6 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
+import axios from "axios";
 
 export const Login = () => {
     const navigate = useNavigate();
@@ -22,16 +23,35 @@ export const Login = () => {
     // Pull user's account from DB and test for login validation
 
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
+            console.error("Invalid form!");
             event.preventDefault();
             event.stopPropagation();
-        }
-
-        if (form.checkValidity() === true) {
-            setValidated(true);
-            navigate('homepage');
+        } else {
+            console.log("Valid form!");
+            await axios.post("http://localhost:3100/users/fetchuser", {
+                email: email,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Mode': 'cors'
+                }
+            })
+                .then((response) => {
+                    console.log(response);
+                    if(!(200 <= response.status && response.status <= 299)){
+                        console.log(`Error: Response code ${response.status} from server!`);
+                    } else {
+                        setValidated(true);
+                        console.log(validated);
+                        navigate('/homepage');
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
         }
     }
 
@@ -48,7 +68,7 @@ export const Login = () => {
                             placeholder="email@wit.edu"
                             onChange={(e) => setEmail(e.target.value)}
                             value={email}
-                            isValid={!validEmail && email.length !== 0}
+                            isValid={validEmail && email.length !== 0}
                         />
                         <Form.Control.Feedback
                             type={validEmail ? "valid" : "invalid"}></Form.Control.Feedback>

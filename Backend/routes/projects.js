@@ -3,6 +3,12 @@ const mysql = require("mysql2");
 const uuid = require("uuid");
 const router = express.Router();
 
+/*
+TODO
+ make sure users can't delete other's projects - add a UserID = (userid from context) to sql in /:title
+ */
+
+
 //uuidv4 for use as uuidv5 namespace
 const NAMESPACE = 'b466ea01-361f-420c-acda-f63263237c5c';
 const connector = mysql.createConnection({
@@ -26,13 +32,13 @@ router.get('/', (req, res) => {
 router.post('/addproject', (req, res) => {
     console.log("addproject received request: ")
     console.log(req.body);
-    const projID = uuid.v4();
+    const projID = uuid.v5(req.body.title, NAMESPACE);
     const sql = "INSERT INTO Projects VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     //using .map on the below array is kind of a waste, since all are required and so only tag could be null
     //still, it's a small array and shouldn't waste too much time.
     connector.query(sql, [
         projID,
-        "Dummy-UserID", // don't leave this hardcoded: req.body.userid,
+        "Dummy-UserID", // don't leave this hardcoded: add userID from user context once implemented,
         req.body.title,
         req.body.shortdesc,
         req.body.fulldesc,
@@ -66,8 +72,10 @@ router.post("/recprojects", (req, res) => {
     // fetch project data and stream each row
     sql = "SELECT * FROM Projects"; // WHERE UserID != ?
     let query = connector.query(sql, [req.body.userid]);
+    let err = false;
     query
         .on('error', (err) => {
+            err = true;
             throw err;
         })
         // each row
@@ -86,6 +94,11 @@ router.post("/recprojects", (req, res) => {
         })
         // all data transmitted
         .on('end', () => {
+            // end event is fired on error. do not attempt to sort.
+            if(err) {
+                res.sendStatus(500);
+                return;
+            }
             // use the row's scores for a counting sort
             let [j, count, output] = [0, Array(8).fill(0), []];
             for(let i = 0; i < rows.length; i++){
@@ -106,7 +119,7 @@ router.post("/recprojects", (req, res) => {
 })
 
 router.delete('/:title', (req, res) => {
-    const projID = uuid.v5(NAMESPACE, req.params.title);
+    const projID = uuid.v5(req.params.title, NAMESPACE);
     const sql = "SET SQL_SAFE_UPDATES = 0; DELETE FROM Projects WHERE ProjectID = ?; SET SQL_SAFE_UPDATES = 1";
     connector.query(sql, [projID], (err, data) => {
         if(err) throw err;

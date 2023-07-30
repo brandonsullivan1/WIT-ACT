@@ -3,6 +3,12 @@ const mysql = require("mysql2");
 const uuid = require("uuid")
 const router = express.Router();
 
+/*
+TODO
+ remove the bandaid fix in adduser where 'Select specific skill' maps to null
+    - This will probably need work on the frontend to convert that into a placeholder value instead of an actual
+        string in /components/Skills.jsx, but it's been uncooperative and we have other priorities
+ */
 const connector = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -23,7 +29,7 @@ router.get('/', (req, res) => {
 
 router.post('/adduser', (req, res) => {
     console.log(req.body);
-    const userID = "Dummy-UserID" // uuid.v4() // random user ID
+    const userID = uuid.v4() // random user ID
     const sql = "INSERT INTO Users VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     connector.query(sql, [
         userID,
@@ -36,10 +42,10 @@ router.post('/adduser', (req, res) => {
         req.body.specskill2,
         req.body.specskill3,
         req.body.tag,
-        req.body.minor,
+        null, //minor
         req.body.phone,
         req.body.discord
-    ].map(x => (x===null||x===undefined||x==='')? null : x), (err, data) => {
+    ].map(x => (x===null||x===undefined||x===''||x==='Select specific skill...')? null : x), (err, data) => {
         if(err) throw err;
         console.log(data);
         res.json(data); //200 OK
@@ -48,6 +54,7 @@ router.post('/adduser', (req, res) => {
 
 router.post('/fetchuser', (req, res) => {
     const sql = "SELECT * FROM Users WHERE email = ?";
+    console.log(req.body.email);
     connector.query(sql, [req.body.email], (err, data) => {
         console.log("in fetchuser");
         if(err) throw err;
