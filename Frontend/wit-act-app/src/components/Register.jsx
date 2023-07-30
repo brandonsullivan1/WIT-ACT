@@ -137,7 +137,7 @@ export const Register = () => {
             const result = PHONE_NUMBER_REGEX.test(form.phoneNumber);
             setValidPhoneNumber(result);
         }
-    }, [form.phoneNumber])
+    }, [phoneNumber])
 
     const validateForm = () => {
         const {
@@ -158,7 +158,7 @@ export const Register = () => {
         if (!name || !validName || name === '') newErrors.name = 'Please enter a valid name';
         if (!generalSkill || generalSkill === 'Select a general skill...') newErrors.generalSkill = 'Please select a general skill';
         if (!skillsFocus || skillsFocus === '') newErrors.skillsFocus = 'Please select a skills focus';
-        if (!validPhoneNumber) newErrors.phoneNumber = 'Please select a skills focus';
+        if (!validPhoneNumber) newErrors.phoneNumber = 'Please enter a valid phone number.';
         if (!specificSkill1 || specificSkill1 === '') newErrors.specificSkill1 = 'Please select a specific skill';
 
         return newErrors;
@@ -175,6 +175,8 @@ export const Register = () => {
             setRegisterValidated(true);
             navigate('/');
         }
+
+        console.log(form);
     }
     return <Form noValidate validated={registerValidated} onSubmit={handleSubmit} id="registerForm">
         <Container>
@@ -352,7 +354,7 @@ export const Register = () => {
                                 onChange={(e) => {
                                     setSpecificSkill1(e.target.value);
                                     setField('specificSkill1', e.target.value);
-                                    if (specificSkill1 !== 'Select specific skill...') setSpecSkill2Hidden(false);
+                                    setSpecSkill2Hidden(false);
                                 }}
                                 value={specificSkill1}
                             >
@@ -372,9 +374,9 @@ export const Register = () => {
                                 name="specificSkill2"
                                 className={!!errors.specificSkill2 && 'red-border'}
                                 onChange={(e) => {
-                                    setSpecificSkill1(e.target.value);
+                                    setSpecificSkill2(e.target.value);
                                     setField('specificSkill2', e.target.value);
-                                    if (specificSkill2 !== 'Select specific skill...') setSpecSkill3Hidden(false);
+                                    setSpecSkill3Hidden(false);
                                 }}
                                 value={specificSkill1}
                             >
@@ -396,7 +398,7 @@ export const Register = () => {
                                     setSpecificSkill3(e.target.value);
                                     setField('specificSkill3', e.target.value);
                                 }}
-                                value={specificSkill1}
+                                value={specificSkill3}
                             >
                                 {SKILLS[generalSkill][skillsFocus].map((availableSpecificSkill, idx) => {
                                     return (
@@ -448,6 +450,7 @@ export const Register = () => {
                                 value={phoneNumber}
                                 isInvalid={!!errors.phoneNumber}
                             />
+                            <Form.Control.Feedback type="invalid">{errors.phoneNumber}</Form.Control.Feedback>
                         </Form.Group>
 
                         <Form.Group controlId="discord">
