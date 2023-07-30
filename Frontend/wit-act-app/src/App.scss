@@ -128,3 +128,15 @@ a, a:visited {
 .navbar {
   align-items: stretch;
 }
+
+.red {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #d9534f
+}
+
+.red-border {
+  border: 1px solid #dc3545;
+}

@@ -1,10 +1,26 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Button, Col, Container, Dropdown, Form, ListGroup, ListGroupItem, ProgressBar, Row} from "react-bootstrap";
-import {EMAIL_REGEX, NAME_REGEX, PWD_REGEX, SKILLS, TAGS} from "../Validation/FormValidation";
+import {EMAIL_REGEX, NAME_REGEX, PHONE_NUMBER_REGEX, PWD_REGEX, SKILLS, TAGS} from "../Validation/FormValidation";
 import {useNavigate} from "react-router-dom";
+import {Typeahead} from "react-bootstrap-typeahead";
 
 export const Register = () => {
     const navigate = useNavigate();
+
+    const [form, setForm] = useState({});
+    const [errors, setErrors] = useState({});
+
+    const setField = (field, value) => {
+        setForm({
+            ...form,
+            [field]: value
+        })
+
+        if (!!errors[field]) setErrors({
+            ...errors,
+            [field]: null
+        })
+    }
 
     const [registerValidated, setRegisterValidated] = useState(false);
 
@@ -29,28 +45,26 @@ export const Register = () => {
     const [minor, setMinor] = useState('');
     const [validMinor, setValidMinor] = useState(false);
 
-    const [generalSkill, setGeneralSkill] = useState('Select general skill...');
-    const [skillsFocus, setSkillsFocus] = useState('Select skill focus...');
-    const [specificSkill1, setSpecificSkill1] = useState('Select specific skill...');
-    const [specificSkill2, setSpecificSkill2] = useState('Select specific skill...');
-    const [specificSkill3, setSpecificSkill3] = useState('Select specific skill...');
+    const [generalSkill, setGeneralSkill] = useState('');
+    const [skillsFocus, setSkillsFocus] = useState('');
+    const [specificSkill1, setSpecificSkill1] = useState('');
+    const [specificSkill2, setSpecificSkill2] = useState('');
+    const [specificSkill3, setSpecificSkill3] = useState('');
 
     const [specSkill2Hidden, setSpecSkill2Hidden] = useState(true);
     const [specSkill3Hidden, setSpecSkill3Hidden] = useState(true);
 
-    const [tag, setTag] = useState('Select tag...');
+    const [tag, setTag] = useState('');
 
     const [phoneNumber, setPhoneNumber] = useState('');
     const [validPhoneNumber, setValidPhoneNumber] = useState(false);
 
     const [discord, setDiscord] = useState('');
-    const [validDiscord, setValidDiscord] = useState(false);
 
     const [registerPage1Hidden, setRegisterPage1Hidden] = useState(false);
     const [registerPage2Hidden, setRegisterPage2Hidden] = useState(true);
     const [registerPage3Hidden, setRegisterPage3Hidden] = useState(true);
     const [registerPage4Hidden, setRegisterPage4Hidden] = useState(true);
-    const [verifyPageHidden, setVerifyPageHidden] = useState(true);
 
     const [progressBarState, setProgressBarState] = useState(0);
 
@@ -59,7 +73,6 @@ export const Register = () => {
         setRegisterPage2Hidden(true);
         setRegisterPage3Hidden(true);
         setRegisterPage4Hidden(true);
-        setVerifyPageHidden(true);
         setProgressBarState(0);
     }
 
@@ -68,7 +81,6 @@ export const Register = () => {
         setRegisterPage2Hidden(false);
         setRegisterPage3Hidden(true);
         setRegisterPage4Hidden(true);
-        setVerifyPageHidden(true);
         setProgressBarState(25);
     }
 
@@ -77,7 +89,6 @@ export const Register = () => {
         setRegisterPage2Hidden(true);
         setRegisterPage3Hidden(false);
         setRegisterPage4Hidden(true);
-        setVerifyPageHidden(true);
         setProgressBarState(50);
     }
 
@@ -86,279 +97,213 @@ export const Register = () => {
         setRegisterPage2Hidden(true);
         setRegisterPage3Hidden(true);
         setRegisterPage4Hidden(false);
-        setVerifyPageHidden(true);
         setProgressBarState(75);
     }
 
-    const changeGenSkill = (e) => {
-        setGeneralSkill(e.target.value);
-        setSkillsFocus("Select skill focus...");
+    const changeGenSkill = (selected) => {
+        setField('generalSkill', selected && selected[0]);
+
+         if (form.generalSkill) setGeneralSkill(form.generalSkill);
     }
 
-    const changeSpecSkill1 = (e) => {
-        setSpecificSkill1(e.target.value);
+    const changeSkillFocus = (selected) => {
+        setField('skillsFocus', selected && selected[0]);
+        if (form.skillsFocus) setSkillsFocus(form.skillsFocus);
+    }
+
+    const changeSpecSkill1 = (selected) => {
+        setField('specificSkill1', selected && selected[0]);
+        if (form.specificSkill1) setSpecificSkill1(form.specificSkill1);
         setSpecSkill2Hidden(false);
     }
 
-    const changeSpecSkill2 = (e) => {
-        setSpecificSkill2(e.target.value);
+    const changeSpecSkill2 = (selected) => {
+        setField('specificSkill2', selected && selected[0]);
         setSpecSkill3Hidden(false);
     }
 
-    const changeSpecSkill3 = (e) => {
-        setSpecificSkill3(e.target.value);
+    const changeSpecSkill3 = (selected) => {
+        setField('specificSkill3', selected && selected[0]);
+    }
+
+    const changeTag = (selected) => {
+        setField('tag', selected && selected[0]);
     }
 
     useEffect(() => {
-        if (specificSkill1 === "Select specific skill...") {
-            setSpecSkill2Hidden(true);
-            setSpecSkill3Hidden(true);
-        }
-    }, [specificSkill1])
-
-    useEffect(() => {
-        if (specificSkill2 === "Select specific skill...") {
-            setSpecSkill3Hidden(true);
-        }
-    }, [specificSkill2])
-
-    useEffect(() => {
-        const result = EMAIL_REGEX.test(email);
+        const result = EMAIL_REGEX.test(form.email);
         setValidEmail(result);
-    }, [email])
+    }, [form.email])
 
     useEffect(() => {
-        const result = PWD_REGEX.test(pwd);
+        const result = PWD_REGEX.test(form.password);
         setValidPwd(result);
-    }, [pwd])
+    }, [form.password])
 
     useEffect(() => {
-        const result = pwd === pwdMatch;
+        const result = form.password === form.confirmPassword;
         setValidPwdMatch(result);
-    }, [pwd, pwdMatch])
+    }, [form.password, form.confirmPassword])
 
     useEffect(() => {
-        const result = NAME_REGEX.test(name);
+        const result = NAME_REGEX.test(form.name);
         setValidName(result);
-    }, [name])
+    }, [form.name])
 
     useEffect(() => {
-        const result = major !== ("Select your major..." || "");
-        setValidMajor(result);
-    }, [major])
-
-    useEffect(() => {
-        const result = minor !== ("(Optional) Select your minor..." || "");
-        setValidMinor(result);
-    }, [minor])
-
-    const handleSubmit = (event) => {
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
+        if (phoneNumber !== '') {
+            const result = PHONE_NUMBER_REGEX.test(form.phoneNumber);
+            setValidPhoneNumber(result);
         }
+    }, [form.phoneNumber])
 
-        if (form.checkValidity() === true) {
+    const validateForm = () => {
+        const {
+            email,
+            password,
+            confirmPassword,
+            name,
+            generalSkill,
+            skillsFocus,
+            specificSkill1,
+            phoneNumber,
+        } = form;
+
+        const newErrors = {};
+
+        if (!email || !validEmail || email === '') newErrors.email = 'Please enter a valid WIT email.';
+        if (!password || !validPwd) newErrors.password = 'Please enter a valid password. 8-24 characters, at least 1 uppercase, at least 1 lowercase, at least 1 number, and at least 1 special character (!, @, #, $, %)';
+        if (!confirmPassword || !validPwdMatch) newErrors.confirmPassword = 'Passwords must be the same.';
+        if (!name || !validName || name === '') newErrors.name = 'Please enter a valid name';
+        if (!generalSkill || generalSkill === '') newErrors.generalSkill = 'Please select a general skill';
+        if (!skillsFocus || skillsFocus === '') newErrors.skillsFocus = 'Please select a skills focus';
+        if (!specificSkill1 || specificSkill1 === '') newErrors.specificSkill1 = 'Please select a specific skill';
+
+        return newErrors;
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const formErrors = validateForm();
+
+        if (Object.keys(formErrors). length > 0) {
+            setErrors(formErrors);
+        } else{
             setRegisterValidated(true);
             navigate('/');
         }
     }
-    return (
-        <Form noValidate validated={registerValidated} onSubmit={handleSubmit}>
-            <Container>
-                <Row>
-                    <Col md="3"></Col>
-                    <Col md="6">
+    return <Form noValidate validated={registerValidated} onSubmit={handleSubmit}>
+        <Container>
+            <Row>
+                <Col md="3"></Col>
+                <Col md="6">
 
-                        <ProgressBar className="mt-1" now={progressBarState}/>
+                    <ProgressBar className="mt-1" now={progressBarState}/>
 
-                        <Container className="mt-3" hidden={registerPage1Hidden}>
-                            <Form.Group controlId="emailValidation">
-                                <Form.Label style={{color: "black"}}>Email</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="text"
-                                    placeholder="email@wit.edu"
-                                    ref={emailRef}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    value={email}
-                                    isInvalid={!validEmail || email.length <= 0}
-                                    onFocus={() => setEmailFocus(true)}
-                                    onBlur={() => setEmailFocus(false)}
-                                />
-                                <Form.Control.Feedback id="emailValidation" type={validEmail ? "invalid" : "valid"}>{validEmail ? "Please enter a valid email." : "Looks good!"}</Form.Control.Feedback>
-                            </Form.Group>
+                    <Container className="mt-3" hidden={registerPage1Hidden}>
+                        <Form.Group controlId="email">
+                            <Form.Label style={{color: "black"}}>Email</Form.Label>
+                            <Form.Control
+                                required={true}
+                                type="text"
+                                placeholder="email@wit.edu"
+                                onChange={(e) => setField('email', e.target.value)}
+                                value={form.email}
+                                isInvalid={!!errors.email}
+                            />
+                            <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+                        </Form.Group>
 
-                            <Form.Group controlId="pwdValidation">
-                                <Form.Label style={{color: "black"}}>Password</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="password"
-                                    placeholder="Password"
-                                    onChange={(e) => setPwd(e.target.value)}
-                                    value={pwd}
-                                    isInvalid={!validPwd}
-                                />
-                            </Form.Group>
+                        <Form.Group controlId="pwd">
+                            <Form.Label style={{color: "black"}}>Password</Form.Label>
+                            <Form.Control
+                                required={true}
+                                type="password"
+                                placeholder="Password"
+                                onChange={(e) => setField('password', e.target.value)}
+                                value={form.password}
+                                isInvalid={!!errors.password}
+                            />
+                            <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+                        </Form.Group>
 
-                            <Form.Group controlId="matchPwdValidation">
-                                <Form.Label style={{color: "black"}}>Confirm Password</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="password"
-                                    placeholder="Confirm Password"
-                                    onChange={(e) => setPwdMatch(e.target.value)}
-                                    value={pwdMatch}
-                                    isInvalid={!pwdMatch}
-                                />
-                            </Form.Group>
+                        <Form.Group controlId="confirmPwd">
+                            <Form.Label style={{color: "black"}}>Confirm Password</Form.Label>
+                            <Form.Control
+                                required={true}
+                                type="password"
+                                placeholder="Confirm Password"
+                                onChange={(e) => setField('confirmPassword', e.target.value)}
+                                value={form.confirmPassword}
+                                isInvalid={!!errors.confirmPassword}
+                            />
+                            <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
+                        </Form.Group>
 
-                            <Container className="mt-3">
-                                <Button onClick={page2} style={{
-                                    border: "2px solid black",
-                                    backgroundColor: "white",
-                                    padding: "1rem 7rem",
-                                    borderRadius: "10px",
-                                    cursor: "pointer",
-                                    color: "black"
-                                }}>Next</Button>
-                            </Container>
+                        <Container className="mt-3">
+                            <Button onClick={page2} style={{
+                                border: "2px solid black",
+                                backgroundColor: "white",
+                                padding: "1rem 7rem",
+                                borderRadius: "10px",
+                                cursor: "pointer",
+                                color: "black"
+                            }}>Next</Button>
                         </Container>
+                    </Container>
 
-                        <Container className="mt-3" hidden={registerPage2Hidden}>
-                            <Container>
-                                <Form.Group controlId="majorValidation">
-                                    <Form.Label style={{color: "black"}}>Full Name</Form.Label>
-                                    <Form.Control
-                                        required
-                                        style={{color: "black"}}
-                                        onChange={((e) => setName(e.target.value))}
-                                        value={name}
-                                        placeholder="Full name"
-                                        isInvalid={!validName}
-                                   />
-                                </Form.Group>
-
-                                <Form.Group controlId="generalSkillValidation">
-                                    <Form.Label style={{color: "black"}}>General Skill</Form.Label>
-                                    <Form.Select
-                                        required
-                                        style={{color: "black"}}
-                                        onChange={changeGenSkill}
-                                        value={generalSkill}
-                                    >
-                                        {Object.keys(SKILLS).map((availableGenSkill, idx) => {
-                                                return (
-                                                    <option key={idx}>{availableGenSkill}</option>
-                                                );
-                                            })
-                                        }
-                                    </Form.Select>
-                                </Form.Group>
-
-                                <Form.Group controlId="focusValidation">
-                                    <Form.Label style={{color: "black"}}>Skill Focus</Form.Label>
-                                    <Form.Select
-                                        required
-                                        style={{color: "black"}}
-                                        onChange={(e) => setSkillsFocus(e.target.value)}
-                                        value={skillsFocus}
-                                    >
-                                        {Object.keys(SKILLS[generalSkill]).map((availableFocus, idx) => {
-                                                return (
-                                                    <option key={idx}>{availableFocus}</option>
-                                                );
-                                            })
-                                        }
-                                    </Form.Select>
-                                </Form.Group>
-
-                                <Container className="mt-3">
-                                    <Row style={{display: "inline-flex"}}>
-                                        <Col md="6"
-                                             style={{alignItems: "center", justifyContent: "center"}}>
-                                            <Button onClick={page1} style={{
-                                                border: "2px solid black",
-                                                backgroundColor: "white",
-                                                padding: "1rem 1rem",
-                                                borderRadius: "10px",
-                                                cursor: "pointer",
-                                                color: "black"
-                                            }}>Back</Button>
-                                        </Col>
-                                        <Col md="6">
-                                            <Button onClick={page3} style={{
-                                                border: "2px solid black",
-                                                backgroundColor: "white",
-                                                padding: "1rem 1rem",
-                                                borderRadius: "10px",
-                                                cursor: "pointer",
-                                                color: "black"
-                                            }}>Next</Button>
-                                        </Col>
-                                    </Row>
-                                </Container>
-                            </Container>
-                        </Container>
-
-                        <Container className="mt-3" hidden={registerPage3Hidden}>
-                            <Form.Group controlId="specSkill1Validaiton">
-                                <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
-                                <Form.Select
-                                    required
+                    <Container className="mt-3" hidden={registerPage2Hidden}>
+                        <Container>
+                            <Form.Group controlId="major">
+                                <Form.Label style={{color: "black"}}>Full Name</Form.Label>
+                                <Form.Control
+                                    required={true}
                                     style={{color: "black"}}
-                                    onChange={changeSpecSkill1}
-                                    value={specificSkill1}
-                                >
-                                    {SKILLS[generalSkill][skillsFocus].map((availableSpecificSkill, idx) => {
-                                            return (
-                                                <option key={idx}>{availableSpecificSkill}</option>
-                                            );
-                                        })
-                                    }
-                                </Form.Select>
+                                    onChange={(e) => setField('name', e.target.value)}
+                                    value={form.name}
+                                    placeholder="Full name"
+                                    isInvalid={!!errors.name}
+                               />
+                                <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
                             </Form.Group>
 
-                            <Form.Group controlId="specSkill2Validation" hidden={specSkill2Hidden}>
-                                <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
-                                <Form.Select
-                                    required
-                                    style={{color: "black"}}
-                                    onChange={changeSpecSkill2}
-                                    value={specificSkill2}
-                                >
-                                    {SKILLS[generalSkill][skillsFocus].map((availableSpecificSkill, idx) => {
-                                            return (
-                                                <option key={idx}>{availableSpecificSkill}</option>
-                                            );
-                                        })
-                                    }
-                                </Form.Select>
+                            <Form.Group controlId="generalSkill">
+                                <Form.Label style={{color: "black"}}>General Skill</Form.Label>
+                                <Typeahead
+                                    id="generalSkill"
+                                    name="generalSkill"
+                                    className={!!errors.generalSkill && 'red-border'}
+                                    placeholder="Select general skill..."
+                                    inputProps={{required: true}}
+                                    onChange={changeGenSkill}
+                                    value={form.generalSkill}
+                                    options={Object.keys(SKILLS)}
+                                />
+                                <Container className="red">{errors.generalSkill}</Container>
                             </Form.Group>
 
-                            <Form.Group controlId="specSkill3Validation" hidden={specSkill3Hidden}>
-                                <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
-                                <Form.Select
-                                    required
-                                    style={{color: "black"}}
-                                    onChange={changeSpecSkill3}
-                                    value={specificSkill3}
-                                >
-                                    {Object.keys(SKILLS).map((availableGenSkill, idx) => {
-                                        return (
-                                            <option key={idx}>{availableGenSkill}</option>
-                                        );
-                                    })
-                                    }
-                                </Form.Select>
+                            <Form.Group controlId="skillFocus">
+                                <Form.Label style={{color: "black"}}>Skill Focus</Form.Label>
+                                <Typeahead
+                                    id="skillFocus"
+                                    name="skillFocus"
+                                    className={!!errors.skillsFocus && 'red-border'}
+                                    placeholder="Select skill focus..."
+                                    inputProps={{required: true}}
+                                    options={Object.keys(SKILLS[generalSkill])}
+                                    value={form.skillsFocus}
+                                    onChange={changeSkillFocus}
+                                />
+                                <Container className="red">{errors.skillsFocus}</Container>
                             </Form.Group>
 
                             <Container className="mt-3">
                                 <Row style={{display: "inline-flex"}}>
                                     <Col md="6"
                                          style={{alignItems: "center", justifyContent: "center"}}>
-                                        <Button onClick={page2} style={{
+                                        <Button onClick={page1} style={{
                                             border: "2px solid black",
                                             backgroundColor: "white",
                                             padding: "1rem 1rem",
@@ -368,7 +313,7 @@ export const Register = () => {
                                         }}>Back</Button>
                                     </Col>
                                     <Col md="6">
-                                        <Button onClick={page4} style={{
+                                        <Button onClick={page3} style={{
                                             border: "2px solid black",
                                             backgroundColor: "white",
                                             padding: "1rem 1rem",
@@ -380,75 +325,143 @@ export const Register = () => {
                                 </Row>
                             </Container>
                         </Container>
+                    </Container>
 
-                        <Container className="mt-3" hidden={registerPage4Hidden}>
-                            <Form.Group controlId="phoneNumberValidation">
-                                <Form.Label style={{color: "black"}}>Phone Number</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="(Optional)"
-                                    onChange={(e) => setPhoneNumber(e.target.value)}
-                                    value={phoneNumber}
-                                />
-                            </Form.Group>
+                    <Container className="mt-3" hidden={registerPage3Hidden}>
+                        <Form.Group controlId="specificSkill1">
+                            <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
+                            <Typeahead
+                                id="specificSkill1"
+                                name="specificSkill1"
+                                className={!!errors.specificSkill1 && 'red-border'}
+                                placeholder="Select general skill..."
+                                inputProps={{required: true}}
+                                onChange={changeSpecSkill1}
+                                value={form.specificSkill1}
+                                options={SKILLS[generalSkill][skillsFocus]}
+                            />
+                            <Container className="red">{errors.specificSkill1}</Container>
+                        </Form.Group>
 
-                            <Form.Group controlId="discordValidation">
-                                <Form.Label style={{color: "black"}}>Discord</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="(Optional)"
-                                    onChange={(e) => setDiscord(e.target.value)}
-                                    value={discord}
-                                />
-                            </Form.Group>
+                        <Form.Group controlId="specificSkill2" hidden={specSkill2Hidden}>
+                            <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
+                            <Typeahead
+                                id="specificSkill2"
+                                name="specificSkill2"
+                                className={!!errors.specificSkill2 && 'red-border'}
+                                placeholder="Select general skill..."
+                                onChange={changeSpecSkill2}
+                                value={form.specificSkill2}
+                                options={SKILLS[generalSkill][skillsFocus]}
+                            />
+                        </Form.Group>
 
-                            <Form.Group controlId="tagValidation">
-                                <Form.Label style={{color: "black"}}>Skill Tag</Form.Label>
-                                <Form.Select
-                                    style={{color: "black"}}
-                                    onChange={(e) => setTag(e.target.value)}
-                                    value={tag}
-                                >
-                                    {TAGS.map((avialableTag, idx) => {
-                                            return (
-                                                <option key={idx}>{avialableTag}</option>
-                                            );
-                                        })
-                                    }
-                                </Form.Select>
-                            </Form.Group>
+                        <Form.Group controlId="specificSkill3" hidden={specSkill3Hidden}>
+                            <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
+                            <Typeahead
+                                id="specificSkill3"
+                                name="specificSkill3"
+                                className={!!errors.specificSkill3 && 'red-border'}
+                                placeholder="Select general skill..."
+                                onChange={changeSpecSkill3}
+                                value={form.specificSkill3}
+                                options={SKILLS[generalSkill][skillsFocus]}
+                            />
+                        </Form.Group>
 
-                            <Container className="mt-3">
-                                <Row style={{display: "inline-flex"}}>
-                                    <Col md="6"
-                                         style={{alignItems: "center", justifyContent: "center"}}>
-                                        <Button onClick={page3} style={{
-                                            border: "2px solid black",
-                                            backgroundColor: "white",
-                                            padding: "1rem 1rem",
-                                            borderRadius: "10px",
-                                            cursor: "pointer",
-                                            color: "black"
-                                        }}>Back</Button>
-                                    </Col>
-                                    <Col md="6">
-                                        <Button type="submit" style={{
-                                            border: "2px solid black",
-                                            backgroundColor: "white",
-                                            padding: "1rem 1rem",
-                                            borderRadius: "10px",
-                                            cursor: "pointer",
-                                            color: "black"
-                                        }}>Register</Button>
-                                    </Col>
-                                </Row>
-                            </Container>
+                        <Container className="mt-3">
+                            <Row style={{display: "inline-flex"}}>
+                                <Col md="6"
+                                     style={{alignItems: "center", justifyContent: "center"}}>
+                                    <Button onClick={page2} style={{
+                                        border: "2px solid black",
+                                        backgroundColor: "white",
+                                        padding: "1rem 1rem",
+                                        borderRadius: "10px",
+                                        cursor: "pointer",
+                                        color: "black"
+                                    }}>Back</Button>
+                                </Col>
+                                <Col md="6">
+                                    <Button onClick={page4} style={{
+                                        border: "2px solid black",
+                                        backgroundColor: "white",
+                                        padding: "1rem 1rem",
+                                        borderRadius: "10px",
+                                        cursor: "pointer",
+                                        color: "black"
+                                    }}>Next</Button>
+                                </Col>
+                            </Row>
                         </Container>
-                    </Col>
-                </Row>
-            </Container>
-        </Form>
-    )
+                    </Container>
+
+                    <Container className="mt-3" hidden={registerPage4Hidden}>
+                        <Form.Group controlId="phoneNumber">
+                            <Form.Label style={{color: "black"}}>Phone Number</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="(Optional)"
+                                onChange={(e) => setField('phoneNumber', e.target.value)}
+                                value={form.phoneNumber}
+                                isInvalid={!!errors.phoneNumber}
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="discord">
+                            <Form.Label style={{color: "black"}}>Discord</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="(Optional)"
+                                onChange={(e) => setField('discord', e.target.value)}
+                                value={form.discord}
+                                isInvalid={!!errors.discord}
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="tagValidation">
+                            <Form.Label style={{color: "black"}}>Skill Tag</Form.Label>
+                            <Typeahead
+                                id="tag"
+                                name="tag"
+                                onChange={changeTag}
+                                className={!!errors.tag && 'red-border'}
+                                placeholder="Select tag..."
+                                options={TAGS}
+                                isInvalid={!!errors.tag}
+                            />
+                        </Form.Group>
+
+                        <Container className="mt-3">
+                            <Row style={{display: "inline-flex"}}>
+                                <Col md="6"
+                                     style={{alignItems: "center", justifyContent: "center"}}>
+                                    <Button onClick={page3} style={{
+                                        border: "2px solid black",
+                                        backgroundColor: "white",
+                                        padding: "1rem 1rem",
+                                        borderRadius: "10px",
+                                        cursor: "pointer",
+                                        color: "black"
+                                    }}>Back</Button>
+                                </Col>
+                                <Col md="6">
+                                    <Button type="submit" style={{
+                                        border: "2px solid black",
+                                        backgroundColor: "white",
+                                        padding: "1rem 1rem",
+                                        borderRadius: "10px",
+                                        cursor: "pointer",
+                                        color: "black"
+                                    }}>Register</Button>
+                                </Col>
+                            </Row>
+                        </Container>
+                    </Container>
+                </Col>
+            </Row>
+        </Container>
+    </Form>
 }
 
 export default Register;

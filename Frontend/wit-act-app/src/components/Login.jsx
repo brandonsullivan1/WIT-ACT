@@ -18,6 +18,10 @@ export const Login = () => {
         setValidEmail(result);
     }, [email])
 
+
+    // Pull user's account from DB and test for login validation
+
+
     const handleSubmit = (event) => {
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
