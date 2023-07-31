@@ -1,29 +1,52 @@
 import React, {useEffect, useRef, useState} from "react";
-import {Button, Form} from "react-bootstrap";
-import {SKILLS, TAGS} from "../Validation/FormValidation";
+import {Button, Container, Form} from "react-bootstrap";
+import {EMAIL_REGEX, NAME_REGEX, SKILLS, TAGS} from "../Validation/FormValidation";
 import axios from "axios";
 
 export const CreateProjectForm = () => {
 
-    const projectTitleRef = useRef();
-    const projectDescRef = useRef();
-    const projectSkillsRef = useRef();
-    const projectLeadMakerRef = useRef();
-    const projectLeadMakerEmailRef = useRef();
+    const [validated, setValidated] = useState(false);
+
+    const [form, setForm] = useState({
+        title: '',
+        shortDesc: '',
+        fullDesc: '',
+        generalSkill: '',
+        skillsFocus: '',
+        specificSkill1: '',
+        specificSkill2: '',
+        specificSkill3: '',
+        tag1: '',
+        tag2: '',
+        leadMaker: '',
+        leadMakerEmail: '',
+    });
+
+    const setField = (field, value) => {
+        setForm({
+            ...form,
+            [field]: value
+        })
+
+        if (!!errors[field]) setErrors({
+            ...errors,
+            [field]: null
+        })
+    }
+
+    const [errors, setErrors] = useState({});
 
     const [projectTitle, setProjectTitle] = useState('');
-    const [projectTitleFocus, setProjectTitleFocus] = useState(false);
 
     const [projectShortDesc, setProjectShortDesc] = useState('');
 
     const [projectDescription, setProjectDescription] = useState('');
-    const [projectDescFocus, setProjectDescFocus] = useState(false);
 
     const [generalSkill, setGeneralSkill] = useState('Select general skill...');
-    const [skillsFocus, setSkillsFocus] = useState('Select skill focus...');
-    const [specSkill1, setSpecSkill1] = useState('Select specific skill...');
-    const [specSkill2, setSpecSkill2] = useState('Select specific skill...');
-    const [specSkill3, setSpecSkill3] = useState('Select specific skill...');
+    const [skillsFocus, setSkillsFocus] = useState('Select skills focus...');
+    const [specificSkill1, setSpecificSkill1] = useState('Select specific skill...');
+    const [specificSkill2, setSpecificSkill2] = useState('Select specific skill...');
+    const [specificSkill3, setSpecificSkill3] = useState('Select specific skill...');
 
     const [specSkill2Hidden, setSpecSkill2Hidden] = useState(true);
     const [specSkill3Hidden, setSpecSkill3Hidden] = useState(true);
@@ -33,110 +56,132 @@ export const CreateProjectForm = () => {
 
     const [tag2Hidden, setTag2Hidden] = useState(true);
 
-    const [projectLeadMaker, setProjectLeadMaker] = useState('');
-    const [projectLeadMakerFocus, setProjectLeadMakerFocus] = useState(false);
+    const [leadMaker, setLeadMaker] = useState('');
+    const [validLeadMaker, setValidLeadMaker] = useState(false);
 
-    const [projectLeadMakerEmail, setProjectLeadMakerEmail] = useState('');
-    const [projectLeadMakerEmailFocus, setProjectLeadMakerEmailFocus] = useState(false);
-
-    const changeGeneralSkill = (e) => {
-        setGeneralSkill(e.target.value);
-        setSkillsFocus('Select skill focus...');
-    }
-
-    const changeSpecSkill1 = (e) => {
-        setSpecSkill1(e.target.value);
-        setSpecSkill2Hidden(false);
-    }
-
-    const changeSpecSkill2 = (e) => {
-        setSpecSkill2(e.target.value);
-        setSpecSkill3Hidden(false);
-    }
-
-    const changeSpecSkill3 = (e) => {
-        setSpecSkill3(e.target.value);
-    }
-
-    const changeTag1 = (e) => {
-        setTag1(e.target.value);
-        setTag2Hidden(false);
-    }
-
-    const changeTag2 = (e) => {
-        setTag2(e.target.value);
-    }
+    const [leadMakerEmail, setLeadMakerEmail] = useState('');
+    const [validLeadMakerEmail, setValidLeadMakerEmail] = useState(false);
 
     useEffect(() => {
-        if (specSkill1 === "Select specific skill...") {
+        if (generalSkill === 'Select general skill...') {
+            setSkillsFocus('Select skills focus...');
+            setSpecificSkill1('Select specific skill...');
             setSpecSkill2Hidden(true);
             setSpecSkill3Hidden(true);
         }
-    }, [specSkill1])
 
-    useEffect(() => {
-        if (specSkill2 === "Select specific skill...") {
+        if (skillsFocus === 'Select skills focus...') {
+            setSpecificSkill1('Select specific skill...');
+            setSpecificSkill2('Select specific skill...');
+            setSpecificSkill3('Select specific skill...');
+            setSpecSkill2Hidden(true);
+            setSpecSkill2Hidden(true);
+        }
+
+        if (specificSkill2 === 'Select specific skill...') {
+            setSpecificSkill3('Select specific skill...');
             setSpecSkill3Hidden(true);
         }
-    }, [specSkill2])
 
-    useEffect(() => {
-        if (tag1 === "(Optional) Select tag...") {
+        if (tag1 === '(Optional) Select tag...') {
+            setTag2('(Optional) Select tag...');
             setTag2Hidden(true);
         }
-    }, [tag1])
+
+        const testLeadMaker = NAME_REGEX.test(leadMaker);
+        setValidLeadMaker(testLeadMaker);
+
+        const testLeadMakerEmail = EMAIL_REGEX.test(leadMakerEmail);
+        setValidLeadMakerEmail(testLeadMakerEmail);
+    }, [generalSkill, skillsFocus, specificSkill1, specificSkill2, tag1, leadMaker, leadMakerEmail])
+
+    const validateForm = () => {
+        const {
+            title,
+            shortDesc,
+            fullDesc,
+            generalSkill,
+            skillsFocus,
+            specificSkill1,
+            leadMaker,
+            leadMakerEmail,
+        } = form;
+
+        const newErrors = {};
+
+        if (!title || title === '') newErrors.title = 'Please enter a valid title.';
+        if (!shortDesc || shortDesc === '') newErrors.shortDesc = 'Please enter a valid short description.';
+        else if (shortDesc.length > 20) newErrors.shortDesc = 'Short description must be 20 characters or less';
+        if (!fullDesc || fullDesc === '') newErrors.fullDesc = 'Please enter a valid full description.';
+        else if (200 < fullDesc.length < 20) newErrors.fullDesc = 'Full description must be at least 20 characters and less than 200 characters';
+        if (!generalSkill || generalSkill === 'Select general skill...') newErrors.generalSkill = 'Please select a general skill.';
+        if (!skillsFocus || skillsFocus === 'Select skills focus...') newErrors.skillsFocus = 'Please select a skills focus.';
+        if (!specificSkill1 || specificSkill1 === 'Select specific skill...') newErrors.specificSkill1 = 'Please select a specific skill.';
+        if (!validLeadMaker || !leadMakerEmail || leadMaker === '') newErrors.leadMaker = 'Please enter a valid name';
+        if (!validLeadMakerEmail || !leadMakerEmail || leadMakerEmail === '') newErrors.leadMakerEmail = 'Please enter a valid WIT email';
+
+        return newErrors;
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await axios.post("http://localhost:3100/users/fetchuser", {
-            title: projectTitle,
-            shortdesc: projectShortDesc,
-            fulldesc: projectDescription,
-            genskill: generalSkill,
-            skillfocus: skillsFocus,
-            specskill1: specSkill1,
-            specskill2: specSkill2,
-            speckskill3: specSkill3,
-            tag1: tag1,
-            tag2: tag2,
-            leadmaker: projectLeadMaker,
-            lmemail: projectLeadMakerEmail
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Mode': 'cors'
-            }
-        })
-            .then((response) => {
-                console.log(response);
-                if(!(200 <= response.status && response.status <= 299)){
-                    console.log(`Error: Response code ${response.status} from server!`);
-                } else {
-                    console.log("Project added!");
+
+        const formErrors = validateForm();
+
+        if (Object.keys(formErrors).length > 0) {
+            setErrors(formErrors);
+        } else {
+            setValidated(true);
+            await axios.post("http://localhost:3100/users/fetchuser", {
+                title: projectTitle,
+                shortdesc: projectShortDesc,
+                fulldesc: projectDescription,
+                genskill: generalSkill,
+                skillfocus: skillsFocus,
+                specskill1: specificSkill1,
+                specskill2: specificSkill1,
+                speckskill3: specificSkill3,
+                tag1: tag1,
+                tag2: tag2,
+                leadmaker: leadMaker,
+                lmemail: leadMakerEmail
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Mode': 'cors'
                 }
             })
-            .catch((err) => {
-                console.error(err);
-            });
-        // add POST method to send project to database
+                .then((response) => {
+                    console.log(response);
+                    if (!(200 <= response.status && response.status <= 299)) {
+                        console.log(`Error: Response code ${response.status} from server!`);
+                    } else {
+                        console.log("Project added!");
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+            // add POST method to send project to database
+        }
     }
 
     return (
-        <Form id="project-form">
-            <Form.Group>
-                <Form.Label htmlFor="project-title">Project Title:</Form.Label>
+        <Form id="project-form" noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form.Group controlId="projectTitle">
+                <Form.Label>Project Title:</Form.Label>
                 <Form.Control
-                    type="title"
-                    id="project-title"
-                    name="project-title"
+                    required={true}
+                    type="text"
+                    id="projectTitle"
+                    name="projectTitle"
                     placeholder="Title"
-                    ref={projectTitleRef}
-                    autoComplete="off"
-                    onChange={(e) => setProjectTitle(e.target.value)}
+                    onChange={(e) => {
+                        setProjectTitle(e.target.value);
+                        setField('title', e.target.value);
+                    }}
                     value={projectTitle}
-                    required
-                    onFocus={() => setProjectTitleFocus(true)}
-                    onBlur={() => setProjectTitleFocus(false)}
+                    isInvalid={!!errors.title}
                     style={{
                         margin: "0.5rem 0",
                         padding: "1rem",
@@ -145,22 +190,23 @@ export const CreateProjectForm = () => {
                         borderRadius: "10px"
                     }}
                 />
+                <Form.Control.Feedback type="invalid">{errors.title}</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group>
+            <Form.Group controlId="projectShortDesc">
                 <Form.Label htmlFor="project-title">Short Description:</Form.Label>
                 <Form.Control
-                    type="title"
-                    id="project-title"
-                    name="project-title"
+                    required={true}
+                    type="text"
+                    id="projectShortDesc"
+                    name="projectShortDesc"
                     placeholder="Description"
-                    ref={projectTitleRef}
-                    autoComplete="off"
-                    onChange={(e) => setProjectTitle(e.target.value)}
-                    value={projectTitle}
-                    required
-                    onFocus={() => setProjectTitleFocus(true)}
-                    onBlur={() => setProjectTitleFocus(false)}
+                    onChange={(e) => {
+                        setProjectShortDesc(e.target.value);
+                        setField('shortDesc', e.target.value);
+                    }}
+                    value={projectShortDesc}
+                    isInvalid={!!errors.shortDesc}
                     style={{
                         margin: "0.5rem 0",
                         padding: "1rem",
@@ -169,21 +215,23 @@ export const CreateProjectForm = () => {
                         borderRadius: "10px"
                     }}
                 />
+                <Form.Control.Feedback type="invalid">{errors.shortDesc}</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group>
+            <Form.Group controlId="projectFullDesc">
                 <Form.Label htmlFor="project-description">Full Description:</Form.Label>
                 <Form.Control
+                    required={true}
                     type="text"
-                    id="project-description"
-                    name="project-descrition"
+                    id="projectFullDesc"
+                    name="projectFullDesc"
                     placeholder="Description"
-                    ref={projectDescRef}
-                    onChange={(e) => setProjectDescription(e.target.value)}
+                    onChange={(e) => {
+                        setProjectDescription(e.target.value);
+                        setField('fullDesc', e.target.value);
+                    }}
                     value={projectDescription}
-                    required
-                    onFocus={() => setProjectDescFocus(true)}
-                    onBlur={() => setProjectDescFocus(false)}
+                    isInvalid={!!errors.fullDesc}
                     style={{
                         margin: "0.5rem 0",
                         padding: "1rem",
@@ -192,12 +240,22 @@ export const CreateProjectForm = () => {
                         borderRadius: "10px"
                     }}
                 />
+                <Form.Control.Feedback type="invalid">{errors.fullDesc}</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group controlId="generalSkillValidation">
+            <Form.Group controlId="generalSkill">
                 <Form.Label>General Skill:</Form.Label>
                 <Form.Select
-                    required
+                    id="generalSkill"
+                    name="generalSkill"
+                    className={!!errors.generalSkill && 'red-border'}
+                    required={true}
+                    onChange={(e) => {
+                        setGeneralSkill(e.target.value);
+                        setField('generalSkill', e.target.value);
+                        setSkillsFocus('Select skills focus...');
+                    }}
+                    value={generalSkill}
                     style={{
                         margin: "0.5rem 0",
                         padding: "1rem",
@@ -205,22 +263,24 @@ export const CreateProjectForm = () => {
                         backgroundColor: "lightgray",
                         borderRadius: "10px"
                     }}
-                    onChange={changeGeneralSkill}
-                    value={generalSkill}
                 >
-                    {Object.keys(SKILLS).map((availableGenSkill, idx) => {
+                    {Object.keys(SKILLS).map((availableGeneralSkill, idx) => {
                         return (
-                            <option key={idx}>{availableGenSkill}</option>
+                            <option key={idx} value={availableGeneralSkill}>{availableGeneralSkill}</option>
                         );
                     })
                     }
                 </Form.Select>
+                <Container className="red">{errors.generalSkill}</Container>
             </Form.Group>
 
-            <Form.Group>
+            <Form.Group controlId="skillsFocus">
                 <Form.Label>Skill Focus:</Form.Label>
                 <Form.Select
-                    required
+                    id="skillsFocus"
+                    name="skillsFocus"
+                    className={!!errors.skillsFocus && 'red-border'}
+                    required={true}
                     style={{
                         margin: "0.5rem 0",
                         padding: "1rem",
@@ -228,22 +288,30 @@ export const CreateProjectForm = () => {
                         backgroundColor: "lightgray",
                         borderRadius: "10px"
                     }}
-                    onChange={(e) => setSkillsFocus(e.target.value)}
+                    onChange={(e) => {
+                        setSkillsFocus(e.target.value);
+                        setField('skillsFocus', e.target.value);
+                        setSpecificSkill1('Select specific skill...');
+                    }}
                     value={skillsFocus}
                 >
-                    {Object.keys(SKILLS[generalSkill]).map((availableFocus, idx) => {
+                    {Object.keys(SKILLS[generalSkill]).map((availableSkillsFocus, idx) => {
                         return (
-                            <option key={idx}>{availableFocus}</option>
+                            <option key={idx} value={availableSkillsFocus}>{availableSkillsFocus}</option>
                         );
                     })
                     }
                 </Form.Select>
+                <Container className="red">{errors.skillsFocus}</Container>
             </Form.Group>
 
-            <Form.Group controlId="specSkill1Validation">
+            <Form.Group controlId="specificSkill1">
                 <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
                 <Form.Select
-                    required
+                    id="specificSkill1"
+                    name="specificSkill1"
+                    className={!!errors.specificSkill1 && 'red-border'}
+                    required={true}
                     style={{
                         margin: "0.5rem 0",
                         padding: "1rem",
@@ -251,21 +319,37 @@ export const CreateProjectForm = () => {
                         backgroundColor: "lightgray",
                         borderRadius: "10px"
                     }}
-                    onChange={changeSpecSkill1}
-                    value={specSkill1}
+                    onChange={(e) => {
+                        setSpecificSkill1(e.target.value);
+                        setField('specificSkill1', e.target.value);
+                        setSpecificSkill2('Select specific skill...');
+                        setSpecificSkill3('Select specific skill...');
+                        setSpecSkill2Hidden(false);
+                    }}
+                    value={specificSkill1}
                 >
                     {SKILLS[generalSkill][skillsFocus].map((availableSpecificSkill, idx) => {
                         return (
-                            <option key={idx}>{availableSpecificSkill}</option>
+                            <option key={idx} value={availableSpecificSkill}>{availableSpecificSkill}</option>
                         );
                     })
                     }
                 </Form.Select>
+                <Container className="red">{errors.specificSkill1}</Container>
             </Form.Group>
 
-            <Form.Group controlId="specSkill2Validation" hidden={specSkill2Hidden}>
+            <Form.Group controlId="specificSkill2" hidden={specSkill2Hidden}>
                 <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
                 <Form.Select
+                    id="specificSkill2"
+                    name="specificSkill2"
+                    onChange={(e) => {
+                        setSpecificSkill2(e.target.value);
+                        setField('specificSkill2', e.target.value);
+                        setSpecificSkill3('Select specific skill...');
+                        setSpecSkill3Hidden(false);
+                    }}
+                    value={specificSkill2}
                     style={{
                         margin: "0.5rem 0",
                         padding: "1rem",
@@ -273,21 +357,26 @@ export const CreateProjectForm = () => {
                         backgroundColor: "lightgray",
                         borderRadius: "10px"
                     }}
-                    onChange={changeSpecSkill2}
-                    value={specSkill2}
                 >
                     {SKILLS[generalSkill][skillsFocus].map((availableSpecificSkill, idx) => {
                         return (
-                            <option key={idx}>{availableSpecificSkill}</option>
+                            <option key={idx} value={availableSpecificSkill}>{availableSpecificSkill}</option>
                         );
                     })
                     }
                 </Form.Select>
             </Form.Group>
 
-            <Form.Group controlId="specSkill3Validaiton" hidden={specSkill3Hidden}>
+            <Form.Group controlId="specificSkill3" hidden={specSkill3Hidden}>
                 <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
                 <Form.Select
+                    id="specificSkill3"
+                    name="specificSkill3"
+                    onChange={(e) => {
+                        setSpecificSkill3(e.target.value);
+                        setField('specificSkill3', e.target.value);
+                    }}
+                    value={specificSkill3}
                     style={{
                         margin: "0.5rem 0",
                         padding: "1rem",
@@ -295,43 +384,28 @@ export const CreateProjectForm = () => {
                         backgroundColor: "lightgray",
                         borderRadius: "10px"
                     }}
-                    onChange={changeSpecSkill3}
-                    value={specSkill3}
                 >
                     {SKILLS[generalSkill][skillsFocus].map((availableSpecificSkill, idx) => {
                         return (
-                            <option key={idx}>{availableSpecificSkill}</option>
+                            <option key={idx} value={availableSpecificSkill}>{availableSpecificSkill}</option>
                         );
                     })
                     }
                 </Form.Select>
             </Form.Group>
 
-            <Form.Group controlId="tag1Validation">
+            <Form.Group controlId="tag1">
                 <Form.Label style={{color: "black"}}>Tag</Form.Label>
                 <Form.Select
-                    style={{
-                        margin: "0.5rem 0",
-                        padding: "1rem",
-                        border: "1px solid black",
-                        backgroundColor: "lightgray",
-                        borderRadius: "10px"
+                    id="tag1"
+                    name="tag1"
+                    onChange={(e) => {
+                        setTag1(e.target.value);
+                        setField('tag1', e.target.value);
+                        setTag2('(Optional) Select tag...');
+                        setTag2Hidden(false);
                     }}
-                    onChange={changeTag1}
                     value={tag1}
-                >
-                    {TAGS.map((availableTag, idx) => {
-                        return (
-                            <option key={idx}>{availableTag}</option>
-                        );
-                    })
-                    }
-                </Form.Select>
-            </Form.Group>
-
-            <Form.Group controlId="tag2Validation" hidden={tag2Hidden}>
-                <Form.Label style={{color: "black"}}>Tag</Form.Label>
-                <Form.Select
                     style={{
                         margin: "0.5rem 0",
                         padding: "1rem",
@@ -339,31 +413,54 @@ export const CreateProjectForm = () => {
                         backgroundColor: "lightgray",
                         borderRadius: "10px"
                     }}
-                    onChange={changeTag2}
-                    value={tag2}
                 >
                     {TAGS.map((availableTag, idx) => {
                         return (
-                            <option key={idx}>{availableTag}</option>
+                            <option key={idx} value={availableTag}>{availableTag}</option>
                         );
                     })
                     }
                 </Form.Select>
             </Form.Group>
 
-            <Form.Group>
+            <Form.Group controlId="tag2" hidden={tag2Hidden}>
+                <Form.Label style={{color: "black"}}>Tag</Form.Label>
+                <Form.Select
+                    id="tag2"
+                    name="tag2"
+                    onChange={(e) => {
+                        setTag2(e.target.value);
+                        setField('tag2', e.target.value);
+                    }}
+                    value={tag2}
+                    style={{
+                        margin: "0.5rem 0",
+                        padding: "1rem",
+                        border: "1px solid black",
+                        backgroundColor: "lightgray",
+                        borderRadius: "10px"
+                    }}
+                >
+                    {TAGS.map((availableTag, idx) => {
+                        return (
+                            <option key={idx} value={availableTag}>{availableTag}</option>
+                        );
+                    })
+                    }
+                </Form.Select>
+            </Form.Group>
+
+            <Form.Group controlId="leadMaker">
                 <Form.Label>Lead Maker:</Form.Label>
                 <Form.Control
-                    required
                     type="text"
-                    id="lead-maker"
-                    name="lead-maker"
+                    id="leadMaker"
+                    name="leadMaker"
                     placeholder="Full name"
-                    ref={projectLeadMakerRef}
-                    onChange={(e) => setProjectLeadMaker(e.target.value)}
-                    value={projectLeadMaker}
-                    onFocus={() => setProjectLeadMakerFocus(true)}
-                    onBlur={() => setProjectLeadMakerFocus(false)}
+                    required={true}
+                    onChange={(e) => setLeadMaker(e.target.value)}
+                    value={leadMaker}
+                    isInvalid={!!errors.leadMaker}
                     style={{
                         margin: "0.5rem 0",
                         padding: "1rem",
@@ -372,21 +469,20 @@ export const CreateProjectForm = () => {
                         borderRadius: "10px"
                     }}
                 />
+                <Form.Control.Feedback type="invalid">{errors.leadMaker}</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group>
+            <Form.Group controlId="leadMakerEmail">
                 <Form.Label>Email:</Form.Label>
                 <Form.Control
-                    required
                     type="text"
-                    id="lead-maker-email"
-                    name="lead-maker-email"
+                    id="leadMakerEmail"
+                    name="leadMakerEmail"
                     placeholder="leadmaker@wit.edu"
-                    ref={projectLeadMakerEmailRef}
-                    onChange={(e) => setProjectLeadMakerEmail(e.target.value)}
-                    value={projectLeadMaker}
-                    onFocus={() => setProjectLeadMakerEmailFocus(true)}
-                    onBlur={() => setProjectLeadMakerEmailFocus(false)}
+                    required={true}
+                    onChange={(e) => setLeadMakerEmail(e.target.value)}
+                    value={leadMakerEmail}
+                    isInvalid={!!errors.leadMakerEmail}
                     style={{
                         margin: "0.5rem 0",
                         padding: "1rem",
@@ -395,10 +491,11 @@ export const CreateProjectForm = () => {
                         borderRadius: "10px"
                     }}
                 />
+                <Form.Control.Feedback type="invalid">{errors.leadMakerEmail}</Form.Control.Feedback>
             </Form.Group>
 
 
-            <Button type="submit" onSubmit={handleSubmit} style={{
+            <Button type="submit" style={{
                 border: "none",
                 backgroundColor: "black",
                 padding: "20px",

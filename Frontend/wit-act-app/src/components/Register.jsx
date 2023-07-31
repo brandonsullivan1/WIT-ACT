@@ -194,7 +194,7 @@ export const Register = () => {
 
         const formErrors = validateForm();
 
-        if (Object.keys(formErrors). length > 0) {
+        if (Object.keys(formErrors).length > 0) {
             setErrors(formErrors);
         } else {
             // this doesn't need to be an await and the function doesn't need to be async, but it doesn't seem to slow

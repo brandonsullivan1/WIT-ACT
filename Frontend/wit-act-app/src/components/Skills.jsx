@@ -10,10 +10,10 @@ export const Skills = () => {
 
     // initialize to user's current registered skill for all
     const [generalSkill, setGeneralSkill] = useState('Select general skill...');
-    const [skillsFocus, setSkillsFocus] = useState('Select skill focus...');
-    const [specSkill1, setSpecSkill1] = useState('Select specific skill...');
-    const [specSkill2, setSpecSkill2] = useState('Select specific skill...');
-    const [specSkill3, setSpecSkill3] = useState('Select specific skill...');
+    const [skillsFocus, setSkillsFocus] = useState('Select skills focus...');
+    const [specificSkill1, setSpecificSkill1] = useState('Select specific skill...');
+    const [specificSkill2, setSpecificSkill2] = useState('Select specific skill...');
+    const [specificSkill3, setSpecificSkill3] = useState('Select specific skill...');
 
     // default to false if user has skill registered
     const [specSkill2Hidden, setSpecSkill2Hidden] = useState(true);
@@ -196,7 +196,7 @@ export const Skills = () => {
                         }} onClick={specificSkillForm} id="specSkillBtn">Update Specific Skill</Button>
                         <Form hidden={specificSkillFormHidden} className="mt-3">
                             <Form.Group>
-                                <Form.Label><strong>Specific Skill:</strong> {specSkill1}</Form.Label>
+                                <Form.Label><strong>Specific Skill:</strong> {specificSkill1}</Form.Label>
                                 <Form.Select
                                     required
                                 >
@@ -209,7 +209,7 @@ export const Skills = () => {
                             </Form.Group>
 
                             <Form.Group hidden={specSkill2Hidden}>
-                                <Form.Label><strong>Specific Skill:</strong> {specSkill1}</Form.Label>
+                                <Form.Label><strong>Specific Skill:</strong> {specificSkill2}</Form.Label>
                                 <Form.Select
                                     required
                                 >
@@ -222,7 +222,7 @@ export const Skills = () => {
                             </Form.Group>
 
                             <Form.Group hidden={specSkill3Hidden}>
-                                <Form.Label><strong>Specific Skill:</strong> {specSkill1}</Form.Label>
+                                <Form.Label><strong>Specific Skill:</strong> {specificSkill3}</Form.Label>
                                 <Form.Select
                                     required
                                 >

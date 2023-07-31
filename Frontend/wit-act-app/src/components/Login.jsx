@@ -8,6 +8,25 @@ export const Login = () => {
 
     const [validated, setValidated] = useState(false);
 
+    const [form, setForm] = useState({
+        email: '',
+        password: '',
+    });
+
+    const [errors, setErrors] = useState({});
+
+    const setField = (field, value) => {
+        setForm({
+            ...form,
+            [field]: value
+        })
+
+        if (!!errors[field]) setErrors({
+            ...errors,
+            [field]: null
+        })
+    }
+
     const [email, setEmail] = useState('');
     const [validEmail, setValidEmail] = useState(false);
 
@@ -22,14 +41,29 @@ export const Login = () => {
 
     // Pull user's account from DB and test for login validation
 
+    const validateForm = () => {
+        const {
+            email,
+            password,
+        } = form;
+
+        const newErrors = {};
+
+        if (!email || email === '') newErrors.email = 'No user found with that email.';
+        if (!pwd || pwd === '') newErrors.password = 'Incorrect password';
+
+        return newErrors;
+    }
+
 
     const handleSubmit = async (event) => {
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            console.error("Invalid form!");
-            event.preventDefault();
-            event.stopPropagation();
+        const formErrors = validateForm();
+
+        if (Object.keys(formErrors).length > 0) {
+            setErrors(formErrors);
+            setValidated(false);
         } else {
+            setValidated(true);
             console.log("Valid form!");
             await axios.post("http://localhost:3100/users/fetchuser", {
                 email: email,
@@ -66,12 +100,14 @@ export const Login = () => {
                             required
                             type="text"
                             placeholder="email@wit.edu"
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => {
+                                setEmail(e.target.value);
+                                setField('email', e.target.value);
+                            }}
                             value={email}
-                            isValid={validEmail && email.length !== 0}
+                            isInvalid={!!errors.email}
                         />
-                        <Form.Control.Feedback
-                            type={validEmail ? "valid" : "invalid"}></Form.Control.Feedback>
+                        <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
                     </Form.Group>
 
                     <Form.Group controlId="pwdValidation">
@@ -80,13 +116,17 @@ export const Login = () => {
                             type="password"
                             placeholder="Password"
                             required
-                            onChange={(e) => setPwd(e.target.value)}
+                            onChange={(e) => {
+                                setPwd(e.target.value);
+                                setField('password', e.target.value);
+                            }}
                             value={pwd}
+                            isInvalid={!!errors.password}
                         />
-                        <Form.Control.Feedback type="invald">Invalid
-                            password.</Form.Control.Feedback>
-                        <p style={{color: "black"}}><a style={{cursor: "pointer"}}>Forgot password?</a></p>
+                        <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
                     </Form.Group>
+
+                    <p style={{color: "black"}}><a style={{cursor: "pointer"}}>Forgot password?</a></p>
 
                     <Container className="mt-3">
                         <Button type="submit" style={{
@@ -96,8 +136,7 @@ export const Login = () => {
                             borderRadius: "10px",
                             cursor: "pointer",
                             color: "black"
-                        }} onSubmit={handleSubmit}>Login</Button>
-
+                        }}>Login</Button>
                     </Container>
                 </Col>
             </Row>
