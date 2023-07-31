@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Container, Card, Row, Col, Navbar } from "react-bootstrap";
 import { ResponsiveNavbar } from "../components/ResponsiveNavbar";
 import { Footer } from "../components/Footer";

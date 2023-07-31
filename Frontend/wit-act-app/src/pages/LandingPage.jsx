@@ -1,15 +1,9 @@
-import React, {useEffect, useRef, useState} from "react";
-import { useNavigate } from "react-router-dom";
-import {Button, Col, Container, Form, Row, Tab, Tabs, ProgressBar, InputGroup, Dropdown} from 'react-bootstrap';
-import {EMAIL_REGEX, PHONE_NUMBER_REGEX, PWD_REGEX, VALID_MAJORS, VALID_MINORS, NAME_REGEX} from "../Validation/FormValidation";
+import React, {useState} from "react";
+import {Container, Tab, Tabs} from 'react-bootstrap';
 import { Footer } from "../components/Footer";
-import * as Tfi from "react-icons/tfi";
-import Profile from "./Profile";
 import { Login } from "../components/Login";
 import Register from "../components/Register";
 
-const TEST_EMAIL = "sullivanb13@wit.edu";
-const TEST_PWD = "TestPassword1!";
 export const LandingPage = () => {
     const [activeKey, setActiveKey] = useState("login");
     const [loginDisabled, setLoginDisabled] = useState(false);

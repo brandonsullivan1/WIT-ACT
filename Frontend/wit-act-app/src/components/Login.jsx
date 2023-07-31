@@ -30,13 +30,17 @@ export const Login = () => {
     const [email, setEmail] = useState('');
     const [validEmail, setValidEmail] = useState(false);
 
-    const [pwd, setPwd] = useState('');
-    const [validPwd, setValidPwd] = useState(false);
+    const [password, setPassword] = useState('');
+    const [validPassword, setValidPassword] = useState(false);
 
     useEffect(() => {
-        const result = email === "sullivanb13@wit.edu";
+        const result = email === ""; // add sql query here
         setValidEmail(result);
     }, [email])
+
+    useEffect(() => {
+        const result = password === ""; // add sql query here
+    }, [password])
 
 
     // Pull user's account from DB and test for login validation
@@ -49,8 +53,8 @@ export const Login = () => {
 
         const newErrors = {};
 
-        if (!email || email === '') newErrors.email = 'No user found with that email.';
-        if (!pwd || pwd === '') newErrors.password = 'Incorrect password';
+        if (!email || email === '' || !validEmail) newErrors.email = 'No user found with that email.';
+        if (!password || password === '' || !validPassword) newErrors.password = 'Incorrect password';
 
         return newErrors;
     }
@@ -94,11 +98,12 @@ export const Login = () => {
             <Row className="mt-3">
                 <Col md="3"></Col>
                 <Col md="6">
-                    <Form.Group controlId="emailValidation">
+                    <Form.Group controlId="email">
                         <Form.Label style={{color: "black"}}>Email</Form.Label>
                         <Form.Control
-                            required
+                            required={true}
                             type="text"
+                            id="email"
                             placeholder="email@wit.edu"
                             onChange={(e) => {
                                 setEmail(e.target.value);
@@ -110,17 +115,18 @@ export const Login = () => {
                         <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group controlId="pwdValidation">
+                    <Form.Group controlId="password">
                         <Form.Label style={{color: "black"}}>Password</Form.Label>
                         <Form.Control
+                            required={true}
                             type="password"
+                            id="password"
                             placeholder="Password"
-                            required
                             onChange={(e) => {
-                                setPwd(e.target.value);
+                                setPassword(e.target.value);
                                 setField('password', e.target.value);
                             }}
-                            value={pwd}
+                            value={password}
                             isInvalid={!!errors.password}
                         />
                         <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>

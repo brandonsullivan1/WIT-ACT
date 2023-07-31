@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ResponsiveNavbar from "../components/ResponsiveNavbar";
 import Footer from "../components/Footer";
-import { Container, Card, Col, Row, Button, ListGroup, Form } from "react-bootstrap";
+import { Container, Col, Row, ListGroup } from "react-bootstrap";
 import { Account } from "../components/Account";
 import { Skills } from "../components/Skills";
 import { ContactInfo } from "../components/ContactInfo";
