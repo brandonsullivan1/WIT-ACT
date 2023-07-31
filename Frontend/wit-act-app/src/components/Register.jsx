@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {Button, Col, Container, Dropdown, Form, ListGroup, ListGroupItem, ProgressBar, Row} from "react-bootstrap";
 import {EMAIL_REGEX, NAME_REGEX, PHONE_NUMBER_REGEX, PWD_REGEX, SKILLS, TAGS} from "../Validation/FormValidation";
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -188,18 +189,51 @@ export const Register = () => {
         return newErrors;
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const formErrors = validateForm();
 
         if (Object.keys(formErrors). length > 0) {
             setErrors(formErrors);
-        } else{
-            setRegisterValidated(true);
-            navigate('/');
+        } else {
+            // this doesn't need to be an await and the function doesn't need to be async, but it doesn't seem to slow
+            // it down and is probably safer. also makes console output follow the order of console.logs during testing
+            await axios.post("http://localhost:3100/users/adduser", {
+                name: name,
+                email: email,
+                password: password,
+                genskill: generalSkill,
+                skillfocus: skillsFocus,
+                specskill1: specificSkill1,
+                specskill2: specificSkill2,
+                specskill3: specificSkill3,
+                tag: tag,
+                phone: phoneNumber,
+                discord: discord
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Mode': 'cors'
+                }
+            })
+                .then((response) => {
+                    console.log(response);
+                    if(!(200 <= response.status && response.status <= 299)){
+                        console.log(`Error: Response code ${response.status} from server!`);
+                    } else {
+                        setRegisterValidated(true);
+                        navigate('/');
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         }
+
+        console.log("EO handlesubmit");
     }
+
     return <Form noValidate validated={registerValidated} onSubmit={handleSubmit} id="registerForm">
         <Container>
             <Row>
