@@ -29,7 +29,7 @@ router.get('/', (req, res) => {
 
 router.post('/adduser', (req, res) => {
     console.log(req.body);
-    const userID = uuid.v4() // random user ID
+    const userID = uuid.v4() // random user ID  TODO update to use a cryptographically secure RNG "crypto" lib
     const sql = "INSERT INTO Users VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     connector.query(sql, [
         userID,

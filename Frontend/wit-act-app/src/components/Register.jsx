@@ -197,41 +197,38 @@ export const Register = () => {
         if (Object.keys(formErrors).length > 0) {
             setErrors(formErrors);
         } else {
+            setRegisterValidated(true);
             // this doesn't need to be an await and the function doesn't need to be async, but it doesn't seem to slow
             // it down and is probably safer. also makes console output follow the order of console.logs during testing
-            await axios.post("http://localhost:3100/users/adduser", {
-                name: name,
-                email: email,
-                password: password,
-                genskill: generalSkill,
-                skillfocus: skillsFocus,
-                specskill1: specificSkill1,
-                specskill2: specificSkill2,
-                specskill3: specificSkill3,
-                tag: tag,
-                phone: phoneNumber,
-                discord: discord
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Mode': 'cors'
-                }
-            })
-                .then((response) => {
-                    console.log(response);
-                    if(!(200 <= response.status && response.status <= 299)){
-                        console.log(`Error: Response code ${response.status} from server!`);
-                    } else {
-                        setRegisterValidated(true);
-                        navigate('/');
+            try {
+                const response = await axios.post("http://localhost:3100/users/adduser", {
+                    name: name,
+                    email: email,
+                    password: password,
+                    genskill: generalSkill,
+                    skillfocus: skillsFocus,
+                    specskill1: specificSkill1,
+                    specskill2: specificSkill2,
+                    specskill3: specificSkill3,
+                    tag: tag,
+                    phone: phoneNumber,
+                    discord: discord
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Mode': 'cors'
                     }
-                })
-                .catch((err) => {
-                    console.log(err);
                 });
+                if(!(200 <= response.status && response.status <= 299)){
+                    console.log(`Error: Response code ${response.status} from server!`);
+                } else {
+                    console.log("in else");
+                    navigate('/');
+                }
+            } catch (err) {
+                console.log(err);
+            }
         }
-
-        console.log("EO handlesubmit");
     }
 
     return <Form noValidate validated={registerValidated} onSubmit={handleSubmit} id="registerForm">
