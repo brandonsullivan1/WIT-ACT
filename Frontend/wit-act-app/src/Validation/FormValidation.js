@@ -2,6 +2,9 @@ export const NAME_REGEX = /^[A-Z][a-zA-Z- ]+$/;
 export const EMAIL_REGEX = /[a-z0-9]@wit.edu/;
 export const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 export const PHONE_NUMBER_REGEX = /[0-9]+.{9}/;
+
+export const DISCORD_REGEX = /.+[#d].{4}/;
+
 export const VALID_MINORS = [
     "Aerospace Engineering",
     "American Studies",

@@ -1,28 +1,122 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {Container, Form, Button, Card} from "react-bootstrap";
+import {DISCORD_REGEX, PHONE_NUMBER_REGEX} from "../Validation/FormValidation";
 
 export const ContactInfo = () => {
 
+    const [phoneNumberFormValidated, setPhoneNumberFormValidated] = useState(false);
     const [phoneFormHidden, setPhoneFormHidden] = useState(true);
-    const [discordFormHidden, setDiscordFormHidden] = useState(true);
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [validPhoneNumber, setValidPhoneNumber] = useState(false);
+    const [phoneNumberForm, setPhoneNumberForm] = useState({
+        phoneNumber: '',
+    });
 
-    // pull user's registered phone number and discord if available and display
+    const [phoneNumberFormErrors, setPhoneNumberFormErrors] = useState({});
 
-    const phoneForm = () => {
+    const setPhoneNumberField = (field, value) => {
+        setPhoneNumberForm({
+            ...phoneNumberForm,
+            [field]: value
+        })
+
+        if (!!phoneNumberFormErrors[field]) setPhoneNumberFormErrors({
+            ...phoneNumberFormErrors,
+            [field]: null
+        })
+    }
+
+    const validatePhoneNumberForm = () => {
+        const {
+            phoneNumber,
+        } = phoneNumberForm;
+
+        const newErrors = {};
+
+        if (!validPhoneNumber || phoneNumber === '') newErrors.phoneNumber = 'Please enter a valid phone number.';
+
+        return newErrors;
+    }
+
+    const handlePhoneNumberFormSubmit = (e) => {
+        e.preventDefault();
+
+        const formErrors = validatePhoneNumberForm();
+
+        if (Object.keys(formErrors).length > 0) {
+            setPhoneNumberFormErrors(formErrors);
+        } else {
+            setPhoneNumberFormValidated(true);
+        }
+    }
+
+    const showPhoneNumberForm = () => {
         const btn = document.getElementById('phoneBtn');
 
         if (phoneFormHidden) {
             setPhoneFormHidden(false);
             btn.style.color = "black";
-            btn.style.backgroundColor = "white"
+            btn.style.backgroundColor = "white";
         } else {
             setPhoneFormHidden(true);
             btn.style.color = "white";
-            btn.style.backgroundColor = "black"
+            btn.style.backgroundColor = "black";
         }
     }
 
-    const discordForm = () => {
+    useEffect(() => {
+        if (phoneNumber !== '') {
+            const result = PHONE_NUMBER_REGEX.test(phoneNumber);
+            setValidPhoneNumber(result);
+        }
+    }, [phoneNumber])
+
+    const [discordFormValidated, setDiscordFormValidated] = useState(false);
+    const [discordFormHidden, setDiscordFormHidden] = useState(true);
+    const [discord, setDiscord] = useState('');
+    const [validDiscord, setValidDiscord] = useState(false);
+    const [discordForm, setDiscordForm] = useState({
+        discord: '',
+    });
+
+    const [discordFormErrors, setDiscordFormErrors] = useState({});
+    const setDiscordFormField = (field, value) => {
+        setDiscordForm({
+            ...discordForm,
+            [field]: value
+        })
+
+        if (!!discordFormErrors[field]) setDiscordFormErrors({
+            ...discordFormErrors,
+            [field]: null
+        })
+    }
+
+    const validateDiscordForm = () => {
+        const {
+            discord,
+        } = discordForm;
+
+        const newErrors = {};
+
+        if (!validDiscord || discord === '') newErrors.discord = 'Please enter a valid discord username.';
+
+        return newErrors;
+    }
+
+    const handleDiscordFormSubmit = (e) => {
+        e.preventDefault();
+
+        const formErrors = validateDiscordForm();
+
+        if (Object.keys(formErrors).length > 0) {
+            setDiscordFormErrors(formErrors);
+        } else {
+            setDiscordFormValidated(true);
+        }
+    }
+
+    const showDiscordForm = () => {
         const btn = document.getElementById('discordBtn');
 
         if (discordFormHidden) {
@@ -35,6 +129,15 @@ export const ContactInfo = () => {
             btn.style.backgroundColor = "black"
         }
     }
+
+    useEffect(() => {
+        if (discord !== '') {
+            const result = DISCORD_REGEX.test(discord);
+            setValidDiscord(result);
+        }
+    }, [discord])
+
+    // pull user's registered phone number and discord if available and display
 
     return (
         <Container>
@@ -58,15 +161,26 @@ export const ContactInfo = () => {
                             cursor: "pointer",
                             color: "white",
                             width: "60%",
-                        }} onClick={phoneForm} id="phoneBtn">Update Phone Number</Button>
-                        <Form hidden={phoneFormHidden} className="mt-3">
-                            <Form.Group>
+                        }} onClick={showPhoneNumberForm} id="phoneBtn">Update Phone Number</Button>
+                        <Form hidden={phoneFormHidden} className="mt-3" noValidate validated={phoneNumberFormValidated} onSubmit={handlePhoneNumberFormSubmit}>
+                            <Form.Group controlId="phoneNumber">
                                 <Form.Label>Phone Number:</Form.Label>
-                                <Form.Control/>
+                                <Form.Control
+                                    required={true}
+                                    type="text"
+                                    id="phoneNumber"
+                                    onChange={(e) => {
+                                        setPhoneNumber(e.target.value);
+                                        setPhoneNumberField('phoneNumber', e.target.value);
+                                    }}
+                                    value={phoneNumber}
+                                    isInvalid={!!phoneNumberFormErrors.phoneNumber}
+                                />
+                                <Form.Control.Feedback type="invalid">{phoneNumberFormErrors.phoneNumber}</Form.Control.Feedback>
                             </Form.Group>
 
                             <Container className="mt-3">
-                                <Button style={{
+                                <Button type="submit" style={{
                                     border: "2px solid black",
                                     backgroundColor: "black",
                                     padding: "1rem 1rem",
@@ -98,15 +212,26 @@ export const ContactInfo = () => {
                             cursor: "pointer",
                             color: "white",
                             width: "60%",
-                        }} onClick={discordForm} id="discordBtn">Update Discord</Button>
-                        <Form hidden={discordFormHidden}>
-                            <Form.Group>
+                        }} onClick={showDiscordForm} id="discordBtn">Update Discord</Button>
+                        <Form hidden={discordFormHidden} className="mt-3" noValidate validated={discordFormValidated} onSubmit={handleDiscordFormSubmit}>
+                            <Form.Group controlId="discord">
                                 <Form.Label>Discord:</Form.Label>
-                                <Form.Control/>
+                                <Form.Control
+                                    required={true}
+                                    type="text"
+                                    id="discord"
+                                    onChange={(e) => {
+                                        setDiscord(e.target.value);
+                                        setDiscordFormField('discord', e.target.value);
+                                    }}
+                                    value={discord}
+                                    isInvalid={!!discordFormErrors.discord}
+                                />
+                                <Form.Control.Feedback type="invalid">{discordFormErrors.discord}</Form.Control.Feedback>
                             </Form.Group>
 
                             <Container className="mt-3">
-                                <Button style={{
+                                <Button type="submit" style={{
                                     border: "2px solid black",
                                     backgroundColor: "black",
                                     padding: "1rem 1rem",

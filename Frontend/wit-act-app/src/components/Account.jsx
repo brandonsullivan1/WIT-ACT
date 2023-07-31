@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import {Container, Form, Button, Card} from "react-bootstrap";
-import {VALID_MAJORS, VALID_MINORS, TAGS} from "../Validation/FormValidation";
+import {VALID_MINORS, TAGS} from "../Validation/FormValidation";
 
 export const Account = () => {
+
+    const [passwordFormValidated, setPasswordFormValidated] = useState(false);
+
+    const [minorFormValidated, setMinorFormValidated] = useState(false);
+
+    const [tagFormValidated, setTagFormValidated] = useState(false);
 
     const [success, setSuccess] = useState('');
 
@@ -24,6 +30,22 @@ export const Account = () => {
     const [matchNewPwd, setMatchNewPwd] = useState('');
     const [validMatch, setValidMatch] = useState(false);
     const [matchFocus, setMatchFocus] = useState(false);
+
+    const [passwordForm, setPasswordForm] = useState({
+       currentPassword: '',
+       newPassword: '',
+       confirmNewPassword: '',
+    });
+
+    const [minorForm, setMinor] = useState({
+        currentMinor: '',
+        newMinor: '',
+    });
+
+    const [tagForm, setTagForm] = useState({
+        currentTag: '',
+        newTag: '',
+    });
 
     const pwdForm = () => {
         const btn = document.getElementById('pwdBtn');
@@ -54,33 +76,33 @@ export const Account = () => {
         // change or add tag
     }
 
-    const minorForm = () => {
-        const btn = document.getElementById('minorBtn');
+    // const minorForm = () => {
+    //     const btn = document.getElementById('minorBtn');
+    //
+    //     if (minorFormHidden) {
+    //         setMinorFormHidden(false);
+    //         btn.style.color = "black";
+    //         btn.style.backgroundColor = "white"
+    //     } else {
+    //         setMinorFormHidden(true);
+    //         btn.style.color = "white";
+    //         btn.style.backgroundColor = "black"
+    //     }
+    // }
 
-        if (minorFormHidden) {
-            setMinorFormHidden(false);
-            btn.style.color = "black";
-            btn.style.backgroundColor = "white"
-        } else {
-            setMinorFormHidden(true);
-            btn.style.color = "white";
-            btn.style.backgroundColor = "black"
-        }
-    }
-
-    const tagForm = () => {
-        const btn = document.getElementById('tagBtn');
-
-        if (tageFormHidden) {
-            setTagFormHidden(false);
-            btn.style.color = "black";
-            btn.style.backgroundColor = "white"
-        } else {
-            setTagFormHidden(true);
-            btn.style.color = "white";
-            btn.style.backgroundColor = "black"
-        }
-    }
+    // const tagForm = () => {
+    //     const btn = document.getElementById('tagBtn');
+    //
+    //     if (tageFormHidden) {
+    //         setTagFormHidden(false);
+    //         btn.style.color = "black";
+    //         btn.style.backgroundColor = "white"
+    //     } else {
+    //         setTagFormHidden(true);
+    //         btn.style.color = "white";
+    //         btn.style.backgroundColor = "black"
+    //     }
+    // }
 
     return (
         <Container>
@@ -105,7 +127,7 @@ export const Account = () => {
                             width: "60%",
                         }} onClick={pwdForm} id="pwdBtn">Update Password</Button>
 
-                        <Form hidden={pwdFormHidden} className="mt-3">
+                        <Form hidden={pwdFormHidden} className="mt-3" noValidate validated={passwordFormValidated}>
                             <Form.Group>
                                 <Form.Label>Current Password:</Form.Label>
                                 <Form.Control
@@ -184,7 +206,7 @@ export const Account = () => {
                                 onClick={minorForm}
                                 id="minorBtn"
                             >Change Minor</Button>
-                            <Form hidden={minorFormHidden} className="mt-3">
+                            <Form hidden={minorFormHidden} className="mt-3" noValidate validated={minorFormValidated}>
                                 <Form.Group style={{alignItems: "left"}}>
                                     <Form.Label><strong>Minor:</strong> Applied Mathematics</Form.Label>
                                     <Form.Select>
@@ -234,7 +256,7 @@ export const Account = () => {
                                 onClick={tagForm}
                                 id="tagBtn"
                             >Change Tag</Button>
-                            <Form hidden={tageFormHidden} className="mt-3">
+                            <Form hidden={tageFormHidden} className="mt-3" noValidate validated={tagFormValidated}>
                                 <Form.Group style={{alignItems: "left"}}>
                                     <Form.Label><strong>Tag: </strong>Technology</Form.Label>
                                     <Form.Select>
