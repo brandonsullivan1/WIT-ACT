@@ -113,7 +113,7 @@ export const CreateProjectForm = () => {
         if (!shortDesc || shortDesc === '') newErrors.shortDesc = 'Please enter a valid short description.';
         else if (shortDesc.length > 20) newErrors.shortDesc = 'Short description must be 20 characters or less';
         if (!fullDesc || fullDesc === '') newErrors.fullDesc = 'Please enter a valid full description.';
-        else if (200 < fullDesc.length < 20) newErrors.fullDesc = 'Full description must be at least 20 characters and less than 200 characters';
+        else if (fullDesc.length < 20 || fullDesc.length > 200) newErrors.fullDesc = 'Full description must be at least 20 characters and less than 200 characters';
         if (!generalSkill || generalSkill === 'Select general skill...') newErrors.generalSkill = 'Please select a general skill.';
         if (!skillsFocus || skillsFocus === 'Select skills focus...') newErrors.skillsFocus = 'Please select a skills focus.';
         if (!specificSkill1 || specificSkill1 === 'Select specific skill...') newErrors.specificSkill1 = 'Please select a specific skill.';
@@ -458,7 +458,10 @@ export const CreateProjectForm = () => {
                     name="leadMaker"
                     placeholder="Full name"
                     required={true}
-                    onChange={(e) => setLeadMaker(e.target.value)}
+                    onChange={(e) => {
+                        setLeadMaker(e.target.value);
+                        setField('leadMaker', e.target.value);
+                    }}
                     value={leadMaker}
                     isInvalid={!!errors.leadMaker}
                     style={{
@@ -480,7 +483,10 @@ export const CreateProjectForm = () => {
                     name="leadMakerEmail"
                     placeholder="leadmaker@wit.edu"
                     required={true}
-                    onChange={(e) => setLeadMakerEmail(e.target.value)}
+                    onChange={(e) => {
+                        setLeadMakerEmail(e.target.value);
+                        setField('leadMakerEmail', e.target.value);
+                    }}
                     value={leadMakerEmail}
                     isInvalid={!!errors.leadMakerEmail}
                     style={{
