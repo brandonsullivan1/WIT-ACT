@@ -2,8 +2,6 @@ import React, {useEffect, useRef, useState} from "react";
 import {Button, Col, Container, Dropdown, Form, ListGroup, ListGroupItem, ProgressBar, Row} from "react-bootstrap";
 import {EMAIL_REGEX, NAME_REGEX, PHONE_NUMBER_REGEX, PWD_REGEX, SKILLS, TAGS} from "../Validation/FormValidation";
 import {useNavigate} from "react-router-dom";
-import {Typeahead} from "react-bootstrap-typeahead";
-import axios from "axios";
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -14,10 +12,10 @@ export const Register = () => {
     const [validEmail, setValidEmail] = useState(false);
 
     const [password, setPassword] = useState('');
-    const [validPwd, setValidPwd] = useState(false);
+    const [validPassword, setValidPassword] = useState(false);
 
-    const [pwdMatch, setPwdMatch] = useState('');
-    const [validPwdMatch, setValidPwdMatch] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [validConfirmPassword, setValidConfirmPassword] = useState(false);
 
     const [name, setName] = useState('');
     const [validName, setValidName] = useState(false);
@@ -107,11 +105,32 @@ export const Register = () => {
     }
 
     useEffect(() => {
+        if (generalSkill === 'Select general skill...') {
+            setSkillsFocus('Select skills focus...');
+        }
+    }, [generalSkill])
+
+    useEffect(() => {
+        if (skillsFocus === 'Select skills focus...') {
+            setSpecificSkill1('Select specific skill....');
+        }
+    }, [skillsFocus])
+
+    useEffect(() => {
         if (specificSkill1 === 'Select specific skill...') {
+            setSpecificSkill2('Select specific skill...');
             setSpecSkill2Hidden(true);
+            setSpecificSkill3('Select specific skill...');
             setSpecSkill3Hidden(true);
         }
     }, [specificSkill1])
+
+    useEffect(() => {
+        if (specificSkill2 === 'Select specific skill...') {
+            setSpecificSkill3('Select specific skill...');
+            setSpecSkill3Hidden(true);
+        }
+    }, [specificSkill2])
 
     useEffect(() => {
         const result = EMAIL_REGEX.test(email);
@@ -120,13 +139,13 @@ export const Register = () => {
 
     useEffect(() => {
         const result = PWD_REGEX.test(password);
-        setValidPwd(result);
+        setValidPassword(result);
     }, [password])
 
     useEffect(() => {
-        const result = password === pwdMatch;
-        setValidPwdMatch(result);
-    }, [password, pwdMatch])
+        const result = password === confirmPassword;
+        setValidConfirmPassword(result);
+    }, [password, confirmPassword])
 
     useEffect(() => {
         const result = NAME_REGEX.test(name);
@@ -135,8 +154,12 @@ export const Register = () => {
 
     useEffect(() => {
         if (phoneNumber !== '') {
-            const result = PHONE_NUMBER_REGEX.test(form.phoneNumber);
+            const result = PHONE_NUMBER_REGEX.test(phoneNumber);
             setValidPhoneNumber(result);
+        }
+
+        if (phoneNumber === '') {
+            setValidPhoneNumber(true);
         }
     }, [phoneNumber])
 
@@ -154,18 +177,18 @@ export const Register = () => {
         const newErrors = {};
 
         if (!email || !validEmail || email === '') newErrors.email = 'Please enter a valid WIT email.';
-        if (!password || !validPwd) newErrors.password = 'Please enter a valid password. 8-24 characters, at least 1 uppercase, at least 1 lowercase, at least 1 number, and at least 1 special character (!, @, #, $, %)';
-        if (!confirmPassword || !validPwdMatch) newErrors.confirmPassword = 'Passwords must be the same.';
+        if (!password || !validPassword) newErrors.password = 'Please enter a valid password. 8-24 characters, at least 1 uppercase, at least 1 lowercase, at least 1 number, and at least 1 special character (!, @, #, $, %)';
+        if (!confirmPassword || !validConfirmPassword) newErrors.confirmPassword = 'Passwords must be the same.';
         if (!name || !validName || name === '') newErrors.name = 'Please enter a valid name';
-        if (!generalSkill || generalSkill === 'Select a general skill...') newErrors.generalSkill = 'Please select a general skill';
-        if (!skillsFocus || skillsFocus === '') newErrors.skillsFocus = 'Please select a skills focus';
+        if (!generalSkill || generalSkill === 'Select general skill...') newErrors.generalSkill = 'Please select a general skill';
+        if (!skillsFocus || skillsFocus === 'Select skills focus') newErrors.skillsFocus = 'Please select a skills focus';
         if (!validPhoneNumber) newErrors.phoneNumber = 'Please enter a valid phone number.';
-        if (!specificSkill1 || specificSkill1 === '') newErrors.specificSkill1 = 'Please select a specific skill';
+        if (!specificSkill1 || specificSkill1 === 'Select specific skill...') newErrors.specificSkill1 = 'Please select a specific skill';
 
         return newErrors;
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
         const formErrors = validateForm();
@@ -173,41 +196,9 @@ export const Register = () => {
         if (Object.keys(formErrors). length > 0) {
             setErrors(formErrors);
         } else{
-            // this doesn't need to be an await and the function doesn't need to be async, but it doesn't seem to slow
-            // it down and is probably safer. also makes console output follow the order of console.logs during testing
-            await axios.post("http://localhost:3100/users/adduser", {
-                name: name,
-                email: email,
-                password: password,
-                genskill: generalSkill,
-                skillfocus: skillsFocus,
-                specskill1: specificSkill1,
-                specskill2: specificSkill2,
-                specskill3: specificSkill3,
-                tag: tag,
-                phone: phoneNumber,
-                discord: discord
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Mode': 'cors'
-                }
-            })
-                .then((response) => {
-                    console.log(response);
-                    if(!(200 <= response.status && response.status <= 299)){
-                        console.log(`Error: Response code ${response.status} from server!`);
-                    } else {
-                        setRegisterValidated(true);
-                        navigate('/');
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+            setRegisterValidated(true);
+            navigate('/');
         }
-        console.log("EO handlesubmit")
-        console.log(form);
     }
     return <Form noValidate validated={registerValidated} onSubmit={handleSubmit} id="registerForm">
         <Container>
@@ -226,7 +217,7 @@ export const Register = () => {
                                 placeholder="email@wit.edu"
                                 onChange={(e) => {
                                     setEmail(e.target.value);
-                                    setField('email', email);
+                                    setField('email', e.target.value)
                                 }}
                                 value={email}
                                 isInvalid={!!errors.email}
@@ -242,7 +233,7 @@ export const Register = () => {
                                 placeholder="Password"
                                 onChange={(e) => {
                                     setPassword(e.target.value);
-                                    setField('password', password);
+                                    setField('password', e.target.value);
                                 }}
                                 value={password}
                                 isInvalid={!!errors.password}
@@ -257,10 +248,10 @@ export const Register = () => {
                                 type="password"
                                 placeholder="Confirm Password"
                                 onChange={(e) => {
-                                    setPwdMatch(e.target.value);
-                                    setField('confirmPassword', pwdMatch);
+                                    setConfirmPassword(e.target.value);
+                                    setField('confirmPassword', e.target.value);
                                 }}
-                                value={pwdMatch}
+                                value={confirmPassword}
                                 isInvalid={!!errors.confirmPassword}
                             />
                             <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
@@ -275,7 +266,7 @@ export const Register = () => {
                                 cursor: "pointer",
                                 color: "black"
                             }}
-                                disabled={!validEmail || !validPwd || !validPwdMatch}
+                                    disabled={!validEmail || !validPassword || !validConfirmPassword}
                             >Next</Button>
                         </Container>
                     </Container>
@@ -289,12 +280,12 @@ export const Register = () => {
                                     style={{color: "black"}}
                                     onChange={(e) => {
                                         setName(e.target.value);
-                                        setField('name', name);
+                                        setField('name', e.target.value);
                                     }}
                                     value={name}
                                     placeholder="Full name"
                                     isInvalid={!!errors.name}
-                               />
+                                />
                                 <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
                             </Form.Group>
 
@@ -308,14 +299,15 @@ export const Register = () => {
                                     onChange={(e) => {
                                         setGeneralSkill(e.target.value);
                                         setField('generalSkill', e.target.value);
+                                        setSkillsFocus('Select skills focus...');
                                     }}
                                     value={generalSkill}
                                 >
-                                {Object.keys(SKILLS).map((availableGeneralSkill, idx) => {
-                                    return (
-                                      <option key={idx} value={availableGeneralSkill}>{availableGeneralSkill}</option>
-                                    );
-                                })}
+                                    {Object.keys(SKILLS).map((availableGeneralSkill, idx) => {
+                                        return (
+                                            <option key={idx} value={availableGeneralSkill}>{availableGeneralSkill}</option>
+                                        );
+                                    })}
                                 </Form.Select>
                                 <Container className="red">{errors.generalSkill}</Container>
                             </Form.Group>
@@ -327,13 +319,12 @@ export const Register = () => {
                                     name="skillFocus"
                                     className={!!errors.skillsFocus && 'red-border'}
                                     required={true}
-                                    value={skillsFocus}
                                     onChange={(e) => {
                                         setSkillsFocus(e.target.value);
                                         setField('skillsFocus', e.target.value);
-                                        // setSpecificSkill1('Select specific skill...');
-                                        // setField('specificSkill1', specificSkill1);
+                                        setSpecificSkill1('Select specific skill...');
                                     }}
+                                    value={skillsFocus}
                                 >
                                     {Object.keys(SKILLS[generalSkill]).map((availableSkillsFocus, idx) => {
                                         return (
@@ -366,7 +357,7 @@ export const Register = () => {
                                             cursor: "pointer",
                                             color: "black"
                                         }}
-                                            disabled={!validName || !generalSkill || !skillsFocus}
+                                                disabled={!validName || generalSkill === 'Select general skill...' || skillsFocus === 'Select skills focus...'}
                                         >Next</Button>
                                     </Col>
                                 </Row>
@@ -385,13 +376,15 @@ export const Register = () => {
                                 onChange={(e) => {
                                     setSpecificSkill1(e.target.value);
                                     setField('specificSkill1', e.target.value);
+                                    setSpecificSkill2('Select specific skill...');
+                                    setSpecificSkill3('Select specific skill...')
                                     setSpecSkill2Hidden(false);
                                 }}
                                 value={specificSkill1}
                             >
                                 {SKILLS[generalSkill][skillsFocus].map((availableSpecificSkill, idx) => {
                                     return (
-                                      <option key={idx} value={availableSpecificSkill}>{availableSpecificSkill}</option>
+                                        <option key={idx} value={availableSpecificSkill}>{availableSpecificSkill}</option>
                                     );
                                 })}
                             </Form.Select>
@@ -407,6 +400,7 @@ export const Register = () => {
                                 onChange={(e) => {
                                     setSpecificSkill2(e.target.value);
                                     setField('specificSkill2', e.target.value);
+                                    setSpecificSkill3('Select specific skill...')
                                     setSpecSkill3Hidden(false);
                                 }}
                                 value={specificSkill2}
@@ -461,7 +455,7 @@ export const Register = () => {
                                         cursor: "pointer",
                                         color: "black"
                                     }}
-                                        disabled={!specificSkill1}
+                                            disabled={specificSkill1 === 'Select specific skill...'}
                                     >Next</Button>
                                 </Col>
                             </Row>
@@ -490,7 +484,7 @@ export const Register = () => {
                                 type="text"
                                 placeholder="(Optional)"
                                 onChange={(e) => {
-                                    setDiscord(e.target.value)
+                                    setDiscord(e.target.value);
                                     setField('discord', e.target.value);
                                 }}
                                 value={discord}
