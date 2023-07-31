@@ -6,6 +6,7 @@ export const PHONE_NUMBER_REGEX = /[0-9]+.{9}/;
 export const DISCORD_REGEX = /.+[#d].{4}/;
 
 export const VALID_MINORS = [
+    "(Optional) Select minor...",
     "Aerospace Engineering",
     "American Studies",
     "Applied Math",

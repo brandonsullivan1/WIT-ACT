@@ -169,6 +169,7 @@ export const ContactInfo = () => {
                                     required={true}
                                     type="text"
                                     id="phoneNumber"
+                                    placeholder="Phone number"
                                     onChange={(e) => {
                                         setPhoneNumber(e.target.value);
                                         setPhoneNumberField('phoneNumber', e.target.value);
@@ -220,6 +221,7 @@ export const ContactInfo = () => {
                                     required={true}
                                     type="text"
                                     id="discord"
+                                    placeholder="Discord"
                                     onChange={(e) => {
                                         setDiscord(e.target.value);
                                         setDiscordFormField('discord', e.target.value);

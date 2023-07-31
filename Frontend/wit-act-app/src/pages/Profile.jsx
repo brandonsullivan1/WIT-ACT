@@ -63,24 +63,24 @@ export const Profile = () => {
             <Container className="auth-form-container" style={{backgroundColor: "white", height: "1200px"}}>
                 <Row>
                     <Col md={4}>
-                            <ListGroup as="ul" variant="flush">
-                                <ListGroup.Item
-                                    onClick={toggleProfilePage}
-                                    active={profilePageActive}
-                                    style={{cursor: "pointer"}}
-                                ><GrIcons.GrUserSettings /> Profile</ListGroup.Item>
-                                <ListGroup.Item
-                                    onClick={toggleSkillsPage}
-                                    active={skillsPageActive}
-                                    style={{cursor: "pointer"}}
-                                ><GiIcons.GiSkills /> Skills</ListGroup.Item>
-                                <ListGroup.Item
-                                    onClick={toggleContactInfoPage}
-                                    active={contactInfoPageActive}
-                                    style={{cursor: "pointer"}}
-                                ><RiIcons.RiContactsBookFill /> Contact Information</ListGroup.Item>
-                            </ListGroup>
-                            <a onClick={() => navigate('/')} style={{color: "black", cursor: "pointer"}}><BiIcons.BiLogOut /> Logout</a>
+                        <ListGroup as="ul" variant="flush">
+                            <ListGroup.Item
+                                onClick={toggleProfilePage}
+                                active={profilePageActive}
+                                style={{cursor: "pointer"}}
+                            ><GrIcons.GrUserSettings /> Profile</ListGroup.Item>
+                            <ListGroup.Item
+                                onClick={toggleSkillsPage}
+                                active={skillsPageActive}
+                                style={{cursor: "pointer"}}
+                            ><GiIcons.GiSkills /> Skills</ListGroup.Item>
+                            <ListGroup.Item
+                                onClick={toggleContactInfoPage}
+                                active={contactInfoPageActive}
+                                style={{cursor: "pointer"}}
+                            ><RiIcons.RiContactsBookFill /> Contact Information</ListGroup.Item>
+                        </ListGroup>
+                        <a onClick={() => navigate('/')} style={{color: "black", cursor: "pointer"}}><BiIcons.BiLogOut /> Logout</a>
                     </Col>
                     <Col md={8}>
                         <Container hidden={hideProfilePage}>

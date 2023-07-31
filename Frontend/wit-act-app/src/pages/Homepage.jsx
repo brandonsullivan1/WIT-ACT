@@ -15,26 +15,26 @@ export const Homepage = () => {
             <Container className="mt-3" style={{ alignItems: "stretch" }}>
                 <Row>
                     {projects.map((item, idx) => {
-                            return (
-                                <Col>
-                                    <Card key={idx} id="card" style={{ backgroundColor: "white", minWidth: '18rem', margin: '20px'}}>
-                                        <Card.Body>
-                                            <Navbar>
-                                                <Container style={{ alignItems:"center", justifyContent:"left"}}></Container>
-                                                <Container style={{ alignItems:"center", justifyContent:"center"}}>
-                                                    <Card.Title>{item.title}</Card.Title>
-                                                </Container>
-                                                <Container style={{ alignItems:"center", justifyContent:"right"}}>
-                                                    <BookmarkButton />
-                                                </Container>
-                                            </Navbar>
-                                            <Card.Text>{item.shortDesc}</Card.Text>
-                                            <CardButtons />
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
-                            );
-                        })
+                        return (
+                            <Col>
+                                <Card key={idx} id="card" style={{ backgroundColor: "white", minWidth: '18rem', margin: '20px'}}>
+                                    <Card.Body>
+                                        <Navbar>
+                                            <Container style={{ alignItems:"center", justifyContent:"left"}}></Container>
+                                            <Container style={{ alignItems:"center", justifyContent:"center"}}>
+                                                <Card.Title>{item.title}</Card.Title>
+                                            </Container>
+                                            <Container style={{ alignItems:"center", justifyContent:"right"}}>
+                                                <BookmarkButton />
+                                            </Container>
+                                        </Navbar>
+                                        <Card.Text>{item.shortDesc}</Card.Text>
+                                        <CardButtons />
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        );
+                    })
                     }
                 </Row>
             </Container>

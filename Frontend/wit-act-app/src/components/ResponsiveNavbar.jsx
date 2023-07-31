@@ -65,14 +65,14 @@ export const ResponsiveNavbar = () => {
                                                 active={homepageFilterActive} style={{cursor: "pointer"}}>
                                     <IoIcons.IoIosHome style={{fontSize: "25px"}}/> Homepage
                                 </ListGroup.Item>
-                                <ListGroup.Item as="li" onClick={toggleProjectFilterActive} active={projectFilterActive}
-                                                style={{cursor: "pointer"}}>
-                                    <AiIcons.AiFillProject style={{fontSize: "25px"}}/> Projects
-                                </ListGroup.Item>
-                                <ListGroup.Item as="li" onClick={toggleMakerFilterActive} active={makerFilterActive}
-                                                style={{cursor: "pointer"}}>
-                                    <RiIcons.RiTeamFill style={{fontSize: "25px"}}/> Makers
-                                </ListGroup.Item>
+                                {/*<ListGroup.Item as="li" onClick={toggleProjectFilterActive} active={projectFilterActive}*/}
+                                {/*                style={{cursor: "pointer"}}>*/}
+                                {/*    <AiIcons.AiFillProject style={{fontSize: "25px"}}/> Projects*/}
+                                {/*</ListGroup.Item>*/}
+                                {/*<ListGroup.Item as="li" onClick={toggleMakerFilterActive} active={makerFilterActive}*/}
+                                {/*                style={{cursor: "pointer"}}>*/}
+                                {/*    <RiIcons.RiTeamFill style={{fontSize: "25px"}}/> Makers*/}
+                                {/*</ListGroup.Item>*/}
                             </ListGroup>
                         </Offcanvas.Body>
                     </Offcanvas>

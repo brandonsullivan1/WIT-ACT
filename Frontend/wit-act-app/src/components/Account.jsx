@@ -1,108 +1,210 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {Container, Form, Button, Card} from "react-bootstrap";
-import {VALID_MINORS, TAGS} from "../Validation/FormValidation";
+import {VALID_MINORS, TAGS, PWD_REGEX} from "../Validation/FormValidation";
 
 export const Account = () => {
 
     const [passwordFormValidated, setPasswordFormValidated] = useState(false);
-
-    const [minorFormValidated, setMinorFormValidated] = useState(false);
-
-    const [tagFormValidated, setTagFormValidated] = useState(false);
-
-    const [success, setSuccess] = useState('');
-
-    const [pwdFormHidden, setPwdFormHidden] = useState(true);
-    const [minorFormHidden, setMinorFormHidden] = useState(true);
-    const [tageFormHidden, setTagFormHidden] = useState(true);
-
-    const [minorSelectHidden, setMinorSelectHidden] = useState(true);
-    const [tagSelectHidden, setTagSelectHidden] = useState(true);
-
-    const [currPwd, setCurrPwd] = useState('');
-    const [matchCurrPwd, setMatchCurrPwd] = useState(false);
-    const [pwdFocus, setPwdFocus] = useState(false);
-
-    const [newPwd, setNewPwd] = useState('');
-    const [validNewPwd, setValidNewPwd] = useState(false);
-    const [newPwdFocus, setNewPwdFocus] = useState(false);
-
-    const [matchNewPwd, setMatchNewPwd] = useState('');
-    const [validMatch, setValidMatch] = useState(false);
-    const [matchFocus, setMatchFocus] = useState(false);
-
+    const [passwordFormHidden, setPasswordFormHidden] = useState(true);
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [confirmCurrentPassword, setConfirmCurrentPassword] = useState(false);
+    const [validCurrentPassword, setValidCurrentPassword] = useState(false);
+    const [newPassword, setNewPassword] = useState('');
+    const [validNewPassword, setValidNewPassword] = useState(false);
+    const [confirmNewPassword, setConfirmNewPassword] = useState('');
+    const [validConfirmNewPassword, setValidConfirmNewPassword] = useState(false);
     const [passwordForm, setPasswordForm] = useState({
-       currentPassword: '',
-       newPassword: '',
-       confirmNewPassword: '',
+        currentPassword: '',
+        newPassword: '',
+        confirmNewPassword: '',
     });
 
-    const [minorForm, setMinor] = useState({
-        currentMinor: '',
-        newMinor: '',
-    });
+    const [passwordFormErrors, setPasswordFormErrors] = useState({});
 
-    const [tagForm, setTagForm] = useState({
-        currentTag: '',
-        newTag: '',
-    });
+    const setPasswordFormField = (field, value) => {
+        setPasswordForm({
+            ...passwordForm,
+            [field]: value
+        })
 
-    const pwdForm = () => {
+        if(!!passwordFormErrors[field]) setPasswordFormErrors({
+            ...passwordFormErrors,
+            [field]: null
+        })
+    }
+
+    const validatePasswordForm = () => {
+        const {
+            currentPassword,
+            newPassword,
+            confirmNewPassword,
+        } = passwordForm;
+
+        const newErrors = {};
+
+        if (!currentPassword || currentPassword === '') newErrors.currentPassword = 'Incorrect password.';
+        if (!validNewPassword || !newPassword || newPassword === '') newErrors.newPassword = 'Please enter a valid password';
+        if (!validConfirmNewPassword || !confirmNewPassword || confirmNewPassword === '') newErrors.confirmNewPassword = 'Passwords must match';
+
+        return newErrors;
+    }
+
+    const handlePasswordFormSubmit = (e) => {
+        e.preventDefault();
+
+        const formErrors = validatePasswordForm();
+
+        if (Object.keys(formErrors). length > 0) {
+            setPasswordFormErrors(formErrors);
+        } else {
+            setPasswordFormValidated(true);
+        }
+    }
+
+    const togglePasswordForm = () => {
         const btn = document.getElementById('pwdBtn');
 
-        if (pwdFormHidden) {
-            setPwdFormHidden(false);
+        if (passwordFormHidden) {
+            setPasswordFormHidden(false);
             btn.style.color = "black";
             btn.style.backgroundColor = "white"
         } else {
-            setPwdFormHidden(true);
+            setPasswordFormHidden(true);
             btn.style.color = "white";
             btn.style.backgroundColor = "black"
         }
     }
 
-    const updatePassword = () => {
-        // add update password in DB
-        // need to pull current password
+    useEffect(() => {
+        // pull user's current password from db and set state
+
+        const testCurrentPassword = currentPassword === confirmCurrentPassword;
+        setValidCurrentPassword(testCurrentPassword);
+
+        const testNewPassword = PWD_REGEX.test(newPassword);
+        setValidNewPassword(testNewPassword);
+
+        const testConfirmNewPassword = newPassword === confirmNewPassword;
+        setValidConfirmNewPassword(testConfirmNewPassword);
+    }, [newPassword, confirmNewPassword])
+
+    const [minorFormValidated, setMinorFormValidated] = useState(false);
+    const [minorFormHidden, setMinorFormHidden] = useState(true);
+    const [minor, setMinor] = useState('(Optional) Select minor...')
+    const [minorForm, setMinorForm] = useState({
+        newMinor: '',
+    });
+
+    const [minorFormErrors, setMinorFormErrors] = useState({});
+
+    const setMinorFormField = (field, value) => {
+        setMinorForm({
+            ...minorForm,
+            [field]: value
+        })
+
+        if (!!minorFormErrors) setMinorFormErrors({
+            ...minorFormErrors,
+            [field]: null
+        })
     }
 
-    const updateMinor = () => {
-        // add update password in DB
-        // change or add minor
+    const validateMinorForm = () => {
+        const {
+            minor
+        } = minorForm;
+
+        const newErrors = {};
+
+        if (!minor || minor === '(Optional) Select minor...') newErrors.minor = 'Please select a minor.';
+
+        return newErrors;
     }
 
-    const updateTag = () => {
-        // add update password in DB
-        // change or add tag
+    const handleMinorFormSubmit = (e) => {
+        e.preventDefault();
+
+        const formErrors = validateMinorForm();
+
+        if (Object.keys(formErrors).length > 0) {
+            setMinorFormErrors(formErrors);
+        } else {
+            setMinorFormValidated(true);
+        }
     }
 
-    // const minorForm = () => {
-    //     const btn = document.getElementById('minorBtn');
-    //
-    //     if (minorFormHidden) {
-    //         setMinorFormHidden(false);
-    //         btn.style.color = "black";
-    //         btn.style.backgroundColor = "white"
-    //     } else {
-    //         setMinorFormHidden(true);
-    //         btn.style.color = "white";
-    //         btn.style.backgroundColor = "black"
-    //     }
-    // }
+    const toggleMinorForm = () => {
+        const btn = document.getElementById('minorBtn');
 
-    // const tagForm = () => {
-    //     const btn = document.getElementById('tagBtn');
-    //
-    //     if (tageFormHidden) {
-    //         setTagFormHidden(false);
-    //         btn.style.color = "black";
-    //         btn.style.backgroundColor = "white"
-    //     } else {
-    //         setTagFormHidden(true);
-    //         btn.style.color = "white";
-    //         btn.style.backgroundColor = "black"
-    //     }
-    // }
+        if (minorFormHidden) {
+            setMinorFormHidden(false);
+            btn.style.color = "black";
+            btn.style.backgroundColor = "white"
+        } else {
+            setMinorFormHidden(true);
+            btn.style.color = "white";
+            btn.style.backgroundColor = "black"
+        }
+    }
+
+    const [tagFormValidated, setTagFormValidated] = useState(false);
+    const [tagFormHidden, setTagFormHidden] = useState(true);
+    const [tag, setTag] = useState('(Optional) Select tag...');
+    const [tagForm, setTagForm] = useState({
+        newTag: '',
+    });
+
+    const [tagFormErrors, setTagFormErrors] = useState({});
+
+    const setTagFormField = (field, value) => {
+        setTagForm({
+            ...tagForm,
+            [field]: value
+        })
+
+        if (!!tagFormErrors[field]) setTagFormErrors({
+            ...tagFormErrors,
+            [field]: null
+        })
+    }
+
+    const validateTagForm = () => {
+        const {
+            tag,
+        } = tagForm;
+
+        const newErrors = {};
+
+        if (!tag || tag === "(Optional) Select tag...") newErrors.tag = 'Please select a tag.';
+
+        return newErrors;
+    }
+
+    const handleTagFormSubmit = (e) => {
+        e.preventDefault();
+
+        const formErrors = validateTagForm();
+
+        if (Object.keys(formErrors).length > 0) {
+            setTagFormErrors(formErrors);
+        } else {
+            setTagFormValidated(true);
+        }
+    }
+
+    const toggleTagForm = () => {
+        const btn = document.getElementById('tagBtn');
+
+        if (tagFormHidden) {
+            setTagFormHidden(false);
+            btn.style.color = "black";
+            btn.style.backgroundColor = "white"
+        } else {
+            setTagFormHidden(true);
+            btn.style.color = "white";
+            btn.style.backgroundColor = "black"
+        }
+    }
 
     return (
         <Container>
@@ -125,53 +227,62 @@ export const Account = () => {
                             cursor: "pointer",
                             color: "white",
                             width: "60%",
-                        }} onClick={pwdForm} id="pwdBtn">Update Password</Button>
+                        }} onClick={togglePasswordForm} id="pwdBtn">Update Password</Button>
 
-                        <Form hidden={pwdFormHidden} className="mt-3" noValidate validated={passwordFormValidated}>
-                            <Form.Group>
+                        <Form hidden={passwordFormHidden} className="mt-3" noValidate validated={passwordFormValidated} onSubmit={handlePasswordFormSubmit}>
+                            <Form.Group controlId="currentPassword">
                                 <Form.Label>Current Password:</Form.Label>
                                 <Form.Control
                                     required
-                                    id="current-pwd"
+                                    id="currentPassword"
                                     type="password"
                                     placeholder="Password"
-                                    onChange={(e) => setCurrPwd(e.target.value)}
-                                    value={currPwd}
-                                    aria-invalid={matchCurrPwd ? "false" : "true"}
-                                    aria-describedby="current-pwd-note"
+                                    onChange={(e) => {
+                                        setCurrentPassword(e.target.value);
+                                        setPasswordFormField('currentPassword', e.target.value)
+                                    }}
+                                    value={currentPassword}
+                                    isInvalid={!!passwordFormErrors.currentPassword}
                                 />
+                                <Form.Control.Feedback type="invalid">{passwordFormErrors.currentPassword}</Form.Control.Feedback>
                             </Form.Group>
 
-                            <Form.Group>
+                            <Form.Group controlId="newPassword">
                                 <Form.Label>New Password:</Form.Label>
                                 <Form.Control
                                     required
-                                    id="new-pwd"
+                                    id="newPassword"
                                     type="password"
                                     placeholder="Password"
-                                    onChange={(e) => setNewPwd(e.target.value)}
-                                    value={newPwd}
-                                    aria-invalid={validNewPwd ? "false" : "true"}
-                                    aria-describedby='new-pwd-note'
+                                    onChange={(e) => {
+                                        setNewPassword(e.target.value);
+                                        setPasswordFormField('newPassword', e.target.value);
+                                    }}
+                                    value={newPassword}
+                                    isInvalid={!!passwordFormErrors.newPassword}
                                 />
+                                <Form.Control.Feedback type="invalid">{passwordFormErrors.newPassword}</Form.Control.Feedback>
                             </Form.Group>
 
-                            <Form.Group>
+                            <Form.Group controlId="confirmNewPassword">
                                 <Form.Label>Confirm Password:</Form.Label>
                                 <Form.Control
                                     required
-                                    id="current-pwd"
+                                    id="confirmNewPassword"
                                     type="password"
                                     placeholder="Password"
-                                    onChange={(e) => setMatchNewPwd(e.target.value)}
-                                    value={matchNewPwd}
-                                    aria-invalid={validMatch ? "false" : "true"}
-                                    aria-describedby='match-new-pwd-note'
+                                    onChange={(e) => {
+                                        setConfirmNewPassword(e.target.value);
+                                        setPasswordFormField('confirmNewPassword', e.target.value)
+                                    }}
+                                    value={confirmNewPassword}
+                                    isInvalid={!!passwordFormErrors.confirmNewPassword}
                                 />
+                                <Form.Control.Feedback type="invalid">{passwordFormErrors.confirmNewPassword}</Form.Control.Feedback>
                             </Form.Group>
 
                             <Container className="mt-3">
-                                <Button style={{
+                                <Button type="submit" style={{
                                     border: "2px solid black",
                                     backgroundColor: "black",
                                     padding: "1rem 1rem",
@@ -203,23 +314,35 @@ export const Account = () => {
                                 color: "white",
                                 width: "60%",
                             }}
-                                onClick={minorForm}
-                                id="minorBtn"
+                                    onClick={toggleMinorForm}
+                                    id="minorBtn"
                             >Change Minor</Button>
-                            <Form hidden={minorFormHidden} className="mt-3" noValidate validated={minorFormValidated}>
-                                <Form.Group style={{alignItems: "left"}}>
+                            <Form hidden={minorFormHidden} className="mt-3" noValidate validated={minorFormValidated} onSubmit={handleMinorFormSubmit}>
+                                <Form.Group style={{alignItems: "left"}} controlId="minor">
                                     <Form.Label><strong>Minor:</strong> Applied Mathematics</Form.Label>
-                                    <Form.Select>
+                                    <Form.Select
+                                        required={true}
+                                        id="minor"
+                                        name="minor"
+                                        className={!!minorFormErrors.minor && 'red-border'}
+                                        onChange={(e) => {
+                                            setMinor(e.target.value);
+                                            setMinorFormField('minor', e.target.value)
+                                        }}
+                                        value={minor}
+                                    >
                                         {VALID_MINORS.map((availableMinor, idx) => {
-                                                return (
-                                                    <option key={idx}>{availableMinor}</option>
-                                                );
-                                            })
+                                            return (
+                                                <option key={idx} value={availableMinor}>{availableMinor}</option>
+                                            );
+                                        })
                                         }
                                     </Form.Select>
 
+                                    <Container className="red">{minorFormErrors.minor}</Container>
+
                                     <Container className="mt-3">
-                                        <Button style={{
+                                        <Button type="submit" style={{
                                             border: "2px solid black",
                                             backgroundColor: "black",
                                             padding: "1rem 1rem",
@@ -253,23 +376,35 @@ export const Account = () => {
                                 color: "white",
                                 width: "60%",
                             }}
-                                onClick={tagForm}
-                                id="tagBtn"
+                                    onClick={toggleTagForm}
+                                    id="tagBtn"
                             >Change Tag</Button>
-                            <Form hidden={tageFormHidden} className="mt-3" noValidate validated={tagFormValidated}>
-                                <Form.Group style={{alignItems: "left"}}>
+                            <Form hidden={tagFormHidden} className="mt-3" noValidate validated={tagFormValidated} onSubmit={handleTagFormSubmit}>
+                                <Form.Group style={{alignItems: "left"}} controlId="tag">
                                     <Form.Label><strong>Tag: </strong>Technology</Form.Label>
-                                    <Form.Select>
+                                    <Form.Select
+                                        required={true}
+                                        id="tag"
+                                        name="tag"
+                                        className={!!tagFormErrors.tag && 'red-border'}
+                                        onChange={(e) => {
+                                            setTag(e.target.value);
+                                            setTagFormField('tag', e.target.value);
+                                        }}
+                                        value={tag}
+                                    >
                                         {TAGS.map((availableTag, idx) => {
-                                                return (
-                                                    <option key={idx}>{availableTag}</option>
-                                                );
-                                            })
+                                            return (
+                                                <option key={idx} value={availableTag}>{availableTag}</option>
+                                            );
+                                        })
                                         }
                                     </Form.Select>
 
+                                    <Container className="red">{tagFormErrors.tag}</Container>
+
                                     <Container className="mt-3">
-                                        <Button style={{
+                                        <Button type="submit" style={{
                                             border: "2px solid black",
                                             backgroundColor: "black",
                                             padding: "1rem 1rem",

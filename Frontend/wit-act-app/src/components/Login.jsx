@@ -65,26 +65,27 @@ export const Login = () => {
         } else {
             setValidated(true);
             console.log("Valid form!");
-            try {
-                const response = await axios.post("http://localhost:3100/users/fetchuser", {
-                    email: email,
-                }, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Mode': 'cors'
-                    }
-                });
-
-                console.log(response);
-                if (!(200 <= response.status && response.status <= 299)) {
-                    console.log(`Error: Response code ${response.status} from server!`);
-                } else {
-                    // Navigation should be handled here, so that it only occurs once the promise resolves
-                    navigate('/homepage');
+            await axios.post("http://localhost:3100/users/fetchuser", {
+                email: email,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Mode': 'cors'
                 }
-            } catch (err) {
-                console.error(err);
-            }
+            })
+                .then((response) => {
+                    console.log(response);
+                    if(!(200 <= response.status && response.status <= 299)){
+                        console.log(`Error: Response code ${response.status} from server!`);
+                    } else {
+                        setValidated(true);
+                        console.log(validated);
+                        navigate('/homepage');
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
         }
     }
 
