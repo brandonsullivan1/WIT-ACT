@@ -3,6 +3,9 @@ import {Button, Container, Form} from "react-bootstrap";
 import {EMAIL_REGEX, NAME_REGEX, SKILLS, TAGS} from "../Validation/FormValidation";
 import axios from "axios";
 
+/*
+ TODO update Create_Projects.sql description VARCHAR lengths to match with validateForm()
+ */
 export const CreateProjectForm = () => {
 
     const [validated, setValidated] = useState(false);
@@ -113,7 +116,7 @@ export const CreateProjectForm = () => {
         if (!shortDesc || shortDesc === '') newErrors.shortDesc = 'Please enter a valid short description.';
         else if (shortDesc.length > 20) newErrors.shortDesc = 'Short description must be 20 characters or less';
         if (!fullDesc || fullDesc === '') newErrors.fullDesc = 'Please enter a valid full description.';
-        else if (fullDesc.length < 20 || fullDesc.length > 200) newErrors.fullDesc = 'Full description must be at least 20 characters and less than 200 characters';
+        else if (fullDesc.length < 50 || fullDesc.length > 500) newErrors.fullDesc = 'Full description must be at least 50 characters and less than 500 characters';
         if (!generalSkill || generalSkill === 'Select general skill...') newErrors.generalSkill = 'Please select a general skill.';
         if (!skillsFocus || skillsFocus === 'Select skills focus...') newErrors.skillsFocus = 'Please select a skills focus.';
         if (!specificSkill1 || specificSkill1 === 'Select specific skill...') newErrors.specificSkill1 = 'Please select a specific skill.';
@@ -132,37 +135,36 @@ export const CreateProjectForm = () => {
             setErrors(formErrors);
         } else {
             setValidated(true);
-            await axios.post("http://localhost:3100/users/fetchuser", {
-                title: projectTitle,
-                shortdesc: projectShortDesc,
-                fulldesc: projectDescription,
-                genskill: generalSkill,
-                skillfocus: skillsFocus,
-                specskill1: specificSkill1,
-                specskill2: specificSkill1,
-                speckskill3: specificSkill3,
-                tag1: tag1,
-                tag2: tag2,
-                leadmaker: leadMaker,
-                lmemail: leadMakerEmail
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Mode': 'cors'
-                }
-            })
-                .then((response) => {
-                    console.log(response);
-                    if (!(200 <= response.status && response.status <= 299)) {
-                        console.log(`Error: Response code ${response.status} from server!`);
-                    } else {
-                        console.log("Project added!");
+            try{
+                const response = await axios.post("http://localhost:3100/projects/addproject", {
+                    title: projectTitle,
+                    shortdesc: projectShortDesc,
+                    fulldesc: projectDescription,
+                    genskill: generalSkill,
+                    skillfocus: skillsFocus,
+                    specskill1: specificSkill1,
+                    specskill2: specificSkill1,
+                    specskill3: specificSkill3,
+                    tag1: tag1,
+                    tag2: tag2,
+                    leadmaker: leadMaker,
+                    lmemail: leadMakerEmail
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Mode': 'cors'
                     }
-                })
-                .catch((err) => {
-                    console.error(err);
                 });
-            // add POST method to send project to database
+                console.log(response);
+                if (!(200 <= response.status && response.status <= 299)) {
+                    console.log(`Error: Response code ${response.status} from server!`);
+                } else {
+                    console.log("Project added!");
+                }
+            }
+            catch(err){
+                console.log(err);
+            }
         }
     }
 
