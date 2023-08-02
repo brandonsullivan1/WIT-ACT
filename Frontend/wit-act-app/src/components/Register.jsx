@@ -1,6 +1,14 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Button, Col, Container, Dropdown, Form, ListGroup, ListGroupItem, ProgressBar, Row} from "react-bootstrap";
-import {EMAIL_REGEX, NAME_REGEX, PHONE_NUMBER_REGEX, PWD_REGEX, SKILLS, TAGS} from "../Validation/FormValidation";
+import {
+    DISCORD_REGEX,
+    EMAIL_REGEX,
+    NAME_REGEX,
+    PHONE_NUMBER_REGEX,
+    PWD_REGEX,
+    SKILLS,
+    TAGS
+} from "../Validation/FormValidation";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 
@@ -36,6 +44,7 @@ export const Register = () => {
     const [validPhoneNumber, setValidPhoneNumber] = useState(true);
 
     const [discord, setDiscord] = useState('');
+    const [validDiscord, setValidDiscord] = useState(false);
 
     const [form, setForm] = useState({
         email: '',
@@ -164,6 +173,13 @@ export const Register = () => {
         }
     }, [phoneNumber])
 
+    useEffect(() => {
+        if (discord !== '') {
+            const result = DISCORD_REGEX.test(discord);
+            setValidDiscord(result);
+        }
+    }, [discord])
+
     const validateForm = () => {
         const {
             email,
@@ -173,6 +189,8 @@ export const Register = () => {
             generalSkill,
             skillsFocus,
             specificSkill1,
+            phoneNumber,
+            discord,
         } = form;
 
         const newErrors = {};
@@ -185,6 +203,7 @@ export const Register = () => {
         if (!skillsFocus || skillsFocus === 'Select skills focus') newErrors.skillsFocus = 'Please select a skills focus';
         if (!validPhoneNumber) newErrors.phoneNumber = 'Please enter a valid phone number.';
         if (!specificSkill1 || specificSkill1 === 'Select specific skill...') newErrors.specificSkill1 = 'Please select a specific skill';
+        if (!validDiscord) newErrors.discord = 'Please enter a valid discord username.';
 
         return newErrors;
     }
@@ -524,6 +543,7 @@ export const Register = () => {
                                 value={discord}
                                 isInvalid={!!errors.discord}
                             />
+                            <Form.Control.Feedback type="invalid">{errors.discord}</Form.Control.Feedback>
                         </Form.Group>
 
                         <Form.Group controlId="tagValidation">
