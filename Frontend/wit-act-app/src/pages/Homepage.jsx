@@ -21,11 +21,15 @@ export const Homepage = () => {
         navigate('/profile');
     };
 
+    const [currProject, setCurrProject] = useState(0);
+
     const [showModal, setShowModal] = useState(false);
 
     const [showSidebar, setShowSidebar] = useState(false);
 
-    const openModal = () => setShowModal(true);
+    const openModal = () => {
+        setShowModal(true);
+    }
     const closeModal = () => setShowModal(false);
 
     const openSidebar = () => setShowSidebar(true);
@@ -608,7 +612,7 @@ export const Homepage = () => {
 
             <Container className="mt-3" style={{ alignItems: "stretch" }}>
                 <Row>
-                    {projects.map((item, idx) => {
+                    {projectList.map((project, idx) => {
                         return (
                             <Col>
                                 <Card key={idx} id="card" style={{ backgroundColor: "white", minWidth: '18rem', margin: '20px'}}>
@@ -616,13 +620,13 @@ export const Homepage = () => {
                                         <Navbar>
                                             <Container style={{ alignItems:"center", justifyContent:"left"}}></Container>
                                             <Container style={{ alignItems:"center", justifyContent:"center"}}>
-                                                <Card.Title>{item.title}</Card.Title>
+                                                <Card.Title>{project.title}</Card.Title>
                                             </Container>
                                             <Container style={{ alignItems:"center", justifyContent:"right"}}>
                                                 <BookmarkButton />
                                             </Container>
                                         </Navbar>
-                                        <Card.Text>{item.shortDesc}</Card.Text>
+                                        <Card.Text>{project.shortDesc}</Card.Text>
                                         <Navbar>
                                             <Container style={{alignItems: "center", justifyContent: "left"}}>
                                                 <Button onClick={toggleLike}
@@ -636,210 +640,206 @@ export const Homepage = () => {
                                             <Container style={{alignItems: "center", justifyContent: "center"}}>
                                                 <Button onClick={openExpandedCard}
                                                         style={{backgroundColor: "#000", border: "1px solid #000"}}>Expand</Button>
-                                                {projectList.map((project, idx) => {
-                                                    return (
-                                                        <Modal show={showExpandedCard} onHide={closeExpandedCard} size="lg"
-                                                               aria-labelledby="contained-modal-title-vcenter" centered>
-                                                            <Modal.Header closeButton>
-                                                                <Modal.Title>{project.title}</Modal.Title>
-                                                            </Modal.Header>
-                                                            <Modal.Body>
-                                                                <Card>
-                                                                    <Card.Body>
-                                                                        <Card.Title>Full Description:</Card.Title>
-                                                                        <Form>
-                                                                            <Form.Group>
-                                                                                <Form.Control
-                                                                                    as="textarea"
-                                                                                    style={{
-                                                                                        margin: "0.5rem 0",
-                                                                                        padding: "1rem",
-                                                                                        border: "1px solid black",
-                                                                                        backgroundColor: "lightgray",
-                                                                                        borderRadius: "10px",
-                                                                                        height: "100px"
-                                                                                    }}
-                                                                                    defaultValue={project.fullDesc}
-                                                                                />
-                                                                            </Form.Group>
+                                                <Modal show={showExpandedCard} onHide={closeExpandedCard} size="lg"
+                                                       aria-labelledby="contained-modal-title-vcenter" centered>
+                                                    <Modal.Header closeButton>
+                                                        <Modal.Title>{project.title}</Modal.Title>
+                                                    </Modal.Header>
+                                                    <Modal.Body>
+                                                        <Card>
+                                                            <Card.Body>
+                                                                <Card.Title>Full Description:</Card.Title>
+                                                                <Form>
+                                                                    <Form.Group>
+                                                                        <Form.Control
+                                                                            as="textarea"
+                                                                            style={{
+                                                                                margin: "0.5rem 0",
+                                                                                padding: "1rem",
+                                                                                border: "1px solid black",
+                                                                                backgroundColor: "lightgray",
+                                                                                borderRadius: "10px",
+                                                                                height: "100px"
+                                                                            }}
+                                                                            defaultValue={project.fullDesc}
+                                                                        />
+                                                                    </Form.Group>
 
-                                                                            <Card.Title className="mt-2">Desired General Skill:</Card.Title>
-                                                                            <Form.Group>
-                                                                                <Form.Control
-                                                                                    style={{
-                                                                                        margin: "0.5rem 0",
-                                                                                        padding: "1rem",
-                                                                                        border: "1px solid black",
-                                                                                        backgroundColor: "lightgray",
-                                                                                        borderRadius: "10px"
-                                                                                    }}
-                                                                                    defaultValue={project.generalSkill}
-                                                                                />
-                                                                            </Form.Group>
+                                                                    <Card.Title className="mt-2">Desired General Skill:</Card.Title>
+                                                                    <Form.Group>
+                                                                        <Form.Control
+                                                                            style={{
+                                                                                margin: "0.5rem 0",
+                                                                                padding: "1rem",
+                                                                                border: "1px solid black",
+                                                                                backgroundColor: "lightgray",
+                                                                                borderRadius: "10px"
+                                                                            }}
+                                                                            defaultValue={project.generalSkill}
+                                                                        />
+                                                                    </Form.Group>
 
-                                                                            <Card.Title className="mt-2">Desired Skill Focus:</Card.Title>
-                                                                            <Form.Group>
-                                                                                <Form.Control
-                                                                                    style={{
-                                                                                        margin: "0.5rem 0",
-                                                                                        padding: "1rem",
-                                                                                        border: "1px solid black",
-                                                                                        backgroundColor: "lightgray",
-                                                                                        borderRadius: "10px"
-                                                                                    }}
-                                                                                    defaultValue={project.skillsFocus}
-                                                                                />
-                                                                            </Form.Group>
+                                                                    <Card.Title className="mt-2">Desired Skill Focus:</Card.Title>
+                                                                    <Form.Group>
+                                                                        <Form.Control
+                                                                            style={{
+                                                                                margin: "0.5rem 0",
+                                                                                padding: "1rem",
+                                                                                border: "1px solid black",
+                                                                                backgroundColor: "lightgray",
+                                                                                borderRadius: "10px"
+                                                                            }}
+                                                                            defaultValue={project.skillsFocus}
+                                                                        />
+                                                                    </Form.Group>
 
-                                                                            <Card.Title className="mt-2">Desired Specific Skill:</Card.Title>
-                                                                            <Form.Group>
-                                                                                <Form.Control
-                                                                                    style={{
-                                                                                        margin: "0.5rem 0",
-                                                                                        padding: "1rem",
-                                                                                        border: "1px solid black",
-                                                                                        backgroundColor: "lightgray",
-                                                                                        borderRadius: "10px"
-                                                                                    }}
-                                                                                    defaultValue={project.specificSkill1}
-                                                                                />
-                                                                            </Form.Group>
+                                                                    <Card.Title className="mt-2">Desired Specific Skill:</Card.Title>
+                                                                    <Form.Group>
+                                                                        <Form.Control
+                                                                            style={{
+                                                                                margin: "0.5rem 0",
+                                                                                padding: "1rem",
+                                                                                border: "1px solid black",
+                                                                                backgroundColor: "lightgray",
+                                                                                borderRadius: "10px"
+                                                                            }}
+                                                                            defaultValue={project.specificSkill1}
+                                                                        />
+                                                                    </Form.Group>
 
-                                                                            <Card.Title className="mt-2">Desired Specific Skill:</Card.Title>
-                                                                            <Form.Group>
-                                                                                <Form.Control
-                                                                                    style={{
-                                                                                        margin: "0.5rem 0",
-                                                                                        padding: "1rem",
-                                                                                        border: "1px solid black",
-                                                                                        backgroundColor: "lightgray",
-                                                                                        borderRadius: "10px"
-                                                                                    }}
-                                                                                    defaultValue={project.specificSkill2}
-                                                                                />
-                                                                            </Form.Group>
+                                                                    <Card.Title className="mt-2">Desired Specific Skill:</Card.Title>
+                                                                    <Form.Group>
+                                                                        <Form.Control
+                                                                            style={{
+                                                                                margin: "0.5rem 0",
+                                                                                padding: "1rem",
+                                                                                border: "1px solid black",
+                                                                                backgroundColor: "lightgray",
+                                                                                borderRadius: "10px"
+                                                                            }}
+                                                                            defaultValue={project.specificSkill2}
+                                                                        />
+                                                                    </Form.Group>
 
-                                                                            <Card.Title className="mt-2">Desired Specific Skill:</Card.Title>
-                                                                            <Form.Group>
-                                                                                <Form.Control
-                                                                                    style={{
-                                                                                        margin: "0.5rem 0",
-                                                                                        padding: "1rem",
-                                                                                        border: "1px solid black",
-                                                                                        backgroundColor: "lightgray",
-                                                                                        borderRadius: "10px"
-                                                                                    }}
-                                                                                    defaultValue={project.specificSkill3}
-                                                                                />
-                                                                            </Form.Group>
+                                                                    <Card.Title className="mt-2">Desired Specific Skill:</Card.Title>
+                                                                    <Form.Group>
+                                                                        <Form.Control
+                                                                            style={{
+                                                                                margin: "0.5rem 0",
+                                                                                padding: "1rem",
+                                                                                border: "1px solid black",
+                                                                                backgroundColor: "lightgray",
+                                                                                borderRadius: "10px"
+                                                                            }}
+                                                                            defaultValue={project.specificSkill3}
+                                                                        />
+                                                                    </Form.Group>
 
-                                                                            <Card.Title className="mt-2">Tag:</Card.Title>
-                                                                            <Form.Group>
-                                                                                <Form.Control
-                                                                                    style={{
-                                                                                        margin: "0.5rem 0",
-                                                                                        padding: "1rem",
-                                                                                        border: "1px solid black",
-                                                                                        backgroundColor: "lightgray",
-                                                                                        borderRadius: "10px"
-                                                                                    }}
-                                                                                    defaultValue={project.tag1}
-                                                                                />
-                                                                            </Form.Group>
+                                                                    <Card.Title className="mt-2">Tag:</Card.Title>
+                                                                    <Form.Group>
+                                                                        <Form.Control
+                                                                            style={{
+                                                                                margin: "0.5rem 0",
+                                                                                padding: "1rem",
+                                                                                border: "1px solid black",
+                                                                                backgroundColor: "lightgray",
+                                                                                borderRadius: "10px"
+                                                                            }}
+                                                                            defaultValue={project.tag1}
+                                                                        />
+                                                                    </Form.Group>
 
-                                                                            <Card.Title className="mt-2">Tag:</Card.Title>
-                                                                            <Form.Group>
-                                                                                <Form.Control
-                                                                                    style={{
-                                                                                        margin: "0.5rem 0",
-                                                                                        padding: "1rem",
-                                                                                        border: "1px solid black",
-                                                                                        backgroundColor: "lightgray",
-                                                                                        borderRadius: "10px"
-                                                                                    }}
-                                                                                    defaultValue={project.tag2}
-                                                                                />
-                                                                            </Form.Group>
+                                                                    <Card.Title className="mt-2">Tag:</Card.Title>
+                                                                    <Form.Group>
+                                                                        <Form.Control
+                                                                            style={{
+                                                                                margin: "0.5rem 0",
+                                                                                padding: "1rem",
+                                                                                border: "1px solid black",
+                                                                                backgroundColor: "lightgray",
+                                                                                borderRadius: "10px"
+                                                                            }}
+                                                                            defaultValue={project.tag2}
+                                                                        />
+                                                                    </Form.Group>
 
-                                                                            <Card.Title className="mt-2">Lead Maker:</Card.Title>
-                                                                            <Form.Group>
-                                                                                <Form.Control
-                                                                                    style={{
-                                                                                        margin: "0.5rem 0",
-                                                                                        padding: "1rem",
-                                                                                        border: "1px solid black",
-                                                                                        backgroundColor: "lightgray",
-                                                                                        borderRadius: "10px"
-                                                                                    }}
-                                                                                    defaultValue={project.leadMaker}
-                                                                                />
-                                                                            </Form.Group>
+                                                                    <Card.Title className="mt-2">Lead Maker:</Card.Title>
+                                                                    <Form.Group>
+                                                                        <Form.Control
+                                                                            style={{
+                                                                                margin: "0.5rem 0",
+                                                                                padding: "1rem",
+                                                                                border: "1px solid black",
+                                                                                backgroundColor: "lightgray",
+                                                                                borderRadius: "10px"
+                                                                            }}
+                                                                            defaultValue={project.leadMaker}
+                                                                        />
+                                                                    </Form.Group>
 
-                                                                            <Card.Title className="mt-2">Lead Maker's Email:</Card.Title>
-                                                                            <Form.Group>
-                                                                                <Form.Control
-                                                                                    style={{
-                                                                                        margin: "0.5rem 0",
-                                                                                        padding: "1rem",
-                                                                                        border: "1px solid black",
-                                                                                        backgroundColor: "lightgray",
-                                                                                        borderRadius: "10px"
-                                                                                    }}
-                                                                                    defaultValue={project.leadMakerEmail}
-                                                                                />
-                                                                            </Form.Group>
-                                                                        </Form>
+                                                                    <Card.Title className="mt-2">Lead Maker's Email:</Card.Title>
+                                                                    <Form.Group>
+                                                                        <Form.Control
+                                                                            style={{
+                                                                                margin: "0.5rem 0",
+                                                                                padding: "1rem",
+                                                                                border: "1px solid black",
+                                                                                backgroundColor: "lightgray",
+                                                                                borderRadius: "10px"
+                                                                            }}
+                                                                            defaultValue={project.leadMakerEmail}
+                                                                        />
+                                                                    </Form.Group>
+                                                                </Form>
 
-                                                                        <Card.Title className="mt-2">Other Team Members:</Card.Title>
-                                                                        <Card.Text>
-                                                                            <ListGroup as="ol" numbered>
-                                                                                <ListGroup.Item style={{
-                                                                                    margin: "0.5rem 0",
-                                                                                    padding: "1rem",
-                                                                                    border: "1px solid black",
-                                                                                    backgroundColor: "lightgray",
-                                                                                    borderRadius: "10px"
-                                                                                }} as="li"
-                                                                                                className="d-flex justify-content-between align-items-start">
-                                                                                    <Container className="ms-2 me-auto">
-                                                                                        <div className="fw-bold">Josh Polischuk</div>
-                                                                                        polischukj@wit.edu
-                                                                                    </Container>
-                                                                                </ListGroup.Item>
-                                                                                <ListGroup.Item style={{
-                                                                                    margin: "0.5rem 0",
-                                                                                    padding: "1rem",
-                                                                                    border: "1px solid black",
-                                                                                    backgroundColor: "lightgray",
-                                                                                    borderRadius: "10px"
-                                                                                }} as="li"
-                                                                                                className="d-flex justify-content-between align-items-start">
-                                                                                    <Container className="ms-2 me-auto">
-                                                                                        <div className="fw-bold">Team Member 2</div>
-                                                                                        (open spot)
-                                                                                    </Container>
-                                                                                </ListGroup.Item>
-                                                                                <ListGroup.Item style={{
-                                                                                    margin: "0.5rem 0",
-                                                                                    padding: "1rem",
-                                                                                    border: "1px solid black",
-                                                                                    backgroundColor: "lightgray",
-                                                                                    borderRadius: "10px"
-                                                                                }} as="li"
-                                                                                                className="d-flex justify-content-between align-items-start">
-                                                                                    <Container className="ms-2 me-auto">
-                                                                                        <div className="fw-bold">Team Member 3</div>
-                                                                                        (open spot)
-                                                                                    </Container>
-                                                                                </ListGroup.Item>
-                                                                            </ListGroup>
-                                                                        </Card.Text>
-                                                                    </Card.Body>
-                                                                </Card>
-                                                            </Modal.Body>
-                                                        </Modal>
-                                                    );
-                                                })}
+                                                                <Card.Title className="mt-2">Other Team Members:</Card.Title>
+                                                                <Card.Text>
+                                                                    <ListGroup as="ol" numbered>
+                                                                        <ListGroup.Item style={{
+                                                                            margin: "0.5rem 0",
+                                                                            padding: "1rem",
+                                                                            border: "1px solid black",
+                                                                            backgroundColor: "lightgray",
+                                                                            borderRadius: "10px"
+                                                                        }} as="li"
+                                                                                        className="d-flex justify-content-between align-items-start">
+                                                                            <Container className="ms-2 me-auto">
+                                                                                <div className="fw-bold">Josh Polischuk</div>
+                                                                                polischukj@wit.edu
+                                                                            </Container>
+                                                                        </ListGroup.Item>
+                                                                        <ListGroup.Item style={{
+                                                                            margin: "0.5rem 0",
+                                                                            padding: "1rem",
+                                                                            border: "1px solid black",
+                                                                            backgroundColor: "lightgray",
+                                                                            borderRadius: "10px"
+                                                                        }} as="li"
+                                                                                        className="d-flex justify-content-between align-items-start">
+                                                                            <Container className="ms-2 me-auto">
+                                                                                <div className="fw-bold">Team Member 2</div>
+                                                                                (open spot)
+                                                                            </Container>
+                                                                        </ListGroup.Item>
+                                                                        <ListGroup.Item style={{
+                                                                            margin: "0.5rem 0",
+                                                                            padding: "1rem",
+                                                                            border: "1px solid black",
+                                                                            backgroundColor: "lightgray",
+                                                                            borderRadius: "10px"
+                                                                        }} as="li"
+                                                                                        className="d-flex justify-content-between align-items-start">
+                                                                            <Container className="ms-2 me-auto">
+                                                                                <div className="fw-bold">Team Member 3</div>
+                                                                                (open spot)
+                                                                            </Container>
+                                                                        </ListGroup.Item>
+                                                                    </ListGroup>
+                                                                </Card.Text>
+                                                            </Card.Body>
+                                                        </Card>
+                                                    </Modal.Body>
+                                                </Modal>
                                             </Container>
                                             <Container style={{alignItems: "center", justifyContent: "right"}}>
                                                 <Button onClick={toggleDislike}
