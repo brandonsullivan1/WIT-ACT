@@ -587,7 +587,7 @@ export const Register = () => {
                                         padding: "1rem 1rem",
                                         borderRadius: "10px",
                                         cursor: "pointer",
-                                        color: "black"
+                                        color: "black",
                                     }} onClick={handleSubmit}>Register</Button>
                                 </Col>
                             </Row>
