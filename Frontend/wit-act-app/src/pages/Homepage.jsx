@@ -10,6 +10,7 @@ import BookmarkButton from "../components/BookmarkButton";
 import { projects } from "./Projects";
 import {useNavigate} from "react-router-dom";
 import {NAME_REGEX, EMAIL_REGEX, SKILLS, TAGS} from "../Validation/FormValidation";
+import axios from "axios";
 
 export const Homepage = () => {
 
@@ -27,10 +28,9 @@ export const Homepage = () => {
 
     const [showSidebar, setShowSidebar] = useState(false);
 
-    const openModal = () => {
-        setShowModal(true);
-    }
+    const openModal = () => setShowModal(true);
     const closeModal = () => setShowModal(false);
+
 
     const openSidebar = () => setShowSidebar(true);
     const closeSidebar = () => setShowSidebar(false);
@@ -184,6 +184,37 @@ export const Homepage = () => {
             setErrors(formErrors);
         } else {
             setValidated(true);
+            try {
+                const response = await axios.post("http://localhost:3100/projects/addproject", {
+                    title: projectTitle,
+                    shortdesc: projectShortDesc,
+                    fulldesc: projectDescription,
+                    genskill: generalSkill,
+                    skillfocus: skillsFocus,
+                    specskill1: specificSkill1,
+                    specskill2: specificSkill1,
+                    specskill3: specificSkill3,
+                    tag1: tag1,
+                    tag2: tag2,
+                    leadmaker: leadMaker,
+                    lmemail: leadMakerEmail
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Mode': 'cors'
+                    }
+                });
+                console.log(response);
+                if (!(200 <= response.status && response.status <= 299)) {
+                    console.log(`Error: Response code ${response.status} from server!`);
+                } else {
+                    console.log("Project added!");
+                }
+            }
+            catch (err){
+                console.log(err);
+            }
+            // TODO visual masking. remove this and replace with actually pulling projects from DB
             const newProject = {
                 title: projectTitle,
                 shortDesc: projectShortDesc,
@@ -198,11 +229,10 @@ export const Homepage = () => {
                 leadMaker: leadMaker,
                 leadMakerEmail: leadMakerEmail,
             };
-
             const newProjectList = projects;
             newProjectList.push(newProject);
             setProjectList(newProjectList);
-            navigate('/homepage');
+            navigate("/homepage"); // TODO when pulling projects from DB, switch to refreshing with navigate(0)
         }
     }
 
@@ -804,8 +834,8 @@ export const Homepage = () => {
                                                                         }} as="li"
                                                                                         className="d-flex justify-content-between align-items-start">
                                                                             <Container className="ms-2 me-auto">
-                                                                                <div className="fw-bold">Josh Polischuk</div>
-                                                                                polischukj@wit.edu
+                                                                                <div className="fw-bold">Team Member 1</div>
+                                                                                (open spot)
                                                                             </Container>
                                                                         </ListGroup.Item>
                                                                         <ListGroup.Item style={{

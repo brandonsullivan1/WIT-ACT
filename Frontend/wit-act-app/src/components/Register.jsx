@@ -242,7 +242,7 @@ export const Register = () => {
                         console.log(`Error: Response code ${response.status} from server!`);
                     } else {
                         setRegisterValidated(true);
-                        navigate('/');
+                        navigate(0); //refresh page
                     }
                 })
                 .catch((err) => {

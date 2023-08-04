@@ -70,7 +70,7 @@ router.post("/recprojects", (req, res) => {
         user = data[0];
     });
     // fetch project data and stream each row
-    sql = "SELECT * FROM Projects"; // WHERE UserID != ?
+    sql = "SELECT * FROM Projects"; // TODO add this when we have more users: WHERE UserID != ?
     let query = connector.query(sql, [req.body.userid]);
     let err = false;
     query
@@ -100,6 +100,7 @@ router.post("/recprojects", (req, res) => {
                 return;
             }
             // use the row's scores for a counting sort
+            // TODO remove the hardcoded count length. it needs to have (maximum score) indexes
             let [j, count, output] = [0, Array(8).fill(0), []];
             for(let i = 0; i < rows.length; i++){
                 j = rows[i]["Score"];

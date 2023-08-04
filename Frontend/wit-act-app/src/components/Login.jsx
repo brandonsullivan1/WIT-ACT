@@ -3,6 +3,11 @@ import React, {useEffect, useState} from "react";
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import axios from "axios";
 
+/*
+ TODO: Fix bug where form needs to be submitted twice to clear
+ TODO: Catch 404 in axios
+ */
+
 export const Login = () => {
     const navigate = useNavigate();
 
@@ -33,35 +38,47 @@ export const Login = () => {
     const [password, setPassword] = useState('');
     const [validPassword, setValidPassword] = useState(false);
 
-    useEffect(() => {
-        const result = email === ""; // add sql query here
-        setValidEmail(result);
-    }, [email])
 
-    useEffect(() => {
-        const result = password === ""; // add sql query here
-    }, [password])
-
-
-    // Pull user's account from DB and test for login validation
-
-    const validateForm = () => {
+    const validateForm = async () => {
         const {
             email,
             password,
         } = form;
 
         const newErrors = {};
-
-        if (!email || email === '' || !validEmail) newErrors.email = 'No user found with that email.';
-        if (!password || password === '' || !validPassword) newErrors.password = 'Incorrect password';
-
+        try{
+            const response = await axios.post("http://localhost:3100/users/fetchuser", {
+                email: email
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Mode': 'cors'
+                }
+            });
+            if(!(response.status <= 200 && response.status <= 299)) {
+                console.log("Error:" + response);
+            } else {
+                console.log(response);
+                const fetchedEmail = response["data"]["Email"];
+                setValidEmail(email === fetchedEmail);
+                const fetchedPassword = response["data"]["Password"];
+                // decryption goes here
+                setValidPassword(password === fetchedPassword);
+            }
+        }
+        catch (err){
+            console.log(err)
+        }
+        if (!validEmail) newErrors.email = 'No user found with that email.';
+        if (!validPassword) newErrors.password = 'Incorrect password';
+        console.log(newErrors);
         return newErrors;
     }
 
 
     const handleSubmit = async (event) => {
-        const formErrors = validateForm();
+        event.preventDefault();
+        const formErrors = await validateForm();
 
         if (Object.keys(formErrors).length > 0) {
             setErrors(formErrors);
@@ -69,27 +86,7 @@ export const Login = () => {
         } else {
             setValidated(true);
             console.log("Valid form!");
-            await axios.post("http://localhost:3100/users/fetchuser", {
-                email: email,
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Mode': 'cors'
-                }
-            })
-                .then((response) => {
-                    console.log(response);
-                    if(!(200 <= response.status && response.status <= 299)){
-                        console.log(`Error: Response code ${response.status} from server!`);
-                    } else {
-                        setValidated(true);
-                        console.log(validated);
-                        navigate('/homepage');
-                    }
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
+            navigate("/homepage");
         }
     }
 
