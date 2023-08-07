@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Container, Form, Button, Card} from "react-bootstrap";
 import {SKILLS} from "../Validation/FormValidation";
+import axios from "axios";
 
 export const Skills = () => {
 
@@ -91,7 +92,7 @@ export const Skills = () => {
         return newErrors;
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const formErrors = validateForm();
@@ -100,6 +101,29 @@ export const Skills = () => {
             setErrors(formErrors);
         } else {
             setValidated(true);
+            try{
+                const response = await axios.post("http://localhost:3100/users/updateSkills", {
+                    genskill: newGeneralSkill,
+                    skillfocus: newSkillsFocus,
+                    specskill1: newSpecificSkill1,
+                    specskill2: newSpecificSkill2,
+                    specskill3: newSpecificSkill3,
+                    userid: "Dummy-UserID"
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Mode': 'cors'
+                    }
+                });
+                if(!(response.status <= 200 && response.status <= 299)) {
+                    console.log("Error: " + response);
+                } else {
+                    console.log(response);
+                }
+            }
+            catch (err){
+                console.log(err)
+            }
         }
     }
 

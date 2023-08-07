@@ -5,10 +5,12 @@ const router = express.Router();
 
 /*
 TODO
- remove the bandaid fix in adduser where 'Select specific skill' maps to null
+ - remove the bandaid fix in adduser and updateSkills where 'Select specific skill' maps to null
     - This will probably need work on the frontend to convert that into a placeholder value instead of an actual
         string in /components/Skills.jsx, but it's been uncooperative and we have other priorities
  !!!!! make fetchuser check passwords
+ - change functions using a "Dummy-UserID" to take a userID from the request body, update frontend submit requests to
+   accomodate
  */
 const connector = mysql.createConnection({
     host: "localhost",
@@ -40,7 +42,7 @@ router.get('/clearusers', (req, res) => {
     });
 })
 
-// REGISTRATION
+/** REGISTRATION **/
 router.post('/adduser', (req, res) => {
     console.log(req.body);
     const userID = uuid.v4() // random user ID  TODO update to use a cryptographically secure RNG "crypto" lib
@@ -66,7 +68,7 @@ router.post('/adduser', (req, res) => {
     });
 })
 
-// LOGIN
+/** LOGIN **/
 router.post('/fetchuser', (req, res) => {
     const sql = "SELECT * FROM Users WHERE email = ?";
     console.log(req.body.email);
@@ -81,7 +83,68 @@ router.post('/fetchuser', (req, res) => {
     })
 })
 
-// PROFILE UPDATES
-router.post('/')
+/** PROFILE UPDATES **/
+// ACCOUNT.JSX HANDLERS
+router.post('/updatePassword', (req, res) => {
+    const sql = "UPDATE Users SET Password=? WHERE UserID=?";
+    connector.query(sql, [req.body.password, req.body.userid], (err, data) => {
+        if(err) throw err;
+        console.log(data);
+        res.json(data);
+    })
+})
+router.post('/updateMinor', (req, res) => {
+    const userID = "Dummy-UserID";
+    const sql = "UPDATE Users SET Minor=? WHERE UserID=?";
+    console.log(`Updating user ${userID} with minor ${req.body.minor}...`);
+    connector.query(sql, [req.body.minor, req.body.userid], (err, data) => {
+        if(err) throw err;
+        console.log(data);
+        res.json(data);
+    })
+})
+router.post('/updateTag', (req, res) => {
+    const sql = "UPDATE Users SET Tag=? WHERE UserID=?";
+    connector.query(sql, [req.body.tag, req.body.userid], (err, data) => {
+        if(err) throw err;
+        console.log(data);
+        res.json(data);
+    })
+})
+
+// SKILLS.JSX HANDLER
+router.post('/updateSkills', (req, res) => {
+    const sql = "UPDATE Users SET General_Skill=?, Skill_Focus=?, Specific_Skill_1=?, Specific_Skill_2=?, " +
+        "Specific_Skill_3=? WHERE UserID=?";
+    connector.query(sql, [
+        req.body.genskill,
+        req.body.skillfocus,
+        req.body.specskill1,
+        req.body.specskill2,
+        req.body.specskill3,
+        req.body.userid
+    ].map(x => (x===null||x===undefined||x===''||x==='Select specific skill...')? null : x), (err, data) => {
+        if(err) throw err;
+        console.log(data);
+        res.json(data);
+    })
+})
+// CONTACTINFO.JSX HANDLERS
+router.post('/updatePhone', (req, res) => {
+    const sql = "UPDATE Users SET Phone_Number=? WHERE UserID=?";
+    connector.query(sql, [req.body.phone, req.body.userid], (err, data) => {
+        if(err) throw err;
+        console.log(data);
+        res.json(data);
+    })
+})
+router.post('/updateDiscord', (req, res) => {
+    const sql = "UPDATE Users SET Discord=? WHERE UserID=?";
+    connector.query(sql, [req.body.discord, req.body.userid], (err, data) => {
+        if(err) throw err;
+        console.log(data);
+        res.json(data);
+    })
+})
 
 module.exports = router;

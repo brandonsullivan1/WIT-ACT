@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Container, Form, Button, Card} from "react-bootstrap";
 import {DISCORD_REGEX, PHONE_NUMBER_REGEX} from "../Validation/FormValidation";
+import axios from "axios";
 
 export const ContactInfo = () => {
 
@@ -38,7 +39,7 @@ export const ContactInfo = () => {
         return newErrors;
     }
 
-    const handlePhoneNumberFormSubmit = (e) => {
+    const handlePhoneNumberFormSubmit = async (e) => {
         e.preventDefault();
 
         const formErrors = validatePhoneNumberForm();
@@ -47,6 +48,25 @@ export const ContactInfo = () => {
             setPhoneNumberFormErrors(formErrors);
         } else {
             setPhoneNumberFormValidated(true);
+            try{
+                const response = await axios.post("http://localhost:3100/users/updatePhone", {
+                    phone: phoneNumber,
+                    userid: "Dummy-UserID"
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Mode': 'cors'
+                    }
+                });
+                if(!(response.status <= 200 && response.status <= 299)) {
+                    console.log("Error: " + response);
+                } else {
+                    console.log(response);
+                }
+            }
+            catch (err){
+                console.log(err)
+            }
         }
     }
 
@@ -104,7 +124,7 @@ export const ContactInfo = () => {
         return newErrors;
     }
 
-    const handleDiscordFormSubmit = (e) => {
+    const handleDiscordFormSubmit = async (e) => {
         e.preventDefault();
 
         const formErrors = validateDiscordForm();
@@ -113,6 +133,25 @@ export const ContactInfo = () => {
             setDiscordFormErrors(formErrors);
         } else {
             setDiscordFormValidated(true);
+            try{
+                const response = await axios.post("http://localhost:3100/users/updateDiscord", {
+                    discord: discord,
+                    userid: "Dummy-UserID"
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Mode': 'cors'
+                    }
+                });
+                if(!(response.status <= 200 && response.status <= 299)) {
+                    console.log("Error: " + response);
+                } else {
+                    console.log(response);
+                }
+            }
+            catch (err){
+                console.log(err)
+            }
         }
     }
 
