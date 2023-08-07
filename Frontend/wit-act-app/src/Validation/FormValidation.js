@@ -124,7 +124,7 @@ export const SKILLS = {
             "Biotech",
             "Medical",
             "Molecular Biology",
-            "Physics," +
+            "Physics",
             "Chemistry",
             "Optics"
         ],
@@ -151,7 +151,7 @@ export const SKILLS = {
             "Passive & Active Systems",
             "Concentration Studies",
             "Urbanism Concentration",
-            "Engineering Technologies Concentration," +
+            "Engineering Technologies Concentration",
             "Adaptive Interventions Concentration",
             "Geospatial Modeling",
             "Design Strategies for Low-Carbon Buildings",
@@ -164,7 +164,7 @@ export const SKILLS = {
             "Color Relationships",
             "Modernism Beyond the West",
             "Material Intelligence",
-            "Issues in Professional Practice," +
+            "Issues in Professional Practice",
             "Context Analysis-Berlin",
             "Space & Media",
             "City of the Future",
@@ -317,7 +317,7 @@ export const SKILLS = {
             "Engineering Graphics",
             "Circuit Theory and Application",
             "Engineering Thermodynamics",
-            "Mechanics of Materials," +
+            "Mechanics of Materials",
             "Design of Machine Elements",
             "Engineering Fluid Mechanics",
             "Materials Science",

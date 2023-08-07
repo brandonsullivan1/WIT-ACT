@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Container, Form, Button, Card} from "react-bootstrap";
 import {VALID_MINORS, TAGS, PWD_REGEX} from "../Validation/FormValidation";
+import axios from "axios";
 
 /*
     This file is exported to the Profile file.
@@ -48,7 +49,7 @@ export const Account = () => {
         } = passwordForm;
 
         const newErrors = {};
-
+        // TODO check DB for password here (assume userID will be accessed from context)
         if (!currentPassword || currentPassword === '') newErrors.currentPassword = 'Incorrect password.';
         if (!validNewPassword || !newPassword || newPassword === '') newErrors.newPassword = 'Please enter a valid password';
         if (!validConfirmNewPassword || !confirmNewPassword || confirmNewPassword === '') newErrors.confirmNewPassword = 'Passwords must match';
@@ -56,7 +57,7 @@ export const Account = () => {
         return newErrors;
     }
 
-    const handlePasswordFormSubmit = (e) => {
+    const handlePasswordFormSubmit = async (e) => {
         e.preventDefault();
 
         const formErrors = validatePasswordForm();
@@ -65,6 +66,25 @@ export const Account = () => {
             setPasswordFormErrors(formErrors);
         } else {
             setPasswordFormValidated(true);
+            try{
+                const response = await axios.post("http://localhost:3100/users/updatePassword", {
+                    password: newPassword,
+                    userid: "Dummy-UserID"
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Mode': 'cors'
+                    }
+                });
+                if(response.status < 200 || response.status > 299) {
+                    console.log("Error: " + response);
+                } else {
+                    console.log(response);
+                }
+            }
+            catch (err){
+                console.log(err)
+            }
         }
     }
 
@@ -128,7 +148,7 @@ export const Account = () => {
         return newErrors;
     }
 
-    const handleMinorFormSubmit = (e) => {
+    const handleMinorFormSubmit = async (e) => {
         e.preventDefault();
 
         const formErrors = validateMinorForm();
@@ -137,6 +157,25 @@ export const Account = () => {
             setMinorFormErrors(formErrors);
         } else {
             setMinorFormValidated(true);
+            try{
+                const response = await axios.post("http://localhost:3100/users/updateMinor", {
+                    minor: minor,
+                    userid: "Dummy-UserID"
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Mode': 'cors'
+                    }
+                });
+                if(response.status < 200 || response.status > 299) {
+                    console.log("Error: " + response);
+                } else {
+                    console.log(response);
+                }
+            }
+            catch (err){
+                console.log(err)
+            }
         }
     }
 
@@ -187,7 +226,7 @@ export const Account = () => {
         return newErrors;
     }
 
-    const handleTagFormSubmit = (e) => {
+    const handleTagFormSubmit = async (e) => {
         e.preventDefault();
 
         const formErrors = validateTagForm();
@@ -196,6 +235,25 @@ export const Account = () => {
             setTagFormErrors(formErrors);
         } else {
             setTagFormValidated(true);
+            try{
+                const response = await axios.post("http://localhost:3100/users/updateTag", {
+                    tag: tag,
+                    userid: "Dummy-UserID"
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Mode': 'cors'
+                    }
+                });
+                if(response.status < 200 || response.status > 299) {
+                    console.log("Error: " + response);
+                } else {
+                    console.log(response);
+                }
+            }
+            catch (err){
+                console.log(err)
+            }
         }
     }
 
