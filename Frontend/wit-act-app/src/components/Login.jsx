@@ -8,6 +8,14 @@ import axios from "axios";
  TODO: Catch 404 in axios
  */
 
+/*
+    This file is used for a user to login.
+
+    The file contains the form a user fills out with their email and password.
+    The file calls the database and checks if all data the user entered is correct
+    and allows or denies log in based on the result.
+ */
+
 export const Login = () => {
     const navigate = useNavigate();
 

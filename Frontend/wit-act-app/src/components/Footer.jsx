@@ -1,6 +1,10 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
+/*
+    This file displays the footer and is exported to each page of the web app.
+ */
+
 export const Footer = () => {
     return (
         <div className="bg-dark mt-auto">

@@ -1,3 +1,7 @@
+/*
+    This file is used to export verification or list populating data and store it organized in one file.
+ */
+
 export const NAME_REGEX = /^[A-Z][a-zA-Z- ]+$/;
 export const EMAIL_REGEX = /[a-z0-9]@wit.edu/;
 export const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;

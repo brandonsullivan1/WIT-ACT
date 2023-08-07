@@ -11,6 +11,19 @@ import * as RiIcons from "react-icons/ri";
 import * as BiIcons from "react-icons/bi";
 import {useNavigate} from "react-router-dom";
 
+/*
+    This page is where a user can change their settings.
+
+    The page is split into two columns, one on the left being categorical options
+    and the column on the right being the settings available to change corresponding to
+    the selected category.
+
+    There is a total of 3 components called, Account, Skills, Contact Info.
+
+    These components are imported from their respective files and are the three categories the user can
+    select. Each file contains the corresponding forms available for the user to change their settings.
+ */
+
 export const Profile = () => {
     const navigate = useNavigate();
 

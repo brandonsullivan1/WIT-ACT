@@ -4,6 +4,16 @@ import { Footer } from "../components/Footer";
 import { Login } from "../components/Login";
 import Register from "../components/Register";
 
+/*
+    This page is designed to be the first page a user sees when navigating to the site.
+    From this page the user can either login to their account or register for an account.
+
+    The page consists of 2 components Login and Register.
+
+    Each component is imported from a file containing the UI design and forms a user must fill out
+    corresponding to each component.
+ */
+
 export const LandingPage = () => {
     const [activeKey, setActiveKey] = useState("login");
     const [loginDisabled, setLoginDisabled] = useState(false);

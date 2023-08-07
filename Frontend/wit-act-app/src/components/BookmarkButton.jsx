@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import * as BsIcons from "react-icons/bs";
 
+/*
+    This file is used to export the bookmark icon and handle the display.
+
+    If a user clicks the unfilled icon it will changed to filled and vice versa.
+ */
+
 export const BookmarkButton = () => {
 
     const [bookmark, setBookmark] = useState(false);

@@ -12,6 +12,13 @@ import {
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 
+/*
+    This file handles the form the user must fill out to register for an account.
+
+    The file checks validity during the process of completing the form,
+    and sends the info to the database upon a successful registration.
+ */
+
 export const Register = () => {
     const navigate = useNavigate();
 

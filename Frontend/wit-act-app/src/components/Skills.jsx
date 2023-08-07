@@ -2,6 +2,12 @@ import React, {useEffect, useState} from "react";
 import {Container, Form, Button, Card} from "react-bootstrap";
 import {SKILLS} from "../Validation/FormValidation";
 
+/*
+    This file contains the necessary form for a user to fill out if
+    they wish to change any of the previous registered skills, or they
+    can add more skill focuses (up to 3).
+ */
+
 export const Skills = () => {
 
     const [validated, setValidated] = useState(false);

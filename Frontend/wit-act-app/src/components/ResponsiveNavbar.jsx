@@ -8,6 +8,13 @@ import * as RiIcons from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import CreateProjectForm from "./CreateProjectForm";
 
+/*
+    This file creates the navbar seen at the top of the web app.
+
+    This allows a user to navigate back to the homepage using the side menu,
+    navigate to their profile page, or post a project idea.
+ */
+
 export const ResponsiveNavbar = () => {
 
     const navigate = useNavigate();

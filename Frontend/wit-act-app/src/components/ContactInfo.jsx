@@ -2,6 +2,11 @@ import React, {useEffect, useState} from "react";
 import {Container, Form, Button, Card} from "react-bootstrap";
 import {DISCORD_REGEX, PHONE_NUMBER_REGEX} from "../Validation/FormValidation";
 
+/*
+    This file contains the forms necessary for a user to add or change their
+    phone number and/or discord username.
+*/
+
 export const ContactInfo = () => {
 
     const [phoneNumberFormValidated, setPhoneNumberFormValidated] = useState(false);

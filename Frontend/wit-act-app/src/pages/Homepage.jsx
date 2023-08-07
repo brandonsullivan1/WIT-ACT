@@ -12,6 +12,15 @@ import {useNavigate} from "react-router-dom";
 import {NAME_REGEX, EMAIL_REGEX, SKILLS, TAGS} from "../Validation/FormValidation";
 import axios from "axios";
 
+/*
+    This file builds the Homepage UI and functionality.
+    The highlights are the grid style layout, the card buttons,
+    the buttons functionalities, the populating of the cards with project data,
+    and displaying the navbar and footer. The navbar allows the user to create a project,
+    the create project form is displayed upon clicking the corresponding button, the user can
+    navigate to their profile page, and the side menu.
+ */
+
 export const Homepage = () => {
 
     const [projectList, setProjectList] = useState(projects);

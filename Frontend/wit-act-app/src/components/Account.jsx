@@ -2,6 +2,13 @@ import React, {useEffect, useState} from "react";
 import {Container, Form, Button, Card} from "react-bootstrap";
 import {VALID_MINORS, TAGS, PWD_REGEX} from "../Validation/FormValidation";
 
+/*
+    This file is exported to the Profile file.
+
+    This file contains the forms for a user to change their password,
+    add/or change their major, and/or change their tag.
+ */
+
 export const Account = () => {
 
     const [passwordFormValidated, setPasswordFormValidated] = useState(false);
