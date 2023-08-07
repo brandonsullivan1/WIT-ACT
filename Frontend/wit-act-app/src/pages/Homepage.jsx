@@ -205,7 +205,7 @@ export const Homepage = () => {
                     }
                 });
                 console.log(response);
-                if (!(200 <= response.status && response.status <= 299)) {
+                if(response.status < 200 || response.status > 299) {
                     console.log(`Error: Response code ${response.status} from server!`);
                 } else {
                     console.log("Project added!");

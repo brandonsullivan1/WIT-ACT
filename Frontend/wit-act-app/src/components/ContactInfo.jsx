@@ -58,7 +58,7 @@ export const ContactInfo = () => {
                         'Mode': 'cors'
                     }
                 });
-                if(!(response.status <= 200 && response.status <= 299)) {
+                if(response.status < 200 || response.status > 299) {
                     console.log("Error: " + response);
                 } else {
                     console.log(response);
@@ -143,7 +143,7 @@ export const ContactInfo = () => {
                         'Mode': 'cors'
                     }
                 });
-                if(!(response.status <= 200 && response.status <= 299)) {
+                if(response.status < 200 || response.status > 299) {
                     console.log("Error: " + response);
                 } else {
                     console.log(response);
