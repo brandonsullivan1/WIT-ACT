@@ -1,5 +1,7 @@
 # WIT-ACT
 
+**__TO ALL FUTURE DEVELOPERS: THERE IS A 'development' BRANCH CREATED FOR YOU. PLEASE ASK JOE FOR A DOCUMENT WITH KNOWN FUTURE TASKS. GOOD LUCK AND THANK YOU FOR YOUR CONTRIBUTIONS!__**
+
 The Frontend and Backend folders each contain their own README and `package.json` files. 
 
 To use this project, 
