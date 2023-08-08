@@ -1,6 +1,9 @@
+/*
+ This file defines the
+*/
 USE WIT_ACT;
-DROP TABLE Projects; # Cannot drop users while exists
-DROP TABLE Users;
+-- DROP TABLE Projects; # Cannot drop users while Projects exists
+-- DROP TABLE Users;
 CREATE TABLE Users (
     UserID VARCHAR(40) NOT NULL,
     FullName VARCHAR(255) NOT NULL,

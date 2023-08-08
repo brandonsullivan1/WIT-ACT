@@ -1,7 +1,13 @@
 const express = require("express");
 const mysql = require("mysql2");
-const uuid = require("uuid")
+const crypto = require("crypto")
 const router = express.Router();
+
+/*
+ This file defines handlers for any routes that will use the Users table. All routes are of the form:
+ http://localhost:3100/users<path>, where <path> is the path specified by the handler. Routes are "grouped" according
+ to which files access them.  There are comments at the top of each "group."
+ */
 
 /*
 TODO
@@ -23,10 +29,8 @@ const connector = mysql.createConnection({
 // TESTING/DEVELOPMENT ROUTES
 router.get('/', (req, res) => {
     const sql = "SELECT * FROM Users";
-
     connector.query(sql, (err, data) => {
         if (err) throw err;
-        console.log(data);
         res.json(data); // 200 OK
     });
 })
@@ -34,18 +38,15 @@ router.get('/', (req, res) => {
 router.get('/clearusers', (req, res) => {
     //cleanup
     const sql = "SET SQL_SAFE_UPDATES = 0; DELETE FROM Users; SET SQL_SAFE_UPDATES = 1";
-
     connector.query(sql, (err, data) => {
         if(err) throw err;
-        console.log(data);
         res.json(data["1"]); //200 OK (consider 204 no content)
     });
 })
 
 /** REGISTRATION **/
 router.post('/adduser', (req, res) => {
-    console.log(req.body);
-    const userID = uuid.v4() // random user ID  TODO update to use a cryptographically secure RNG "crypto" lib
+    const userID = crypto.randomUUID(); // random user ID
     const sql = "INSERT INTO Users VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     connector.query(sql, [
         "Dummy-UserID", //userID,
@@ -63,7 +64,6 @@ router.post('/adduser', (req, res) => {
         req.body.discord
     ].map(x => (x===null||x===undefined||x===''||x==='Select specific skill...')? null : x), (err, data) => {
         if(err) throw err;
-        console.log(data);
         res.json(data); //200 OK
     });
 })
@@ -71,9 +71,7 @@ router.post('/adduser', (req, res) => {
 /** LOGIN **/
 router.post('/fetchuser', (req, res) => {
     const sql = "SELECT * FROM Users WHERE email = ?";
-    console.log(req.body.email);
     connector.query(sql, [req.body.email], (err, data) => {
-        console.log("in fetchuser");
         if(err) throw err;
         if(data[0] === undefined){
             res.status(404).json(`No users found matching email ${req.body.email}!`);
@@ -89,17 +87,14 @@ router.post('/updatePassword', (req, res) => {
     const sql = "UPDATE Users SET Password=? WHERE UserID=?";
     connector.query(sql, [req.body.password, req.body.userid], (err, data) => {
         if(err) throw err;
-        console.log(data);
         res.json(data);
     })
 })
 router.post('/updateMinor', (req, res) => {
     const userID = "Dummy-UserID";
     const sql = "UPDATE Users SET Minor=? WHERE UserID=?";
-    console.log(`Updating user ${userID} with minor ${req.body.minor}...`);
     connector.query(sql, [req.body.minor, req.body.userid], (err, data) => {
         if(err) throw err;
-        console.log(data);
         res.json(data);
     })
 })
@@ -107,7 +102,6 @@ router.post('/updateTag', (req, res) => {
     const sql = "UPDATE Users SET Tag=? WHERE UserID=?";
     connector.query(sql, [req.body.tag, req.body.userid], (err, data) => {
         if(err) throw err;
-        console.log(data);
         res.json(data);
     })
 })
@@ -125,7 +119,6 @@ router.post('/updateSkills', (req, res) => {
         req.body.userid
     ].map(x => (x===null||x===undefined||x===''||x==='Select specific skill...')? null : x), (err, data) => {
         if(err) throw err;
-        console.log(data);
         res.json(data);
     })
 })
@@ -134,7 +127,6 @@ router.post('/updatePhone', (req, res) => {
     const sql = "UPDATE Users SET Phone_Number=? WHERE UserID=?";
     connector.query(sql, [req.body.phone, req.body.userid], (err, data) => {
         if(err) throw err;
-        console.log(data);
         res.json(data);
     })
 })
@@ -142,7 +134,6 @@ router.post('/updateDiscord', (req, res) => {
     const sql = "UPDATE Users SET Discord=? WHERE UserID=?";
     connector.query(sql, [req.body.discord, req.body.userid], (err, data) => {
         if(err) throw err;
-        console.log(data);
         res.json(data);
     })
 })

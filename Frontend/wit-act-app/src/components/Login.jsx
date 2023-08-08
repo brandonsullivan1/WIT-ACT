@@ -103,7 +103,7 @@ export const Login = () => {
             <Row className="mt-3">
                 <Col md="3"></Col>
                 <Col md="6">
-                    <Form.Group controlId="email">
+                    <Form.Group >
                         <Form.Label style={{color: "black"}}>Email</Form.Label>
                         <Form.Control
                             required={true}
@@ -120,7 +120,7 @@ export const Login = () => {
                         <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group controlId="password">
+                    <Form.Group >
                         <Form.Label style={{color: "black"}}>Password</Form.Label>
                         <Form.Control
                             required={true}

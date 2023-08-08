@@ -1,7 +1,11 @@
+/*
+ This file creates the table for storing user projects, assuming that the WIT_ACT database exists.
+ Projects are referenced by ProjectID and belong to a User matching UserID
+*/
 USE WIT_ACT;
-#DROP TABLE Projects;
+-- DROP TABLE Projects;
 CREATE TABLE Projects (
-    ProjectID VARCHAR(40) NOT NULL, # Generate with node UUID
+    ProjectID VARCHAR(40) NOT NULL, -- Generate with node UUID
     UserID VARCHAR(40) NOT NULL,
     Title VARCHAR(255) NOT NULL,
     ShortDesc VARCHAR(255) NOT NULL,

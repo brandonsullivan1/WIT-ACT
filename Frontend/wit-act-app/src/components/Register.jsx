@@ -185,6 +185,10 @@ export const Register = () => {
             const result = DISCORD_REGEX.test(discord);
             setValidDiscord(result);
         }
+
+        if (discord === '') {
+            setValidDiscord(true);
+        }
     }, [discord])
 
     const validateForm = () => {
@@ -269,7 +273,7 @@ export const Register = () => {
                     <ProgressBar className="mt-1" now={progressBarState}/>
 
                     <Container className="mt-3" hidden={registerPage1Hidden}>
-                        <Form.Group controlId="email">
+                        <Form.Group >
                             <Form.Label style={{color: "black"}}>Email</Form.Label>
                             <Form.Control
                                 required={true}
@@ -285,7 +289,7 @@ export const Register = () => {
                             <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group controlId="pwd">
+                        <Form.Group >
                             <Form.Label style={{color: "black"}}>Password</Form.Label>
                             <Form.Control
                                 required={true}
@@ -301,7 +305,7 @@ export const Register = () => {
                             <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group controlId="confirmPwd">
+                        <Form.Group >
                             <Form.Label style={{color: "black"}}>Confirm Password</Form.Label>
                             <Form.Control
                                 required={true}
@@ -333,7 +337,7 @@ export const Register = () => {
 
                     <Container className="mt-3" hidden={registerPage2Hidden}>
                         <Container>
-                            <Form.Group controlId="major">
+                            <Form.Group >
                                 <Form.Label style={{color: "black"}}>Full Name</Form.Label>
                                 <Form.Control
                                     required={true}
@@ -349,7 +353,7 @@ export const Register = () => {
                                 <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
                             </Form.Group>
 
-                            <Form.Group controlId="generalSkill">
+                            <Form.Group >
                                 <Form.Label style={{color: "black"}}>General Skill</Form.Label>
                                 <Form.Select
                                     id="generalSkill"
@@ -372,7 +376,7 @@ export const Register = () => {
                                 <Container className="red">{errors.generalSkill}</Container>
                             </Form.Group>
 
-                            <Form.Group controlId="skillFocus">
+                            <Form.Group >
                                 <Form.Label style={{color: "black"}}>Skill Focus</Form.Label>
                                 <Form.Select
                                     id="skillFocus"
@@ -426,7 +430,7 @@ export const Register = () => {
                     </Container>
 
                     <Container className="mt-3" hidden={registerPage3Hidden}>
-                        <Form.Group controlId="specificSkill1">
+                        <Form.Group >
                             <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
                             <Form.Select
                                 id="specificSkill1"
@@ -451,7 +455,7 @@ export const Register = () => {
                             <Container className="red">{errors.specificSkill1}</Container>
                         </Form.Group>
 
-                        <Form.Group controlId="specificSkill2" hidden={specSkill2Hidden}>
+                        <Form.Group  hidden={specSkill2Hidden}>
                             <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
                             <Form.Select
                                 id="specificSkill2"
@@ -473,7 +477,7 @@ export const Register = () => {
                             </Form.Select>
                         </Form.Group>
 
-                        <Form.Group controlId="specificSkill3" hidden={specSkill3Hidden}>
+                        <Form.Group  hidden={specSkill3Hidden}>
                             <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
                             <Form.Select
                                 id="specificSkill3"
@@ -523,7 +527,7 @@ export const Register = () => {
                     </Container>
 
                     <Container className="mt-3" hidden={registerPage4Hidden}>
-                        <Form.Group controlId="phoneNumber">
+                        <Form.Group >
                             <Form.Label style={{color: "black"}}>Phone Number</Form.Label>
                             <Form.Control
                                 type="text"
@@ -538,7 +542,7 @@ export const Register = () => {
                             <Form.Control.Feedback type="invalid">{errors.phoneNumber}</Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group controlId="discord">
+                        <Form.Group >
                             <Form.Label style={{color: "black"}}>Discord</Form.Label>
                             <Form.Control
                                 type="text"
@@ -553,7 +557,7 @@ export const Register = () => {
                             <Form.Control.Feedback type="invalid">{errors.discord}</Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group controlId="tagValidation">
+                        <Form.Group >
                             <Form.Label style={{color: "black"}}>Tag</Form.Label>
                             <Form.Select
                                 id="tag"

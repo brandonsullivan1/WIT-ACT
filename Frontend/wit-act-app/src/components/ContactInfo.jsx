@@ -207,7 +207,7 @@ export const ContactInfo = () => {
                             width: "60%",
                         }} onClick={showPhoneNumberForm} id="phoneBtn">Update Phone Number</Button>
                         <Form hidden={phoneFormHidden} className="mt-3" noValidate validated={phoneNumberFormValidated} onSubmit={handlePhoneNumberFormSubmit}>
-                            <Form.Group controlId="phoneNumber">
+                            <Form.Group >
                                 <Form.Label>Phone Number:</Form.Label>
                                 <Form.Control
                                     required={true}
@@ -259,7 +259,7 @@ export const ContactInfo = () => {
                             width: "60%",
                         }} onClick={showDiscordForm} id="discordBtn">Update Discord</Button>
                         <Form hidden={discordFormHidden} className="mt-3" noValidate validated={discordFormValidated} onSubmit={handleDiscordFormSubmit}>
-                            <Form.Group controlId="discord">
+                            <Form.Group >
                                 <Form.Label>Discord:</Form.Label>
                                 <Form.Control
                                     required={true}

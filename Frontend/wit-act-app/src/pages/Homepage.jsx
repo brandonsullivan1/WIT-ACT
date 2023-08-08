@@ -5,7 +5,6 @@ import * as CgIcons from "react-icons/cg";
 import * as IoIcons from "react-icons/io";
 import * as AiIcons from "react-icons/ai";
 import { Footer } from "../components/Footer";
-import { CardButtons } from "../components/CardButtons";
 import BookmarkButton from "../components/BookmarkButton";
 import { projects } from "./Projects";
 import {useNavigate} from "react-router-dom";
@@ -303,7 +302,7 @@ export const Homepage = () => {
                     </Modal.Header>
                     <Modal.Body style={{backgroundColor: "white"}}>
                         <Form id="project-form" noValidate validated={validated} onSubmit={handleSubmit}>
-                            <Form.Group controlId="projectTitle">
+                            <Form.Group >
                                 <Form.Label>Project Title:</Form.Label>
                                 <Form.Control
                                     required={true}
@@ -328,7 +327,7 @@ export const Homepage = () => {
                                 <Form.Control.Feedback type="invalid">{errors.title}</Form.Control.Feedback>
                             </Form.Group>
 
-                            <Form.Group controlId="projectShortDesc">
+                            <Form.Group >
                                 <Form.Label htmlFor="project-title">Short Description:</Form.Label>
                                 <Form.Control
                                     required={true}
@@ -353,7 +352,7 @@ export const Homepage = () => {
                                 <Form.Control.Feedback type="invalid">{errors.shortDesc}</Form.Control.Feedback>
                             </Form.Group>
 
-                            <Form.Group controlId="projectFullDesc">
+                            <Form.Group >
                                 <Form.Label htmlFor="project-description">Full Description:</Form.Label>
                                 <Form.Control
                                     required={true}
@@ -378,7 +377,7 @@ export const Homepage = () => {
                                 <Form.Control.Feedback type="invalid">{errors.fullDesc}</Form.Control.Feedback>
                             </Form.Group>
 
-                            <Form.Group controlId="generalSkill">
+                            <Form.Group >
                                 <Form.Label>General Skill:</Form.Label>
                                 <Form.Select
                                     id="generalSkill"
@@ -409,7 +408,7 @@ export const Homepage = () => {
                                 <Container className="red">{errors.generalSkill}</Container>
                             </Form.Group>
 
-                            <Form.Group controlId="skillsFocus">
+                            <Form.Group >
                                 <Form.Label>Skill Focus:</Form.Label>
                                 <Form.Select
                                     id="skillsFocus"
@@ -440,7 +439,7 @@ export const Homepage = () => {
                                 <Container className="red">{errors.skillsFocus}</Container>
                             </Form.Group>
 
-                            <Form.Group controlId="specificSkill1">
+                            <Form.Group >
                                 <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
                                 <Form.Select
                                     id="specificSkill1"
@@ -473,7 +472,7 @@ export const Homepage = () => {
                                 <Container className="red">{errors.specificSkill1}</Container>
                             </Form.Group>
 
-                            <Form.Group controlId="specificSkill2" hidden={specSkill2Hidden}>
+                            <Form.Group  hidden={specSkill2Hidden}>
                                 <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
                                 <Form.Select
                                     id="specificSkill2"
@@ -502,7 +501,7 @@ export const Homepage = () => {
                                 </Form.Select>
                             </Form.Group>
 
-                            <Form.Group controlId="specificSkill3" hidden={specSkill3Hidden}>
+                            <Form.Group  hidden={specSkill3Hidden}>
                                 <Form.Label style={{color: "black"}}>Specific Skill</Form.Label>
                                 <Form.Select
                                     id="specificSkill3"
@@ -529,7 +528,7 @@ export const Homepage = () => {
                                 </Form.Select>
                             </Form.Group>
 
-                            <Form.Group controlId="tag1">
+                            <Form.Group >
                                 <Form.Label style={{color: "black"}}>Tag</Form.Label>
                                 <Form.Select
                                     id="tag1"
@@ -558,7 +557,7 @@ export const Homepage = () => {
                                 </Form.Select>
                             </Form.Group>
 
-                            <Form.Group controlId="tag2" hidden={tag2Hidden}>
+                            <Form.Group  hidden={tag2Hidden}>
                                 <Form.Label style={{color: "black"}}>Tag</Form.Label>
                                 <Form.Select
                                     id="tag2"
@@ -585,7 +584,7 @@ export const Homepage = () => {
                                 </Form.Select>
                             </Form.Group>
 
-                            <Form.Group controlId="leadMaker">
+                            <Form.Group >
                                 <Form.Label>Lead Maker:</Form.Label>
                                 <Form.Control
                                     type="text"
@@ -610,7 +609,7 @@ export const Homepage = () => {
                                 <Form.Control.Feedback type="invalid">{errors.leadMaker}</Form.Control.Feedback>
                             </Form.Group>
 
-                            <Form.Group controlId="leadMakerEmail">
+                            <Form.Group >
                                 <Form.Label>Email:</Form.Label>
                                 <Form.Control
                                     type="text"

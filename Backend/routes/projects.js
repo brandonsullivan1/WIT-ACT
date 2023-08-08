@@ -3,11 +3,21 @@ const mysql = require("mysql2");
 const uuid = require("uuid");
 const router = express.Router();
 
+
 /*
-TODO
- make sure users can't delete other's projects - add a UserID = (userid from context) to sql in /:title
+ This file defines handlers for any routes that will use the Projects table. All routes are of the form:
+ http://localhost:3100/projects<path>, where <path> is the path specified by the handler.  This file also contains
+ our recommendation algorithm, which takes a user and returns an array of all projects, sorted by relevance.
+ Relevance is calculated based on matching General Skill, Skill Focus, Specific Skills, Minor, and Tag to compute a
+ score for each project, then running a counting sort on these scores to order projects.
  */
 
+/*
+TODO
+ - Make sure users can't delete other's projects - add a UserID = (userid from context) to sql in /:title
+ - Add some kind of handling for duplicate project names: either don't allow it or change id calculation
+ - CURRENT project handling creates card for project despite DB error - investigate if a different fix isn't made
+ */
 
 //uuidv4 for use as uuidv5 namespace
 const NAMESPACE = 'b466ea01-361f-420c-acda-f63263237c5c';
@@ -19,19 +29,27 @@ const connector = mysql.createConnection({
     multipleStatements: true
 });
 
+// TESTING/DEVELOPMENT ROUTES
 router.get('/', (req, res) => {
     const sql = "SELECT * FROM Projects";
 
     connector.query(sql, (err, data) => {
         if (err) throw err;
-        console.log(data);
         res.json(data); // 200 OK
     });
 })
 
+router.get('/clearprojects', (req, res) => {
+    //cleanup
+    const sql = "SET SQL_SAFE_UPDATES = 0; DELETE FROM Projects; SET SQL_SAFE_UPDATES = 1";
+    connector.query(sql, (err, data) => {
+        if(err) throw err;
+        res.json(data["1"]); //200 OK (consider 204 no content)
+        //data["1"] ignores the useless responses from the SAFE_UPDATE processing
+    });
+})
+
 router.post('/addproject', (req, res) => {
-    console.log("addproject received request: ")
-    console.log(req.body);
     const projID = uuid.v5(req.body.title, NAMESPACE);
     const sql = "INSERT INTO Projects VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     //using .map on the below array is kind of a waste, since all are required and so only tag could be null
@@ -53,20 +71,16 @@ router.post('/addproject', (req, res) => {
         req.body.lmemail,
     ].map(x => (x===null||x===undefined||x==='')? null : x), (err, data) => {
         if(err) throw err;
-        console.log(`Project ID: ${projID}`);
-        console.log(data);
         res.json(data); //200 OK
     });
 })
 
 router.post("/recprojects", (req, res) => {
-    console.log("starting recommendation algorithm");
     // variables
     let [user, rows] = [null, []];
     // fetch user data for comparison/s
     let sql = "SELECT General_Skill, Skill_Focus, Specific_Skill_1, Specific_Skill_2, Specific_Skill_3, Tag, Minor FROM Users WHERE UserID = ?";
     connector.query(sql, [req.body.userid], (err, data) => {
-        console.log(data);
         user = data[0];
     });
     // fetch project data and stream each row
@@ -100,7 +114,7 @@ router.post("/recprojects", (req, res) => {
                 return;
             }
             // use the row's scores for a counting sort
-            // TODO remove the hardcoded count length. it needs to have (maximum score) indexes
+            // TODO remove the hardcoded count length. it needs to have a number of indices equal to the max value of score
             let [j, count, output] = [0, Array(8).fill(0), []];
             for(let i = 0; i < rows.length; i++){
                 j = rows[i]["Score"];
@@ -114,7 +128,6 @@ router.post("/recprojects", (req, res) => {
                 count[j]--;
                 output[count[j]] = rows[i];
             }
-            console.log(output);
             res.json(output);
         });
 })
@@ -124,19 +137,6 @@ router.delete('/:title', (req, res) => {
     const sql = "SET SQL_SAFE_UPDATES = 0; DELETE FROM Projects WHERE ProjectID = ?; SET SQL_SAFE_UPDATES = 1";
     connector.query(sql, [projID], (err, data) => {
         if(err) throw err;
-        console.log(data);
-        res.json(data["1"]); //200 OK (consider 204 no content)
-        //data["1"] ignores the useless responses from the SAFE_UPDATE processing
-    });
-})
-
-router.get('/clearprojects', (req, res) => {
-    //cleanup
-    const sql = "SET SQL_SAFE_UPDATES = 0; DELETE FROM Projects; SET SQL_SAFE_UPDATES = 1";
-
-    connector.query(sql, (err, data) => {
-        if(err) throw err;
-        console.log(data);
         res.json(data["1"]); //200 OK (consider 204 no content)
         //data["1"] ignores the useless responses from the SAFE_UPDATE processing
     });

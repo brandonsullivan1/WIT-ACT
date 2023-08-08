@@ -147,7 +147,7 @@ export const Skills = () => {
                 }}>
                     <Card.Body>
                         <Form className="mt-3" noValidate validated={validated} onSubmit={handleSubmit}>
-                            <Form.Group controlId="generalSkill">
+                            <Form.Group >
                                 <Form.Label><strong>General Skill:</strong> {currentGeneralSkill}</Form.Label>
                                 <Form.Select
                                     id="generalSkill"
@@ -170,7 +170,7 @@ export const Skills = () => {
                                 <Container className="red">{errors.newGeneralSkill}</Container>
                             </Form.Group>
 
-                            <Form.Group controlId="skillsFocus">
+                            <Form.Group >
                                 <Form.Label><strong>Skills Focus:</strong> {currentSkillsFocus}</Form.Label>
                                 <Form.Select
                                     id="skillsFocus"
@@ -197,7 +197,7 @@ export const Skills = () => {
                                 <Container className="red">{errors.newSkillsFocus}</Container>
                             </Form.Group>
 
-                            <Form.Group controlId="specificSkill1">
+                            <Form.Group >
                                 <Form.Label><strong>Specific Skill:</strong> {currentSpecificSkill1}</Form.Label>
                                 <Form.Select
                                     id="specificSkill1"
@@ -223,7 +223,7 @@ export const Skills = () => {
                                 <Container className="red">{errors.newSpecificSkill1}</Container>
                             </Form.Group>
 
-                            <Form.Group controlId="specificSkill2" hidden={newSpecificSkill2Hidden}>
+                            <Form.Group  hidden={newSpecificSkill2Hidden}>
                                 <Form.Label><strong>Specific Skill:</strong> {currentSpecificSkill2}</Form.Label>
                                 <Form.Select
                                     id="specificSkill2"
@@ -249,7 +249,7 @@ export const Skills = () => {
                                 <Container className="red">{errors.newSpecificSkill2}</Container>
                             </Form.Group>
 
-                            <Form.Group controlId="specificSkill3" hidden={newSpecificSkill3Hidden}>
+                            <Form.Group  hidden={newSpecificSkill3Hidden}>
                                 <Form.Label><strong>Specific Skill:</strong> {currentSpecificSkill3}</Form.Label>
                                 <Form.Select
                                     id="specificSkill3"

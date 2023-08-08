@@ -295,7 +295,7 @@ export const Account = () => {
                         }} onClick={togglePasswordForm} id="pwdBtn">Update Password</Button>
 
                         <Form hidden={passwordFormHidden} className="mt-3" noValidate validated={passwordFormValidated} onSubmit={handlePasswordFormSubmit}>
-                            <Form.Group controlId="currentPassword">
+                            <Form.Group >
                                 <Form.Label>Current Password:</Form.Label>
                                 <Form.Control
                                     required
@@ -312,7 +312,7 @@ export const Account = () => {
                                 <Form.Control.Feedback type="invalid">{passwordFormErrors.currentPassword}</Form.Control.Feedback>
                             </Form.Group>
 
-                            <Form.Group controlId="newPassword">
+                            <Form.Group >
                                 <Form.Label>New Password:</Form.Label>
                                 <Form.Control
                                     required
@@ -329,7 +329,7 @@ export const Account = () => {
                                 <Form.Control.Feedback type="invalid">{passwordFormErrors.newPassword}</Form.Control.Feedback>
                             </Form.Group>
 
-                            <Form.Group controlId="confirmNewPassword">
+                            <Form.Group >
                                 <Form.Label>Confirm Password:</Form.Label>
                                 <Form.Control
                                     required
@@ -383,7 +383,7 @@ export const Account = () => {
                                     id="minorBtn"
                             >Change Minor</Button>
                             <Form hidden={minorFormHidden} className="mt-3" noValidate validated={minorFormValidated} onSubmit={handleMinorFormSubmit}>
-                                <Form.Group style={{alignItems: "left"}} controlId="minor">
+                                <Form.Group style={{alignItems: "left"}} >
                                     <Form.Label><strong>Minor:</strong> Applied Mathematics</Form.Label>
                                     <Form.Select
                                         required={true}
@@ -445,7 +445,7 @@ export const Account = () => {
                                     id="tagBtn"
                             >Change Tag</Button>
                             <Form hidden={tagFormHidden} className="mt-3" noValidate validated={tagFormValidated} onSubmit={handleTagFormSubmit}>
-                                <Form.Group style={{alignItems: "left"}} controlId="tag">
+                                <Form.Group style={{alignItems: "left"}} >
                                     <Form.Label><strong>Tag: </strong>Technology</Form.Label>
                                     <Form.Select
                                         required={true}
