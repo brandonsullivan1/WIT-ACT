@@ -11,12 +11,14 @@ const router = express.Router();
 
 /*
 TODO
+ - Switch adduser to use the randomly generated UserID, and update the frontend to store the ID in a context
+  until logout. It should be passed from the context for all API calls requiring a userID (most of them!). Any
+   calls from the frontend currently passing "Dummy-UserID" should be updated to use the context value
+ - !!!!! make fetchuser check passwords as soon as the above is done
  - remove the bandaid fix in adduser and updateSkills where 'Select specific skill' maps to null
     - This will probably need work on the frontend to convert that into a placeholder value instead of an actual
         string in /components/Skills.jsx, but it's been uncooperative and we have other priorities
- !!!!! make fetchuser check passwords
- - change functions using a "Dummy-UserID" to take a userID from the request body, update frontend submit requests to
-   accomodate
+
  */
 const connector = mysql.createConnection({
     host: "localhost",
